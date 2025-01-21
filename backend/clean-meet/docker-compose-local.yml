@@ -1,0 +1,39 @@
+services:
+  spring-app-server:
+    build: .
+    environment:
+        SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_LOCAL}
+        SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME_LOCAL}
+        SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD_LOCAL}
+#        SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+#        SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+#        SPRING_CLOUD_AWS_REGION_STATIC: ${SPRING_CLOUD_AWS_REGION_STATIC}
+#        SPRING_CLOUD_AWS_S3_BUCKET: ${SPRING_CLOUD_AWS_S3_BUCKET}
+    develop:
+      watch:
+        - action: sync+restart
+          path: .
+          target: /app
+    depends_on:
+      database-mysql:
+        condition: service_healthy
+
+  database-mysql:
+    image: mysql:8.1
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "3306:3306"  # 로컬 3306 -> 컨테이너 3306
+
+  nginx-proxy:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-app-server
