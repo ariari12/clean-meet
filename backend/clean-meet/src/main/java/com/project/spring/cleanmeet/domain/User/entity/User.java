@@ -18,7 +18,7 @@ public class User extends BaseEntity {
     private String password;
     private String name;
     private String contact;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
     private String role;
