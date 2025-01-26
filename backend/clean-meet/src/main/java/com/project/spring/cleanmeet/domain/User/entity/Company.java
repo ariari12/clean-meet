@@ -2,20 +2,30 @@ package com.project.spring.cleanmeet.domain.User.entity;
 
 import com.project.spring.cleanmeet.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.*;
 
+@Builder
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String business_number;
-    private String company_name;
-    private String service_area;
-    private String service_category;
+    @Column(name = "business_number")
+    private String businessNumber;
+    @Column(name = "company_name")
+    private String companyName;
+    @Column(name = "service_area")
+    private String serviceArea;
+    @Column(name = "service_category")
+    private String serviceCategory;
     @Lob // Text 자료형으로 매핑
     @Column(columnDefinition = "TEXT")
     private String description;
-    private String logo_url;
+    @Column(name = "logo_url")
+    private String logoUrl;
 
     @OneToOne
     @JoinColumn(name = "user_id")
