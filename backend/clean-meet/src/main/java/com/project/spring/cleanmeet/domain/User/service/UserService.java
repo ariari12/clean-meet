@@ -39,7 +39,8 @@ public class UserService {
         User user = userMapper.toEntity(userRequestDto);
         user.updateRole(Role.ROLE_PERSONAL);
         user.updateAddress(savedAddress);
-        user.encodePassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        // 패스워드 검증 및 해싱
+        user.encodePassword(passwordEncoder, userRequestDto.getPassword());
         User savedUser = userRepository.save(user);
 
         return savedUser.getId();
