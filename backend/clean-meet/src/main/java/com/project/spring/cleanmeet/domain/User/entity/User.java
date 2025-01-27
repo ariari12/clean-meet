@@ -31,4 +31,16 @@ public class User extends BaseEntity {
         }
         this.address = address;
     }
+    public void updateRole(Role role) {
+        if(role == null) {
+            throw new IllegalArgumentException("Role cannot be null");
+        }
+        this.role = role;
+    }
+    public void encodePassword(String password) {
+        if(role == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
+        this.password = password;
+    }
 }
