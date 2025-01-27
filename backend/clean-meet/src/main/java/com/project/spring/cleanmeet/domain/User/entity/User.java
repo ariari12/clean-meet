@@ -21,7 +21,9 @@ public class User extends BaseEntity {
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public void updateAddress(Address address) {
         if(address == null) {

@@ -20,7 +20,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> users(@RequestBody UserRequestDto userRequestDto) {
-        System.out.println("userRequestDto = " + userRequestDto);
         Long userId = userService.save(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("UserId: " + userId);
     }

@@ -14,5 +14,4 @@ public class UserRequestDto {
     private String name;
     private String contact;
     private AddressRequestDto addressRequestDto;
-    private String role;
 }
