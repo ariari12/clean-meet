@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>User Registration</h1>
+<form id="userForm">
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="contact">Contact:</label>
+        <input type="text" id="contact" name="contact">
+    </div>
+    <h3>Address</h3>
+    <div>
+        <label for="addressName">Address Name:</label>
+        <input type="text" id="addressName" name="addressName" required>
+    </div>
+    <div>
+        <label for="region1DepthName">Region (1st Depth):</label>
+        <input type="text" id="region1DepthName" name="region1DepthName" required>
+    </div>
+    <div>
+        <label for="region2DepthName">Region (2nd Depth):</label>
+        <input type="text" id="region2DepthName" name="region2DepthName" required>
+    </div>
+    <div>
+        <label for="region3DepthName">Region (3nd Depth):</label>
+        <input type="text" id="region3DepthName" name="region3DepthName" required>
+    </div>
+    <div>
+        <label for="roadName">Road Name:</label>
+        <input type="text" id="roadName" name="roadName" required>
+    </div>
+    <div>
+        <label for="mainBuildingNo">Building No:</label>
+        <input type="text" id="mainBuildingNo" name="mainBuildingNo" required>
+    </div>
+    <div>
+        <label for="subBuildingNo">SubBuilding No:</label>
+        <input type="text" id="subBuildingNo" name="subBuildingNo" required>
+    </div>
+    <div>
+        <label for="zoneNo">Zone No:</label>
+        <input type="text" id="zoneNo" name="zoneNo" required>
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+<p id="responseMessage" style="color: green;"></p>
+<script>
+    $(document).ready(function () {
+        $("#userForm").on("submit", function (event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+
+            // DTO 데이터 생성
+            const userRequestDto = {
+                email: $("#email").val(),
+                password: $("#password").val(),
+                name: $("#name").val(),
+                contact: $("#contact").val(),
+                addressRequestDto: {
+                    addressName: $("#addressName").val(),
+                    region1DepthName: $("#region1DepthName").val(),
+                    region2DepthName: $("#region2DepthName").val(),
+                    region3DepthName: $("#region3DepthName").val(),
+                    roadName: $("#roadName").val(),
+                    mainBuildingNo: $("#mainBuildingNo").val(),
+                    subBuildingNo: $("#subBuildingNo").val(),
+                    zoneNo: $("#zoneNo").val(),
+                }
+            };
+
+            // Ajax 요청
+            $.ajax({
+                url: "/api/users", // 서버의 엔드포인트 URL
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(userRequestDto), // JSON 직렬화
+                success: function (response) {
+                    $("#responseMessage").text("User registered successfully!");
+                },
+                error: function (xhr, status, error) {
+                    $("#responseMessage").css("color", "red");
+                    $("#responseMessage").text("Error: " + xhr.responseText || error);
+                },
+            });
+        });
+    });
+</script>
+</body>
+</html>
