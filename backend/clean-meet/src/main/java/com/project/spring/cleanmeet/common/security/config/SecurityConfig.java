@@ -1,7 +1,6 @@
 package com.project.spring.cleanmeet.common.security.config;
 
 
-import com.project.spring.cleanmeet.common.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
