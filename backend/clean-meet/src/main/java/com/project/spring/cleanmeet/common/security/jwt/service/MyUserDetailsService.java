@@ -1,5 +1,6 @@
-package com.project.spring.cleanmeet.common.security.jwt;
+package com.project.spring.cleanmeet.common.security.jwt.service;
 
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.User.entity.User;
 import com.project.spring.cleanmeet.domain.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
-    public static Object CustomUser;
     private final UserRepository userRepository;
 
     @Override

@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.common.security.jwt;
+package com.project.spring.cleanmeet.common.security.jwt.dto;
 
 import lombok.Getter;
 import lombok.Setter;

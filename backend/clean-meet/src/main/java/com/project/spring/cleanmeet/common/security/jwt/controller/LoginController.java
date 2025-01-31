@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class LoginController {
     private final AuthService authService;
 
 
     @PostMapping("/login")
     public ResponseEntity<?> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
                                       HttpServletResponse httpServletResponse) {
+        System.out.println("userLoginRequestDto = " + userLoginRequestDto);
         authService.loginWithJwt(userLoginRequestDto,httpServletResponse);
-
         return ResponseEntity.status(HttpStatus.OK).body("Login Successful");
 
     }

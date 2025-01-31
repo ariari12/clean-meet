@@ -1,12 +1,13 @@
-package com.project.spring.cleanmeet.common.security.jwt;
+package com.project.spring.cleanmeet.common.security.config;
 
+import com.project.spring.cleanmeet.common.security.jwt.JwtUtil;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
