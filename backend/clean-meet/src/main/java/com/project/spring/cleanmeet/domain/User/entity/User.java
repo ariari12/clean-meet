@@ -20,12 +20,15 @@ public class User extends BaseEntity {
     private String password;
     private String name;
     private String contact;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
 
     public void updateAddress(Address address) {
         if(address == null) {
