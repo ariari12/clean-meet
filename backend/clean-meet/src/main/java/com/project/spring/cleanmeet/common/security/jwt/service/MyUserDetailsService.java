@@ -33,7 +33,7 @@ public class MyUserDetailsService implements UserDetailsService {
         //return new User(member.getUsername(), member.getPassword(),grantedAuthorities);
         CustomUser customUser = new CustomUser(user.getEmail(), user.getPassword(), grantedAuthorities);
         customUser.setName(user.getName());
-        customUser.setId(user.getId());
+        customUser.setId(user.getId().toString());
         return customUser;
     }
 

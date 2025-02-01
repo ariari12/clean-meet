@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String jwtCookie = "";
         for(Cookie cookie : cookies) {
-            if (cookie.getName().equals("JWT")) {
+            if (cookie.getName().equals("ACCESS_TOKEN")) {
                 jwtCookie = cookie.getValue();
             }
         }
@@ -62,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 authorities
         );
         customUser.setName(claims.get("name").toString());
-        customUser.setId(((Number) claims.get("id")).longValue());
+        customUser.setId(claims.get("id").toString());
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 // 유저네임, 패스워드

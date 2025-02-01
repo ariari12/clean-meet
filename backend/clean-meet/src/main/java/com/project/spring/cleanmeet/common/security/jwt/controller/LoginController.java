@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,11 +16,17 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
+    public ResponseEntity<String> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
                                       HttpServletResponse httpServletResponse) {
-        System.out.println("userLoginRequestDto = " + userLoginRequestDto);
         authService.loginWithJwt(userLoginRequestDto,httpServletResponse);
-        return ResponseEntity.status(HttpStatus.OK).body("Login Successful");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    @PostMapping("/refreshToken")
+    public ResponseEntity<String> tokenRotation(@CookieValue("REFRESH_TOKEN") String refreshToken,
+                                                @CookieValue("ACCESS_TOKEN") String expiredAccessToken,
+                                                HttpServletResponse response) {
+        authService.tokenRotation(refreshToken, expiredAccessToken, response);
 
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

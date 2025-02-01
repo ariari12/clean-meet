@@ -1,7 +1,11 @@
 package com.project.spring.cleanmeet.common.security.jwt.service;
 
+import com.project.spring.cleanmeet.common.exception.InvalidTokenException;
 import com.project.spring.cleanmeet.common.security.jwt.JwtUtil;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginRequestDto;
+import com.project.spring.cleanmeet.common.security.jwt.redis.RedisRefreshTokenService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final RedisRefreshTokenService redisRefreshTokenService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtUtil jwtUtil;
 
+    private static final int TOKEN_TTL = 60 * 60 * 24;  // 1일
 
-    public String loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    public void loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
         // 아이디 비밀번호 검증
@@ -26,29 +32,58 @@ public class AuthService {
 
         // 검증된 유저 Authentication authentication 에 추가 컨트롤러에서 꺼내쓸 수 있음
         SecurityContextHolder.getContext().setAuthentication(auth);
-        String jwt = jwtUtil.createToken(SecurityContextHolder.getContext().getAuthentication());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
 
-        setCookie(response, "JWT",jwt,3600);
+        String newAccessToken = jwtUtil.createToken(customUser);
+        createCookie(response, "ACCESS_TOKEN",newAccessToken,TOKEN_TTL);
 
-//        String refreshToken = jwtUtil.createRefreshToken(data.get("username"));
-//
-//        // 4. Refresh Token DB 저장 or 캐싱 (Rotation을 위해서 '현재 유효한 토큰 목록'을 관리)
-//        refreshTokenRepository.save(
-//                RefreshToken.createRefreshToken(data.get("username"),refreshToken)
-//        );
+        String newRefreshToken = jwtUtil.createRefreshToken(customUser);
+        // 4. Refresh Token DB 저장 or 캐싱 (Rotation을 위해서 '현재 유효한 토큰 목록'을 관리)
+        redisRefreshTokenService.saveRefreshToken(customUser.getId().toString(),newRefreshToken,TOKEN_TTL);
 
-//        Cookie refreshCookie = new Cookie("REFRESH_TOKEN", refreshToken);
-//        refreshCookie.setHttpOnly(true);
-//        refreshCookie.setPath("/");
-//        refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7일 예시
-//        response.addCookie(refreshCookie);
+        createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
+    }
 
+    public void tokenRotation(String refreshToken, String expiredAccessToken, HttpServletResponse response) {
+        //토큰 추출
+        Claims claims = jwtUtil.extractToken(refreshToken);
+        String userId = claims.get("id", String.class);
+        // 레디스 검증
+        String savedRefreshToken = redisRefreshTokenService.getRefreshToken(userId);
+        if( savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)) {
+            throw new InvalidTokenException("Refresh token 만료 또는 유효하지 않습니다.");
+        }
+        // 2. 새로운 액세스 토큰 및 리프레시 토큰 발급
+        CustomUser customUser = extractCustomUserFromExpiredToken(expiredAccessToken);
+        String newAccessToken = jwtUtil.createToken(customUser);
+        String newRefreshToken = jwtUtil.createRefreshToken(userId);
 
-        return jwt;
+        updateRefreshTokenRedis(userId, newRefreshToken, TOKEN_TTL);
+
+        createCookie(response, "ACCESS_TOKEN",newAccessToken,TOKEN_TTL);
+        createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
     }
 
-    private void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    private CustomUser extractCustomUserFromExpiredToken(String expiredAccessToken) {
+        Claims accessTokenClaims = jwtUtil.extractExpiredAccessToken(expiredAccessToken);
+        CustomUser customUser = new CustomUser(
+                (String) accessTokenClaims.get("username"),
+                "",
+                jwtUtil.extractAuthorities(accessTokenClaims)
+        );
+        customUser.setId((String) accessTokenClaims.get("id"));
+        customUser.setName((String) accessTokenClaims.get("name"));
+        return customUser;
+    }
+
+    private void updateRefreshTokenRedis(String userId, String newRefreshToken, int ttl) {
+        redisRefreshTokenService.removeRefreshToken(userId);
+        redisRefreshTokenService.saveRefreshToken(userId, newRefreshToken,ttl);
+    }
+
+    private void createCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
