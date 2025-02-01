@@ -27,12 +27,12 @@ services:
       timeout: 5s
       retries: 5
     ports:
-      - "3306:3306"  # 로컬 3306 -> 컨테이너 3306
+      - "3307:3306"  # 로컬 3307 -> 컨테이너 3306
 
   redis:
     image: redis:7.4
     ports:
-      - "6379:6379"
+      - "6380:6379"
     command: [ "redis-server", "--appendonly", "yes" ]  # 데이터 영구 저장 설정
 
   nginx-proxy:
