@@ -6,7 +6,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME_LOCAL}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD_LOCAL}
       JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     #        SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
     #        SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY}
     #        SPRING_CLOUD_AWS_REGION_STATIC: ${SPRING_CLOUD_AWS_REGION_STATIC}
@@ -27,6 +28,12 @@ services:
       retries: 5
     ports:
       - "3306:3306"  # 로컬 3306 -> 컨테이너 3306
+
+  redis:
+    image: redis:7.4
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--appendonly", "yes" ]  # 데이터 영구 저장 설정
 
   nginx-proxy:
     build: ./nginx
