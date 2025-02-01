@@ -25,8 +25,8 @@ public class UserApiController {
     )
     @PostMapping
     public ResponseEntity<String> users(@RequestBody UserRequestDto userRequestDto) {
-        Long userId = userService.save(userRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("UserId: " + userId);
+        userService.save(userRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

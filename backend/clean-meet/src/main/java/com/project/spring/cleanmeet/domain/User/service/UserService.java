@@ -26,7 +26,7 @@ public class UserService {
     private final AddressMapper addressMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public Long save(UserRequestDto userRequestDto) {
+    public void save(UserRequestDto userRequestDto) {
 
         //중복 회원가입 방지
         isEmailExists(userRequestDto);
@@ -41,9 +41,8 @@ public class UserService {
         user.updateAddress(savedAddress);
         // 패스워드 검증 및 해싱
         user.encodePassword(passwordEncoder, userRequestDto.getPassword());
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
 
-        return savedUser.getId();
     }
 
     private void isEmailExists(UserRequestDto userRequestDto) {
