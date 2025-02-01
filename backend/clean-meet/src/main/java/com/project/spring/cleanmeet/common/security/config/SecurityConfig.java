@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/login/**","/users","/api/auth/login/**","/api/users",
-                                        "/api/auth/refreshToken","/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                        "/api/auth/refreshToken","/swagger-ui/**","/v3/api-docs/**").permitAll()
 //                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
