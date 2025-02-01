@@ -24,7 +24,7 @@ public class AuthService {
 
     private static final int TOKEN_TTL = 60 * 60 * 24;  // 1일
 
-    public void loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    public String loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
         // 아이디 비밀번호 검증
@@ -36,16 +36,18 @@ public class AuthService {
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
 
         String newAccessToken = jwtUtil.createToken(customUser);
-        createCookie(response, "ACCESS_TOKEN",newAccessToken,TOKEN_TTL);
+
 
         String newRefreshToken = jwtUtil.createRefreshToken(customUser);
         // 4. Refresh Token DB 저장 or 캐싱 (Rotation을 위해서 '현재 유효한 토큰 목록'을 관리)
         redisRefreshTokenService.saveRefreshToken(customUser.getId().toString(),newRefreshToken,TOKEN_TTL);
 
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
+
+        return newAccessToken;
     }
 
-    public void tokenRotation(String refreshToken, String expiredAccessToken, HttpServletResponse response) {
+    public String tokenRotation(String refreshToken, String authorizationHeader, HttpServletResponse response) {
         //토큰 추출
         Claims claims = jwtUtil.extractToken(refreshToken);
         String userId = claims.get("id", String.class);
@@ -55,15 +57,15 @@ public class AuthService {
             throw new InvalidTokenException("Refresh token 만료 또는 유효하지 않습니다.");
         }
         // 2. 새로운 액세스 토큰 및 리프레시 토큰 발급
+        String expiredAccessToken = extractAccessToken(authorizationHeader);
         CustomUser customUser = extractCustomUserFromExpiredToken(expiredAccessToken);
         String newAccessToken = jwtUtil.createToken(customUser);
         String newRefreshToken = jwtUtil.createRefreshToken(userId);
 
         updateRefreshTokenRedis(userId, newRefreshToken, TOKEN_TTL);
-
-        createCookie(response, "ACCESS_TOKEN",newAccessToken,TOKEN_TTL);
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
+        return newAccessToken;
     }
 
     private CustomUser extractCustomUserFromExpiredToken(String expiredAccessToken) {
@@ -89,5 +91,13 @@ public class AuthService {
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
+    }
+
+    public String extractAccessToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // "Bearer " 제거
+            return authorizationHeader.substring(7);
+        }
+        throw new IllegalArgumentException("Authorization 헤더가 유효하지 않습니다.");
     }
 }

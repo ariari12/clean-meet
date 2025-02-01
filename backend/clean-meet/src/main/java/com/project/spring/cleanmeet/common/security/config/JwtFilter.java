@@ -31,22 +31,16 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
+        String jwtToken = authorizationHeader.substring(7);  // "Bearer " 제거
 
-        String jwtCookie = "";
-        for(Cookie cookie : cookies) {
-            if (cookie.getName().equals("ACCESS_TOKEN")) {
-                jwtCookie = cookie.getValue();
-            }
-        }
         Claims claims;
         try{
-            claims = jwtUtil.extractToken(jwtCookie);
-
+            claims = jwtUtil.extractToken(jwtToken);
         }catch (Exception e){
             filterChain.doFilter(request, response);
             return;
