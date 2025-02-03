@@ -1,6 +1,5 @@
 package com.project.spring.cleanmeet.domain.User.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

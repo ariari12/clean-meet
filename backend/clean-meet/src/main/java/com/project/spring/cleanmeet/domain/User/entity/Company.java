@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company extends BaseEntity {
@@ -19,8 +20,9 @@ public class Company extends BaseEntity {
     private String companyName;
     @Column(name = "service_area")
     private String serviceArea;
-    @Column(name = "service_category")
-    private String serviceCategory;
+
+    @Column(name = "company_contact")
+    private String companyContact;
     @Lob // Text 자료형으로 매핑
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -28,6 +30,7 @@ public class Company extends BaseEntity {
     private String logoUrl;
 
     @OneToOne
+    @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
 

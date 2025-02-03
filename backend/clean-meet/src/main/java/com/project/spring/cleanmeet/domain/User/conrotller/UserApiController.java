@@ -1,4 +1,5 @@
 package com.project.spring.cleanmeet.domain.User.conrotller;
+import com.project.spring.cleanmeet.domain.User.dto.CompanyRequestDto;
 import com.project.spring.cleanmeet.domain.User.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.User.service.UserService;
 
@@ -25,7 +26,17 @@ public class UserApiController {
     )
     @PostMapping
     public ResponseEntity<String> users(@RequestBody UserRequestDto userRequestDto) {
-        userService.save(userRequestDto);
+        userService.personalSave(userRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            summary = "기업 회원가입",
+            description = "새로운 기업 사용자를 등록합니다."
+    )
+    @PostMapping("/company")
+    public ResponseEntity<String> company(@RequestBody CompanyRequestDto companyRequestDto) {
+        userService.companySave(companyRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
