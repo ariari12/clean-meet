@@ -1,12 +1,16 @@
 package com.project.spring.cleanmeet.domain.user.service;
 
 import com.project.spring.cleanmeet.common.exception.DuplicateEmailException;
+import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
+import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCompanyCategory;
+import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
+import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCompanyCategoryRepository;
 import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
 import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.*;
 import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.CompanyMapper;
-import com.project.spring.cleanmeet.domain.user.mapper.ServiceCompanyCategoryMapper;
+import com.project.spring.cleanmeet.domain.servicecategory.mapper.ServiceCompanyCategoryMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
 import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.repository.*;

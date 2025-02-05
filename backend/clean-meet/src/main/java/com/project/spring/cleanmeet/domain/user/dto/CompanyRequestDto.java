@@ -1,5 +1,6 @@
 package com.project.spring.cleanmeet.domain.user.dto;
 
+import com.project.spring.cleanmeet.domain.servicecategory.dto.ServiceCategoryRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
