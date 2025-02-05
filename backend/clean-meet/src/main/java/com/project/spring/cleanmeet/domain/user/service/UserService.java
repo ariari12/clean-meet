@@ -81,7 +81,7 @@ public class UserService {
 
         // 회사 저장
         Company company = companyMapper.toEntity(companyRequestDto, user);
-        log.info("company {}",company);
+
         Company savedCompany = companyRepository.save(company);
 
         List<ServiceCompanyCategory> serviceCompanyCategoryList = companyRequestDto
