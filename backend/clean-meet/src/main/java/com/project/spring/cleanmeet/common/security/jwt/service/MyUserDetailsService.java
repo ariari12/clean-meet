@@ -1,8 +1,8 @@
 package com.project.spring.cleanmeet.common.security.jwt.service;
 
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
-import com.project.spring.cleanmeet.domain.User.entity.User;
-import com.project.spring.cleanmeet.domain.User.repository.UserRepository;
+import com.project.spring.cleanmeet.domain.user.entity.User;
+import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

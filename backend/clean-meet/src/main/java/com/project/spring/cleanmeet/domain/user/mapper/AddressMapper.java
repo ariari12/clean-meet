@@ -1,7 +1,7 @@
-package com.project.spring.cleanmeet.domain.User.mapper;
+package com.project.spring.cleanmeet.domain.user.mapper;
 
-import com.project.spring.cleanmeet.domain.User.dto.AddressRequestDto;
-import com.project.spring.cleanmeet.domain.User.entity.Address;
+import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
+import com.project.spring.cleanmeet.domain.user.entity.Address;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 

@@ -1,8 +1,8 @@
-package com.project.spring.cleanmeet.domain.User.mapper;
+package com.project.spring.cleanmeet.domain.user.mapper;
 
-import com.project.spring.cleanmeet.domain.User.entity.Company;
-import com.project.spring.cleanmeet.domain.User.entity.ServiceCategory;
-import com.project.spring.cleanmeet.domain.User.entity.ServiceCompanyCategory;
+import com.project.spring.cleanmeet.domain.user.entity.Company;
+import com.project.spring.cleanmeet.domain.user.entity.ServiceCategory;
+import com.project.spring.cleanmeet.domain.user.entity.ServiceCompanyCategory;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,15 +1,15 @@
-package com.project.spring.cleanmeet.domain.User.service;
+package com.project.spring.cleanmeet.domain.user.service;
 
 import com.project.spring.cleanmeet.common.exception.DuplicateEmailException;
-import com.project.spring.cleanmeet.domain.User.dto.AddressRequestDto;
-import com.project.spring.cleanmeet.domain.User.dto.CompanyRequestDto;
-import com.project.spring.cleanmeet.domain.User.entity.*;
-import com.project.spring.cleanmeet.domain.User.mapper.AddressMapper;
-import com.project.spring.cleanmeet.domain.User.mapper.CompanyMapper;
-import com.project.spring.cleanmeet.domain.User.mapper.ServiceCompanyCategoryMapper;
-import com.project.spring.cleanmeet.domain.User.mapper.UserMapper;
-import com.project.spring.cleanmeet.domain.User.dto.UserRequestDto;
-import com.project.spring.cleanmeet.domain.User.repository.*;
+import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
+import com.project.spring.cleanmeet.domain.user.entity.*;
+import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
+import com.project.spring.cleanmeet.domain.user.mapper.CompanyMapper;
+import com.project.spring.cleanmeet.domain.user.mapper.ServiceCompanyCategoryMapper;
+import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
+import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
+import com.project.spring.cleanmeet.domain.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

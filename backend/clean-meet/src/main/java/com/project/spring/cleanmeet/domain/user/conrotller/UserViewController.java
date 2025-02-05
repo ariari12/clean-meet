@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.User.conrotller;
+package com.project.spring.cleanmeet.domain.user.conrotller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 

@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.User.dto;
+package com.project.spring.cleanmeet.domain.user.dto;
 
 
 import lombok.AllArgsConstructor;

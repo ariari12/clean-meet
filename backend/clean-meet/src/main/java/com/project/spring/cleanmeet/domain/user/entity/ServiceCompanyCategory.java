@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.User.entity;
+package com.project.spring.cleanmeet.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

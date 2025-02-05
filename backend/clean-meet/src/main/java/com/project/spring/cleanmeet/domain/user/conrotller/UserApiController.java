@@ -1,7 +1,7 @@
-package com.project.spring.cleanmeet.domain.User.conrotller;
-import com.project.spring.cleanmeet.domain.User.dto.CompanyRequestDto;
-import com.project.spring.cleanmeet.domain.User.dto.UserRequestDto;
-import com.project.spring.cleanmeet.domain.User.service.UserService;
+package com.project.spring.cleanmeet.domain.user.conrotller;
+import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
+import com.project.spring.cleanmeet.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
