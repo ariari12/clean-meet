@@ -40,6 +40,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void personalSave(UserRequestDto userRequestDto) {
+        log.info("개인 회원가입 시작: email={}", userRequestDto.getEmail());
 
         //중복 회원가입 방지
         isEmailExists(userRequestDto.getEmail());
@@ -47,6 +48,7 @@ public class UserService {
         // 주소 저장
         Address address = addressMapper.toEntity(userRequestDto.getAddressRequestDto());
         Address savedAddress = addressRepository.save(address);
+        log.info("주소 저장 완료 : {}", savedAddress);
 
         //유저 저장
         User user = userMapper.toEntity(userRequestDto);
@@ -54,11 +56,13 @@ public class UserService {
         user.updateAddress(savedAddress);
         // 패스워드 검증 및 해싱
         user.encodePassword(passwordEncoder, userRequestDto.getPassword());
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        log.info("회원 가입 성공: email={}", savedUser.getEmail());
 
     }
 
     public void companySave(CompanyRequestDto companyRequestDto) {
+        log.info("회사 회원가입 시작: companyName={}", companyRequestDto.getCompanyName());
 
         UserRequestDto userRequestDto = companyRequestDto.getUserRequestDto();
         AddressRequestDto addressRequestDto = userRequestDto.getAddressRequestDto();
@@ -69,6 +73,7 @@ public class UserService {
         // 주소 저장
         Address address = addressMapper.toEntity(addressRequestDto);
         Address savedAddress = addressRepository.save(address);
+        log.info("회사 주소 저장 완료 : {}", savedAddress);
 
         //유저 저장
         User user = userMapper.toEntity(userRequestDto);
@@ -76,14 +81,15 @@ public class UserService {
         user.updateAddress(savedAddress);
         // 패스워드 검증 및 해싱
         user.encodePassword(passwordEncoder, userRequestDto.getPassword());
-        userRepository.save(user);
-
+        User savedUser = userRepository.save(user);
+        log.info("회사 유저정보 저장 완료 : {}", savedUser);
 
         // 회사 저장
         Company company = companyMapper.toEntity(companyRequestDto, user);
-
         Company savedCompany = companyRepository.save(company);
+        log.info("회사 정보 저장 완료 : {}", savedCompany);
 
+        // 서비스 카테고리와의 관계 설정
         List<ServiceCompanyCategory> serviceCompanyCategoryList = companyRequestDto
                 .getServiceCategory()
                 .stream()
@@ -96,7 +102,8 @@ public class UserService {
                     }
                 ).toList();
 
-        serviceCompanyCategoryRepository.saveAll(serviceCompanyCategoryList);
+        List<ServiceCompanyCategory> savedServiceCompanyCategory = serviceCompanyCategoryRepository.saveAll(serviceCompanyCategoryList);
+        log.info("회사 서비스카테고리 저장 완료: {}", savedServiceCompanyCategory);
     }
 
     private void isEmailExists(String email) {
