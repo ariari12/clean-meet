@@ -44,7 +44,7 @@ const Navbar = () => {
   return (
     <>
       <div className="navbar">
-        <div className="navbar__logo">Clean Meet</div>
+        <Link href="/" className="navbar__logo">Clean Meet</Link>
         <div className="navbar__list">
           <Link href="/request" className="navbar__list--item">
             의뢰 목록
