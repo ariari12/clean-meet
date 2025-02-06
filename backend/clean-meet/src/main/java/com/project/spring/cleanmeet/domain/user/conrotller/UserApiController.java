@@ -32,7 +32,8 @@ public class UserApiController {
 
     @Operation(
             summary = "기업 회원가입",
-            description = "새로운 기업 사용자를 등록합니다."
+            description = "새로운 기업 사용자를 등록합니다. " +
+                    "서비스 카테고리 = 'OFFICE_CLEANING','HOME_CLEANING','MOVE_CLEANING','WINDOW_CLEANING'"
     )
     @PostMapping("/company")
     public ResponseEntity<String> company(@RequestBody CompanyRequestDto companyRequestDto) {

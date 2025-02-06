@@ -35,7 +35,7 @@ public class LoginApiController {
     public ResponseEntity<String> tokenRotation(
             @Parameter(description = "리프레시 토큰을 쿠키에서 가져옵니다.", example = "리프레시 토큰 값")
             @CookieValue("REFRESH_TOKEN") String refreshToken,
-            @Parameter(description = "Bearer 액세스 토큰", example = "Bearer 토큰값")
+            @Parameter(description = "만료된 액세스 토큰을 넘겨주세요", example = "Bearer 엑세스 토큰값")
             @RequestHeader("Authorization") String authorizationHeader,
             HttpServletResponse response) {
         String accessToken = authService.tokenRotation(refreshToken, authorizationHeader, response);
