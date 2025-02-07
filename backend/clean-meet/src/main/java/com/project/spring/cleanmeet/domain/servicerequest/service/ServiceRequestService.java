@@ -14,7 +14,7 @@ import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.ServiceRequestMapper;
 import com.project.spring.cleanmeet.domain.user.repository.AddressRepository;
 import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ServiceRequestService {
     private final ServiceRequestRepository serviceRequestRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
@@ -32,7 +32,7 @@ public class ServiceRequestService {
     private final ServiceRequestMapper serviceRequestMapper;
 
     public void save(ServiceRequestDto serviceRequestDto) {
-
+        log.info("서비스 요창 저장 시작 serviceRequestDto : {}",serviceRequestDto);
         User user = userRepository.findById(serviceRequestDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("존재하지않은 userId"));
         log.info("유저 조회 성공 user : {}", user);

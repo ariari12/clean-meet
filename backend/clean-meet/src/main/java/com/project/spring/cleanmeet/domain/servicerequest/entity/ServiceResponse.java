@@ -3,10 +3,16 @@ package com.project.spring.cleanmeet.domain.servicerequest.entity;
 import com.project.spring.cleanmeet.common.entity.BaseEntity;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Builder
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ServiceResponse extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +23,7 @@ public class ServiceResponse extends BaseEntity {
     @Column(name = "scheduled_date_time")
     private LocalDateTime scheduledDateTime;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "service_status")
     private ServiceStatus serviceStatus;
 
@@ -29,4 +35,10 @@ public class ServiceResponse extends BaseEntity {
     @JoinColumn(name = "service_request")
     private ServiceRequest serviceRequest;
 
+    public void updateStatus(ServiceStatus serviceStatus) {
+        if(serviceStatus == null){
+            throw new IllegalArgumentException("ServiceStatus can not be null");
+        }
+        this.serviceStatus = serviceStatus;
+    }
 }
