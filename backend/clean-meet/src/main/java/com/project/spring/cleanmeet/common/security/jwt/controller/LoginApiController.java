@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -23,6 +25,9 @@ public class LoginApiController {
     public ResponseEntity<String> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
                                       HttpServletResponse httpServletResponse) {
         String accessToken = authService.loginWithJwt(userLoginRequestDto, httpServletResponse);
+
+        log.info("로그인 성공: email={}, accessToken={}", userLoginRequestDto.getEmail(), accessToken);
+
         return ResponseEntity.status(HttpStatus.OK).body(accessToken);
     }
 
