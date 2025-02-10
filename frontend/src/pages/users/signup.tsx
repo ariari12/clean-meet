@@ -53,6 +53,15 @@ const SignupPage = () => {
         <div className="text-center font-black text-[30px] text-[#1089d3]">회원가입</div>
         <form className="mt-[20px]" onSubmit={handleSubmit}>
           <input
+              type="text"
+              id="name"
+              className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder="이름"
+              required
+            />
+          <input
             type="email"
             id="email"
             className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
@@ -82,15 +91,6 @@ const SignupPage = () => {
             placeholder="비밀번호 확인"
             required
           />
-          <input
-            type="text"
-            id="name"
-            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            placeholder="이름"
-            required
-            />
           <input
             type="text"
             id="contact"
