@@ -4,17 +4,20 @@ import com.project.spring.cleanmeet.common.exception.InvalidTokenException;
 import com.project.spring.cleanmeet.common.security.jwt.JwtUtil;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginRequestDto;
+import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginResponseDto;
 import com.project.spring.cleanmeet.common.security.jwt.redis.RedisRefreshTokenService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,7 +27,7 @@ public class AuthService {
 
     private static final int TOKEN_TTL = 60 * 60 * 24;  // 1일
 
-    public String loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    public UserLoginResponseDto loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
         // 아이디 비밀번호 검증
@@ -44,7 +47,10 @@ public class AuthService {
 
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
-        return newAccessToken;
+        UserLoginResponseDto userLoginResponseDto =
+                new UserLoginResponseDto(newAccessToken, customUser.getUsername(), customUser.getName());
+        log.info("유저 로그인 성공 {}", userLoginResponseDto);
+        return userLoginResponseDto;
     }
 
     public String tokenRotation(String refreshToken, String authorizationHeader, HttpServletResponse response) {

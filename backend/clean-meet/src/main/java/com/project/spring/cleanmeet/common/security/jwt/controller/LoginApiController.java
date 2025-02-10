@@ -1,5 +1,6 @@
 package com.project.spring.cleanmeet.common.security.jwt.controller;
 
+import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginResponseDto;
 import com.project.spring.cleanmeet.common.security.jwt.service.AuthService;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,13 +23,11 @@ public class LoginApiController {
 
     @Operation(summary = "JWT 로그인", description = "이메일과 비밀번호로 로그인하여 액세스 토큰은 body 에 리프레시 토큰은 쿠키에 발급받습니다.")
     @PostMapping("/login")
-    public ResponseEntity<String> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
+    public ResponseEntity<UserLoginResponseDto> loginJwt(@RequestBody UserLoginRequestDto userLoginRequestDto,
                                       HttpServletResponse httpServletResponse) {
-        String accessToken = authService.loginWithJwt(userLoginRequestDto, httpServletResponse);
+        UserLoginResponseDto userLoginResponseDto = authService.loginWithJwt(userLoginRequestDto, httpServletResponse);
 
-        log.info("로그인 성공: email={}, accessToken={}", userLoginRequestDto.getEmail(), accessToken);
-
-        return ResponseEntity.status(HttpStatus.OK).body(accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body(userLoginResponseDto);
     }
 
     @Operation(
