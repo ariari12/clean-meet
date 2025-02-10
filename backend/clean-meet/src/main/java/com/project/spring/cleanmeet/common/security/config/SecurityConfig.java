@@ -35,9 +35,10 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/login/**","/users/**","/api/auth/login/**","/api/users",
-                                        "/api/users/company", "/api/auth/refreshToken","/swagger-ui/**",
+                                .requestMatchers("/login/**","/users/**","/api/auth/login/**","/api/users/**",
+                                        "/api/auth/refreshToken","/swagger-ui/**",
                                         "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/api/service/answer/**").hasRole("COMPANY")
 //                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )

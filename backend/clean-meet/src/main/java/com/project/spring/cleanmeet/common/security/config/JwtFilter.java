@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 
 
 @Component
@@ -46,9 +46,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String[] arr = claims.get("authorities").toString().split(",");
-        var authorities =
-                Arrays.stream(arr).map(SimpleGrantedAuthority::new).toList();
+        List<String> list = claims.get("authorities", List.class);
+        List<SimpleGrantedAuthority> authorities = list.stream().map(SimpleGrantedAuthority::new).toList();
 
         CustomUser customUser = new CustomUser(
                 claims.get("username").toString(),
