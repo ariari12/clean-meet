@@ -52,6 +52,12 @@ const Navbar = () => {
           <Link href="/company" className="navbar__list--item">
             회사 목록
           </Link>
+          <Link href="/" className="navbar__list--item">
+            고객 문의
+          </Link>
+          <Link href="/" className="navbar__list--item">
+            프로필
+          </Link>
           <Link href="/users/login" className="navbar__list--item">
             로그인
           </Link>

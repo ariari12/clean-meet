@@ -50,12 +50,21 @@ const SignupPage = () => {
   return (
     <div className="relative w-full h-[100vh] flex justify-center items-center text-center">
       <div className="max-w-[650px] bg-gradient-to-t from-white to-[#f4f7fb] rounded-[40px] p-[25px] px-[35px] border-[5px] border-white shadow-[rgba(133,189,215,0.88)_0px_30px_30px_-20px] m-[20px]">
-        <div className="text-center font-black text-[30px] text-[#1089d3]">회원가입11</div>
+        <div className="text-center font-black text-[30px] text-[#1089d3]">회원가입</div>
         <form className="mt-[20px]" onSubmit={handleSubmit}>
+          <input
+              type="text"
+              id="name"
+              className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder="이름"
+              required
+            />
           <input
             type="email"
             id="email"
-            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_10px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
+            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             name="email"
@@ -65,7 +74,7 @@ const SignupPage = () => {
           <input
             type="password"
             id="password"
-            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_10px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
+            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
             onChange={(e) => setPassword(e.target.value)}
             name="password"
             value={password}
@@ -75,7 +84,7 @@ const SignupPage = () => {
           <input
             type="password"
             id="confirmPassword"
-            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_10px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
+            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
             onChange={(e) => setConfirmPassword(e.target.value)}
             name="confirmPassword"
             value={confirmPassword}
@@ -84,17 +93,8 @@ const SignupPage = () => {
           />
           <input
             type="text"
-            id="name"
-            className=""
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            placeholder="이름"
-            required
-            />
-          <input
-            type="text"
             id="contact"
-            className=""
+            className="w-full bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
             onChange={(e) => setContact(e.target.value)}
             value={contact}
             placeholder="연락처"
@@ -103,7 +103,7 @@ const SignupPage = () => {
           <input
             type="text"
             id="addressName"
-            className=""
+            className="w-full mb-10 bg-white border-none p-[15px] px-[20px] rounded-[20px] mt-[15px] shadow-[#cff0ff_0px_5px_10px_-5px] focus:outline-none focus:border-2 focus:border-[#12b1d1] placeholder:text-[#aaaaaa]"
             onChange={(e) => setAddressName(e.target.value)}
             value={addressName}
             placeholder="주소"
