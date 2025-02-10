@@ -12,13 +12,15 @@ COPY . .
 # 4. Next.js 빌드 실행
 RUN yarn build
 
-# 5. 프로덕션 실행을 위한 가벼운 Node 이미지 사용
+# 5. Next.js standalone 실행
 FROM node:18-alpine
 WORKDIR /app
 
 # 6. 빌드 결과물 복사
-COPY --from=builder /app ./
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
 
 # 7. 포트 설정 및 실행 명령어
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]
