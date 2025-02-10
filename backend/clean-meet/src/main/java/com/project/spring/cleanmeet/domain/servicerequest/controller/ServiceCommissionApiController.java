@@ -1,4 +1,5 @@
 package com.project.spring.cleanmeet.domain.servicerequest.controller;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
@@ -7,12 +8,15 @@ import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceAnswerS
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/service")
@@ -24,7 +28,14 @@ public class ServiceCommissionApiController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/commission/all")
-    public ResponseEntity<List<ServiceCommissionResponseDto>> commissionAll() {
+    public ResponseEntity<List<ServiceCommissionResponseDto>> commissionAll(Authentication authentication) {
+        CustomUser customUser=(CustomUser) authentication.getPrincipal();
+        log.info(customUser.toString());
+        log.info(customUser.getUsername());
+        log.info(customUser.getPassword());
+        log.info(customUser.getName());
+        log.info("{}",customUser.getId());
+        log.info("{}",customUser.getAuthorities());
         List<ServiceCommissionResponseDto> list = serviceCommissionService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
@@ -39,7 +50,9 @@ public class ServiceCommissionApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Operation(summary = "서비스 의뢰 응답", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "서비스 의뢰 응답",
+            description = "회사 유저만 가능",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/answer")
     public ResponseEntity<String> response(@RequestBody ServiceAnswerRequestDto serviceAnswerRequestDto) {
         serviceAnswerService.save(serviceAnswerRequestDto);
