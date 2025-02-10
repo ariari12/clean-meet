@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceRequestDto {
+public class ServiceCommissionRequestDto {
 
+    private String title;
     private String description;
     private Long userId;
     private AddressRequestDto addressRequestDto;

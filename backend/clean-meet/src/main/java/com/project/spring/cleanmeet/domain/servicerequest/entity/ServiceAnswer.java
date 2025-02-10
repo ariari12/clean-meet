@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServiceResponse extends BaseEntity {
+public class ServiceAnswer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,8 +32,8 @@ public class ServiceResponse extends BaseEntity {
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_request")
-    private ServiceRequest serviceRequest;
+    @JoinColumn(name = "service_commission")
+    private ServiceCommission serviceCommission;
 
     public void updateStatus(ServiceStatus serviceStatus) {
         if(serviceStatus == null){

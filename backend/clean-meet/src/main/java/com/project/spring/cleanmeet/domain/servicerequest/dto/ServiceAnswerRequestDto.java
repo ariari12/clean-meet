@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceResponseDto {
+public class ServiceAnswerRequestDto {
 
     private String description;
 
