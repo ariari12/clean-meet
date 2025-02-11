@@ -116,7 +116,7 @@ public class JwtUtil {
 
 
     public List<GrantedAuthority> extractAuthorities(Claims claims) {
-        List<String> authoritiesList = (List<String>) claims.get("authorities", List.class);
+        List<String> authoritiesList = claims.get("authorities", List.class);
         return authoritiesList.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
