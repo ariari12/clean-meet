@@ -12,6 +12,8 @@ services:
     #        SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY}
     #        SPRING_CLOUD_AWS_REGION_STATIC: ${SPRING_CLOUD_AWS_REGION_STATIC}
     #        SPRING_CLOUD_AWS_S3_BUCKET: ${SPRING_CLOUD_AWS_S3_BUCKET}
+    ports:
+      - "8080:8080"
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -34,10 +36,3 @@ services:
     ports:
       - "6380:6379"
     command: [ "redis-server", "--appendonly", "yes" ]  # 데이터 영구 저장 설정
-
-  nginx-proxy:
-    build: ./nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - spring-app-server
