@@ -27,6 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info("로그인 정보 확인 : {}", email);
         //DB에서 username을 가진 유저를 찾아와서
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
