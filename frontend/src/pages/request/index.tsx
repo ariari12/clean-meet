@@ -77,7 +77,7 @@ const RequestListPage = () => {
   });
 
   return (
-    <div className="my-[100px] max-w-4xl mx-auto p-6 bg-zinc-50 shadow-lg rounded-lg">
+    <div className="my-[100px] max-w-5xl mx-auto p-6 bg-zinc-50 shadow-lg rounded-lg">
       {/* 검색 */}
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
         <select
