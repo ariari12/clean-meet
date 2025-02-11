@@ -55,7 +55,7 @@ const Navbar = () => {
           <Link href="/" className="navbar__list--item">
             고객 문의
           </Link>
-          <Link href="/" className="navbar__list--item">
+          <Link href="/users/profile/personalProfile" className="navbar__list--item">
             프로필
           </Link>
           <Link href="/users/login" className="navbar__list--item">
