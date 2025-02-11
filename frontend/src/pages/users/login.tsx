@@ -19,7 +19,7 @@ const LoginPage = () => {
     try {
       console.log("로그인:", 2);
       const response = await axios.post(
-        "/api/auth/login",
+        "http://localhost:8080/api/auth/login",
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
