@@ -41,9 +41,9 @@ services:
       - "80:80"
     depends_on:
       - spring-app-server
-      # - frontend
+      - react-app-client
 
-  frontend:
+  react-app-client:
     build:
       context: ../../frontend
       dockerfile: Dockerfile
