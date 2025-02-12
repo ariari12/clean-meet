@@ -3,8 +3,8 @@ package com.project.spring.cleanmeet.domain.servicerequest.service;
 import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceStatus;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
@@ -17,10 +17,10 @@ import com.project.spring.cleanmeet.domain.user.repository.AddressRepository;
 import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -57,14 +57,9 @@ public class ServiceCommissionService {
 
     }
 
-    public List<ServiceCommissionResponseDto> findAll() {
-        List<ServiceCommission> all = serviceCommissionRepository.findAll();
-        log.info("all: {}", all);
-        List<ServiceCommissionResponseDto> list =
-                all.stream()
-                        .map(serviceCommissionMapper::toDto)
-                        .toList();
-        log.info("의뢰 목록들 조회 성공 {}", list);
-        return list;
+    public Page<CommissionPageResponseDto> findAllPage(Pageable pageable) {
+        Page<ServiceCommission> allPage = serviceCommissionRepository.findAllPage(pageable);
+        log.info("의뢰 목록들 조회 성공 {}", allPage);
+        return allPage.map(serviceCommissionMapper::toDto);
     }
 }

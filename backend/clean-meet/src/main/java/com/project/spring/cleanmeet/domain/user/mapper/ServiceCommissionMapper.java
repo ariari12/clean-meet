@@ -1,8 +1,8 @@
 package com.project.spring.cleanmeet.domain.user.mapper;
 
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.user.entity.Address;
 import com.project.spring.cleanmeet.domain.user.entity.User;
@@ -17,5 +17,6 @@ public interface ServiceCommissionMapper {
     ServiceCommission toEntity(ServiceCommissionRequestDto serviceCommissionRequestDto,
                                User user, Address address, ServiceCategory serviceCategory);
 
-    ServiceCommissionResponseDto toDto(ServiceCommission serviceCommission);
+    @Mapping(target = "serviceCategoryResponseDto", source = "serviceCategory")
+    CommissionPageResponseDto toDto(ServiceCommission serviceCommission);
 }
