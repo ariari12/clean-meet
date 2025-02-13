@@ -7,7 +7,7 @@ export default function Home() {
       {/* 플랫폼 짧은 슬로건 & 메인 이미지 영역*/}
       <section className="pt-[72px] relative w-full h-[500px] flex flex-col justify-center items-center text-center bg-gray-900 text-white">
         <Image
-          src=""
+          src="/clean-img.jpg"
           alt="깨끗한 집 사진"
           layout="fill"
           objectFit="cover"
