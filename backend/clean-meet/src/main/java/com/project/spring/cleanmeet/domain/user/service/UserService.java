@@ -6,6 +6,7 @@ import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCompany
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCompanyCategoryRepository;
 import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
 import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.*;
 import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
@@ -16,6 +17,8 @@ import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,4 +116,8 @@ public class UserService {
         }
     }
 
+    public Page<CompanyCardPageResponse> findCompanyAllPage(Pageable pageable) {
+        Page<Company> companyCardPage = companyRepository.findCompanyCardPage(pageable);
+        return companyCardPage.map(companyMapper::toDto);
+    }
 }
