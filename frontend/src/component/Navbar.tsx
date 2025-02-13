@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React from "react";
 
-{/* <ul>
+{
+  /* <ul>
   <li>
     <Link href="/company">회사 목록</Link>
   </li>
@@ -38,14 +39,20 @@ import React from "react";
   <li>
     <Link href="/users/signup">회원가입</Link>
   </li>
-</ul>; */}
+</ul>; */
+}
 
 const Navbar = () => {
   return (
     <>
       <div className="navbar">
-        <Link href="/" className="navbar__logo">Clean Meet</Link>
+        <Link href="/" className="navbar__logo">
+          Clean Meet
+        </Link>
         <div className="navbar__list">
+          <Link href="/request/regist" className="navbar__list--item">
+            의뢰 등록
+          </Link>
           <Link href="/request" className="navbar__list--item">
             의뢰 목록
           </Link>
@@ -55,7 +62,10 @@ const Navbar = () => {
           <Link href="/" className="navbar__list--item">
             고객 문의
           </Link>
-          <Link href="/users/profile/personalProfile" className="navbar__list--item">
+          <Link
+            href="/users/profile/personalProfile"
+            className="navbar__list--item"
+          >
             프로필
           </Link>
           <Link href="/users/login" className="navbar__list--item">
