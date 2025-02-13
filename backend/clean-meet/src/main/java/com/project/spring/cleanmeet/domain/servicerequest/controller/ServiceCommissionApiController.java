@@ -31,14 +31,14 @@ public class ServiceCommissionApiController {
                 페이징 및 정렬을 적용하여 서비스 요청 목록을 조회합니다.
                 - `sort` 파라미터는 원하는 정렬 방향을 포함해야 합니다.
                 - 기본값이 설정되어 있어 생략해도 상관없습니다.
-                - 예시: `/api/commission/all?sort=createdAt,desc`
+                - 예시: `/api/commission/page?sort=createdAt,desc`
                 """,
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @GetMapping("/all")
+    @GetMapping("/page")
     public ResponseEntity<Page<CommissionPageResponseDto>> commissionAll(
             @ParameterObject
-            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC)
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         Page<CommissionPageResponseDto> page = serviceCommissionService.findAllPage(pageable);

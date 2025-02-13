@@ -21,6 +21,10 @@ public class Company extends BaseEntity {
     @Column(name = "service_area")
     private String serviceArea;
 
+    //회사소개 문구
+    @Column(name = "company_introduction")
+    private String companyIntroduction;
+
     @Column(name = "company_contact")
     private String companyContact;
     @Lob // Text 자료형으로 매핑
