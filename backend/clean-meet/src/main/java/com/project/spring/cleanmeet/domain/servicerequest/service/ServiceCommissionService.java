@@ -1,6 +1,7 @@
 package com.project.spring.cleanmeet.domain.servicerequest.service;
 
 import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +36,10 @@ public class ServiceCommissionService {
     private final AddressMapper addressMapper;
     private final ServiceCommissionMapper serviceCommissionMapper;
 
-    public void save(ServiceCommissionRequestDto serviceCommissionRequestDto) {
+    public void save(ServiceCommissionRequestDto serviceCommissionRequestDto, Authentication authentication) {
         log.info("서비스 요창 저장 시작 serviceCommissionDto : {}", serviceCommissionRequestDto);
-        User user = userRepository.findById(serviceCommissionRequestDto.getUserId())
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
+        User user = userRepository.findById(Long.parseLong(customUser.getId()))
                 .orElseThrow(() -> new UserNotFoundException("존재하지않은 userId"));
         log.info("유저 조회 성공 user : {}", user);
 
