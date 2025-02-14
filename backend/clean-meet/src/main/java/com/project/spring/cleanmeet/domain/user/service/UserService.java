@@ -1,24 +1,24 @@
 package com.project.spring.cleanmeet.domain.user.service;
 
 import com.project.spring.cleanmeet.common.exception.DuplicateEmailException;
+import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCompanyCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCompanyCategoryRepository;
-import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.*;
 import com.project.spring.cleanmeet.domain.user.entity.*;
 import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.CompanyMapper;
 import com.project.spring.cleanmeet.domain.servicecategory.mapper.ServiceCompanyCategoryMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
-import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +105,8 @@ public class UserService {
                     }
                 ).toList();
 
-        List<ServiceCompanyCategory> savedServiceCompanyCategory = serviceCompanyCategoryRepository.saveAll(serviceCompanyCategoryList);
+        List<ServiceCompanyCategory> savedServiceCompanyCategory =
+                serviceCompanyCategoryRepository.saveAll(serviceCompanyCategoryList);
         log.info("회사 서비스카테고리 저장 완료: {}", savedServiceCompanyCategory);
     }
 
@@ -119,5 +120,16 @@ public class UserService {
     public Page<CompanyCardPageResponse> findCompanyAllPage(Pageable pageable) {
         Page<Company> companyCardPage = companyRepository.findCompanyCardPage(pageable);
         return companyCardPage.map(companyMapper::toDto);
+    }
+
+    public UserProfileResponseDto findUserProfile(Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("유저 프로필 조회 시작 customUser={}", customUser);
+        Long userId = Long.parseLong(customUser.getId());
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("존재하지 않는 유저 입니다."));
+        UserProfileResponseDto userProfileResponseDto = userMapper.toUserProfile(user);
+        log.info("유저 프로필 조회 완료 UserProfileResponseDto : {}", userProfileResponseDto);
+        return userProfileResponseDto;
     }
 }
