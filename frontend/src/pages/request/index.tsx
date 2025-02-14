@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
@@ -77,96 +78,119 @@ const RequestListPage = () => {
   });
 
   return (
-    <div className="my-[100px] max-w-5xl mx-auto p-6 bg-zinc-50 shadow-lg rounded-lg">
-      {/* 검색 */}
-      <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
-        <select
-          value={cleaningType}
-          onChange={(e) => setCleaningType(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          <option value="전체">전체</option>
-          <option value="일반 청소">일반 청소</option>
-          <option value="특수 청소">특수 청소</option>
-          <option value="방역 청소">방역 청소</option>
-        </select>
-
-        <input
-          type="text"
-          placeholder="검색"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center shadow-md hover:bg-blue-600">
-          <FaSearch className="mr-2" /> 검색
-        </button>
-      </div>
-
-      <div className="flex items-center justify-between mt-4">
-        <div>의뢰: {filteredRequests.length}개</div>
-
-        {/* 진행 토글 */}
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-700">모집중만 보기</span>
-          <label className="relative inline-block w-16 h-8 cursor-pointer">
-            <input
-              type="checkbox"
-              className="opacity-0 w-0 h-0 peer"
-              onChange={() =>
-                setStatus(status === "모집중" ? "전체" : "모집중")
-              }
-              checked={status === "모집중"}
-            />
-            <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full border-1 border-gray-400 peer-checked:bg-cyan-700 peer-checked:border-transparent transition-all duration-300 ease-in-out"></span>
-            <span className="absolute left-1 top-1 block w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-8 transition-all duration-300 ease-in-out"></span>
-          </label>
+    <div>
+      <div className="pt-[120px] bg-teal-500 text-white">
+        <div className="max-w-7xl mx-auto py-10 px-6 flex justify-between items-center">
+          <div className="flex-1">
+            <h1 className="text-3xl font-semibold mb-4">
+              맞춤 전문 업체를 찾아보세요!
+            </h1>
+            <p className="text-lg mb-6">
+              다양한 전문 업체들을 비교하고 쉽게 선택해보세요. <br/>
+              고객 맞춤형 서비스를 제공하고 있습니다.
+            </p>
+          </div>
+          <Link href="/company" passHref>
+            <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 transition cursor-pointer">
+              전문업체 확인하기
+            </span>
+          </Link>
         </div>
       </div>
 
-      {/* 리스트 */}
-      <div className="mt-6 space-y-4">
-        {filteredRequests.map((request) => (
-          <div
-            key={request.id}
-            className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer"
+      <div className="my-[100px] max-w-5xl mx-auto p-6 bg-zinc-50 shadow-lg rounded-lg">
+        {/* 검색 */}
+        <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
+          <select
+            value={cleaningType}
+            onChange={(e) => setCleaningType(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            <span
-              className={`text-sm font-semibold ${
-                request.status === "모집중" ? "text-blue-500" : "text-red-500"
-              }`}
-            >
-              {request.status}
-            </span>
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold text-gray-800">
-                {request.title}
-              </span>
-            </div>
+            <option value="전체">전체</option>
+            <option value="일반 청소">일반 청소</option>
+            <option value="특수 청소">특수 청소</option>
+            <option value="방역 청소">방역 청소</option>
+          </select>
 
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">
-                {request.cleaningType}
-              </span>
-              <span className="text-sm text-gray-600">|</span>
-              <span className="text-sm text-gray-600">{request.createdAt}</span>
-            </div>
+          <input
+            type="text"
+            placeholder="검색"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center shadow-md hover:bg-blue-600">
+            <FaSearch className="mr-2" /> 검색
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mt-4">
+          <div>의뢰: {filteredRequests.length}개</div>
+
+          {/* 진행 토글 */}
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-700">모집중만 보기</span>
+            <label className="relative inline-block w-16 h-8 cursor-pointer">
+              <input
+                type="checkbox"
+                className="opacity-0 w-0 h-0 peer"
+                onChange={() =>
+                  setStatus(status === "모집중" ? "전체" : "모집중")
+                }
+                checked={status === "모집중"}
+              />
+              <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full border-1 border-gray-400 peer-checked:bg-cyan-700 peer-checked:border-transparent transition-all duration-300 ease-in-out"></span>
+              <span className="absolute left-1 top-1 block w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-8 transition-all duration-300 ease-in-out"></span>
+            </label>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* 페이지네이션 */}
-      <div className="flex justify-center mt-6 space-x-2">
-        <button className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400">
-          이전
-        </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
-          1
-        </button>
-        <button className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400">
-          다음
-        </button>
+        {/* 리스트 */}
+        <div className="mt-6 space-y-4">
+          {filteredRequests.map((request) => (
+            <div
+              key={request.id}
+              className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer"
+            >
+              <span
+                className={`text-sm font-semibold ${
+                  request.status === "모집중" ? "text-blue-500" : "text-red-500"
+                }`}
+              >
+                {request.status}
+              </span>
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-gray-800">
+                  {request.title}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {request.cleaningType}
+                </span>
+                <span className="text-sm text-gray-600">|</span>
+                <span className="text-sm text-gray-600">
+                  {request.createdAt}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 페이지네이션 */}
+        <div className="flex justify-center mt-6 space-x-2">
+          <button className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400">
+            이전
+          </button>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
+            1
+          </button>
+          <button className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400">
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );
