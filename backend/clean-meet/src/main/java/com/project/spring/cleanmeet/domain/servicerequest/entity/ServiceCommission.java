@@ -6,6 +6,7 @@ import com.project.spring.cleanmeet.domain.user.entity.Address;
 import com.project.spring.cleanmeet.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -22,6 +23,11 @@ public class ServiceCommission extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "service_status")

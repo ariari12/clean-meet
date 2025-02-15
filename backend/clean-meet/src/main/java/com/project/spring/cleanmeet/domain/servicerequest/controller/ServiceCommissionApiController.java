@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -50,8 +51,9 @@ public class ServiceCommissionApiController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @PostMapping("/commission")
-    public ResponseEntity<String> request(@RequestBody ServiceCommissionRequestDto serviceCommissionRequestDto) {
-        serviceCommissionService.save(serviceCommissionRequestDto);
+    public ResponseEntity<String> request(@RequestBody ServiceCommissionRequestDto serviceCommissionRequestDto,
+                                          Authentication authentication) {
+        serviceCommissionService.save(serviceCommissionRequestDto,authentication);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

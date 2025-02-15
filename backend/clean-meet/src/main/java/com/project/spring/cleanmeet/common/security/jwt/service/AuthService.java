@@ -51,7 +51,7 @@ public class AuthService {
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
         UserLoginResponseDto userLoginResponseDto =
-                new UserLoginResponseDto(newAccessToken, customUser.getUsername(), customUser.getName());
+                new UserLoginResponseDto(newAccessToken, customUser.getUsername(), customUser.getName(), customUser.getAuthorities());
         log.info("유저 로그인 성공 {}", userLoginResponseDto);
         return userLoginResponseDto;
     }

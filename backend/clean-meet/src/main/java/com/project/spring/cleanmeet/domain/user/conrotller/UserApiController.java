@@ -1,10 +1,12 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
 import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
 import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +33,18 @@ public class UserApiController {
     public ResponseEntity<String> users(@RequestBody UserRequestDto userRequestDto) {
         userService.personalSave(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            summary = "프로필 정보 조회",
+            description = "로그인 된 유저 프로필 조회",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileResponseDto> getUserProfile(Authentication auth) {
+        UserProfileResponseDto dto = userService.findUserProfile(auth);
+
+        return ResponseEntity.ok(dto);
     }
 
     @Operation(

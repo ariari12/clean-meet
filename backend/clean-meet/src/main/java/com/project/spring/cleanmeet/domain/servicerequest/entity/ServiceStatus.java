@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ServiceStatus {
-    PENDING("대기중"), APPROVED("승인"), REJECTED("거부"), COMPLETE("완료");
+    PENDING("대기중"), APPROVED("승인"), REJECTED("거부"), CLOSED("종료");
 
     private final String status;
 
