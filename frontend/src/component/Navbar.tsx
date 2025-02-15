@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { useUser } from "../context/UserContext"; // UserContext 가져오기
+import { useUser } from "../context/UserContext";
 
 const Navbar = () => {
   const { user, setUser } = useUser(); // 사용자 정보
@@ -29,23 +29,37 @@ const Navbar = () => {
           <Link href="/customerInquiry" className="navbar__list--item">
             고객 문의
           </Link>
-          <Link
-            href="/users/profile/personalProfile"
-            className="navbar__list--item"
-          >
-            프로필
-          </Link>
-
+        </div>
+        <div>
           {user ? (
-            <>
+            <div className="flex items-center">
+              {/* <p className="text-lg">
+                <span className="font-bold italic">테스트 유저</span>님
+                안녕하세요
+              </p> */}
+              <p className="text-lg">
+                <span className="font-bold italic">{user.name}</span>님
+                안녕하세요!
+              </p>
               <button onClick={handleLogout} className="navbar__list--item">
                 로그아웃
               </button>
-            </>
+              <Link
+                href="/users/profile/personalProfile"
+                className="navbar__list--item"
+              >
+                프로필
+              </Link>
+            </div>
           ) : (
-            <Link href="/users/login" className="navbar__list--item">
-              로그인
-            </Link>
+            <div>
+              <Link href="/users/login" className="navbar__list--item">
+                로그인
+              </Link>
+              <Link href="/users/signup" className="navbar__list--item">
+                회원가입
+              </Link>
+            </div>
           )}
         </div>
       </div>
