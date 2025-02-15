@@ -8,8 +8,10 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       REDIS_HOST: redis
       REDIS_PORT: 6379
-    ports:
-      - "8080:8080"
+    #        SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+    #        SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+    #        SPRING_CLOUD_AWS_REGION_STATIC: ${SPRING_CLOUD_AWS_REGION_STATIC}
+    #        SPRING_CLOUD_AWS_S3_BUCKET: ${SPRING_CLOUD_AWS_S3_BUCKET}
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -32,3 +34,20 @@ services:
     ports:
       - "6380:6379"
     command: [ "redis-server", "--appendonly", "yes" ]  # 데이터 영구 저장 설정
+
+  nginx-proxy:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-app-server
+      - react-app-client
+
+  react-app-client:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    # ports:
+    #   - "3000:3000"
+    depends_on:
+      - spring-app-server

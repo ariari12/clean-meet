@@ -4,17 +4,20 @@ import com.project.spring.cleanmeet.common.exception.InvalidTokenException;
 import com.project.spring.cleanmeet.common.security.jwt.JwtUtil;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginRequestDto;
+import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginResponseDto;
 import com.project.spring.cleanmeet.common.security.jwt.redis.RedisRefreshTokenService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,7 +27,8 @@ public class AuthService {
 
     private static final int TOKEN_TTL = 60 * 60 * 24;  // 1일
 
-    public String loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    public UserLoginResponseDto loginWithJwt(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+        log.info("로그인 로직 시작 : {}", userLoginRequestDto);
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
         // 아이디 비밀번호 검증
@@ -34,17 +38,22 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
+        log.info("로그인 유저 검증 성공 : {}", customUser);
 
         String newAccessToken = jwtUtil.createToken(customUser);
-
+        log.info("새로운 엑세스 토큰 생성 : {}", newAccessToken);
 
         String newRefreshToken = jwtUtil.createRefreshToken(customUser);
         // 4. Refresh Token DB 저장 or 캐싱 (Rotation을 위해서 '현재 유효한 토큰 목록'을 관리)
         redisRefreshTokenService.saveRefreshToken(customUser.getId().toString(),newRefreshToken,TOKEN_TTL);
+        log.info("새로운 리프레시 토큰 생성 : {}", newRefreshToken);
 
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
-        return newAccessToken;
+        UserLoginResponseDto userLoginResponseDto =
+                new UserLoginResponseDto(newAccessToken, customUser.getUsername(), customUser.getName(), customUser.getAuthorities());
+        log.info("유저 로그인 성공 {}", userLoginResponseDto);
+        return userLoginResponseDto;
     }
 
     public String tokenRotation(String refreshToken, String authorizationHeader, HttpServletResponse response) {
@@ -89,6 +98,7 @@ public class AuthService {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        //cookie.setSecure(true);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
