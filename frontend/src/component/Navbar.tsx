@@ -1,48 +1,15 @@
 import Link from "next/link";
 import React from "react";
-
-{
-  /* <ul>
-  <li>
-    <Link href="/company">회사 목록</Link>
-  </li>
-  <li>
-    <Link href="/company/regist">회사 생성</Link>
-  </li>
-  <li>
-    <Link href="/company/1">회사 상세</Link>
-  </li>
-  <li>
-    <Link href="/company/edit">회사 수정</Link>
-  </li>
-
-  <li>
-    <Link href="/reqeust">의뢰 목록</Link>
-  </li>
-  <li>
-    <Link href="/reqeust/regist">의뢰 생성</Link>
-  </li>
-  <li>
-    <Link href="/reqeust/1">의뢰 상세</Link>
-  </li>
-  <li>
-    <Link href="/reqeust/edit">의뢰 수정</Link>
-  </li>
-
-  <li>
-    <Link href="/users/login">로그인</Link>
-  </li>
-  <li></li>
-  <li>
-    <Link href="/users/profile">프로필</Link>
-  </li>
-  <li>
-    <Link href="/users/signup">회원가입</Link>
-  </li>
-</ul>; */
-}
+import { useUser } from "../context/UserContext"; // UserContext 가져오기
 
 const Navbar = () => {
+  const { user, setUser } = useUser(); // 사용자 정보
+
+  const handleLogout = () => {
+    setUser(null); // 로그아웃 시 사용자 정보 초기화
+    localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 삭제
+  };
+
   return (
     <>
       <div className="navbar">
@@ -68,9 +35,18 @@ const Navbar = () => {
           >
             프로필
           </Link>
-          <Link href="/users/login" className="navbar__list--item">
-            로그인
-          </Link>
+
+          {user ? (
+            <>
+              <button onClick={handleLogout} className="navbar__list--item">
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <Link href="/users/login" className="navbar__list--item">
+              로그인
+            </Link>
+          )}
         </div>
       </div>
     </>
