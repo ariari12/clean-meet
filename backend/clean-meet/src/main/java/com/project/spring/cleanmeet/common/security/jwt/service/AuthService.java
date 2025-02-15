@@ -57,7 +57,9 @@ public class AuthService {
     }
 
     public String tokenRotation(String refreshToken, String authorizationHeader, HttpServletResponse response) {
+        log.info("token Rotation 시작 refreshToken: {}", refreshToken);
         //토큰 추출
+        log.info("리프레시 토큰 추출 시작 : {}", refreshToken);
         Claims claims = jwtUtil.extractToken(refreshToken);
         String userId = claims.get("id", String.class);
         // 레디스 검증
@@ -65,15 +67,19 @@ public class AuthService {
         if( savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)) {
             throw new InvalidTokenException("Refresh token 만료 또는 유효하지 않습니다.");
         }
+        log.info("레디스 검증 완료 savedRefreshToken : {}", savedRefreshToken);
         // 2. 새로운 액세스 토큰 및 리프레시 토큰 발급
         String expiredAccessToken = extractAccessToken(authorizationHeader);
         CustomUser customUser = extractCustomUserFromExpiredToken(expiredAccessToken);
         String newAccessToken = jwtUtil.createToken(customUser);
         String newRefreshToken = jwtUtil.createRefreshToken(userId);
+        log.info("엑세스 토큰 재발급 완료 : {} ", newAccessToken);
+        log.info("리프레시 토큰 재발급 완료 : {}", newRefreshToken);
 
         updateRefreshTokenRedis(userId, newRefreshToken, TOKEN_TTL);
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
 
+        log.info("token Rotation 종료");
         return newAccessToken;
     }
 
@@ -106,7 +112,9 @@ public class AuthService {
     public String extractAccessToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             // "Bearer " 제거
-            return authorizationHeader.substring(7);
+            String extractToken = authorizationHeader.substring(7);
+            log.info("Access Token 추출 완료 : {}", extractToken);
+            return extractToken;
         }
         throw new IllegalArgumentException("Authorization 헤더가 유효하지 않습니다.");
     }

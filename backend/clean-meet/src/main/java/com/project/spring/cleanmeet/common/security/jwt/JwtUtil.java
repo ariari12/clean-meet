@@ -71,10 +71,12 @@ public class JwtUtil {
             log.error("Failed to parse token: {}",e.getMessage());
             throw new InvalidTokenException("잘못된 토큰입니다.");
         }
+        log.info("토큰 추출 완료 : {}", claims);
         return claims;
     }
 
     public Claims extractExpiredAccessToken(String token) {
+        log.info("만료된 엑세스 토큰 추출 시작  : {}", token);
         Claims claims;
         try {
             claims = Jwts.parser()
@@ -87,6 +89,7 @@ public class JwtUtil {
             log.error("Failed to parse token: {}",e.getMessage());
             throw new InvalidTokenException("잘못된 토큰입니다.");
         }
+        log.info("만료된 엑세스 토큰 추출 완료  : {}", claims);
         return claims;
     }
 
