@@ -1,41 +1,65 @@
 "use client";
 
+import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useUser } from "../../context/UserContext";
 
 const LoginPage = () => {
   const router = useRouter();
+  const { setUser } = useUser(); // UserContext에서 setUser를 사용
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   console.log("로그인:", 1);
-  
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    // 데이터 예시
+    // {
+    //   "accessToken": "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VybmFtZSI6InRlc3RAdGVzdC5jb20iLCJpZCI6IjEiLCJuYW1lIjoic3RyaW5nIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9QRVJTT05BTCJdLCJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNzM5NjE4OTQzLCJleHAiOjE3Mzk2MjA3NDN9.nzUZBuj0w8wwcwcan8kgs1TBq7uHph-bVXuAWKQSl1XhaTA1tRe499TzxW7aAeM7",
+    //   "email": "test@test.com",
+    //   "name": "string",
+    //   "authorities": [
+    //     {
+    //       "authority": "ROLE_PERSONAL"
+    //     }
+    //   ]
+    // }
 
     try {
       console.log("로그인:", 2);
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true, // 백엔드와 쿠키/토큰 공유
         }
       );
-  
+
       console.log("로그인 성공:", response.data);
 
-      // JWT 토큰 저장 
-      const token = response.data;
+      // JWT 토큰 저장
+      const token = response.data.accessToken;
       localStorage.setItem("token", token);
+      
+      // 사용자 정보 저장
+      const user = {
+        email: response.data.email,
+        name: response.data.name,
+        authorities: response.data.authority,
+      };
+      setUser(user);
 
-      router.push("/")
+      router.push("/");
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("로그인 에러:", error.response?.data || error.message);
     }
@@ -45,7 +69,7 @@ const LoginPage = () => {
     <div className="relative w-full h-[100vh] flex flex-col justify-center items-center text-center">
       <div className="max-w-[650px] lg:w-[650px] bg-gradient-to-t from-white to-[#f4f7fb] rounded-[40px] p-[25px] px-[35px] border-[5px] border-white shadow-[rgba(133,189,215,0.88)_0px_30px_30px_-20px] m-[20px]">
         <div className="text-center font-black text-[30px] text-[#1089d3]">
-          로그인11
+          로그인
         </div>
         <form className="mt-[20px]" onSubmit={handleLogin}>
           <input
