@@ -1,11 +1,22 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const RequestRegistPage = () => {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const [title, setTitle] = useState("");
-  const [cleaningType, setCleaningType] = useState("일반 청소");
+  const [cleaningType, setCleaningType] = useState("OFFICE_CLEANING");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [description, setDescription] = useState("");
+  const [addressName, setAddressName] = useState("");
+  // const [region1DepthName, setRegion1DepthName] = useState("");
+  // const [region2DepthName, setRegion2DepthName] = useState("");
+  // const [region3DepthName, setRegion3DepthName] = useState("");
+  // const [roadName, setRoadName] = useState("");
+  // const [mainBuildingNo, setMainBuildingNo] = useState("");
+  // const [subBuildingNo, setSubBuildingNo] = useState("");
+  // const [zoneNo, setZoneNo] = useState("");
   const [images, setImages] = useState<File[]>([]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,19 +27,39 @@ const RequestRegistPage = () => {
     setImages([...images, ...files]);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newRequest = {
+
+    const requestData = {
       title,
-      cleaningType,
+      description,
       startDate,
       endDate,
-      description,
-      images,
-      status: "모집중",
-      createdAt: new Date().toISOString().split("T")[0],
+      addressRequestDto: {
+        addressName,
+        region1DepthName: "",
+        region2DepthName: "",
+        region3DepthName: "",
+        roadName: "",
+        mainBuildingNo: "",
+        subBuildingNo: "",
+        zoneNo: "",
+      },
+      serviceCategory: {
+        name: cleaningType,
+      },
     };
-    console.log("등록 데이터 확인:", newRequest);
+
+    console.log("데이터 확인:", requestData);
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/service/commitsstion`,
+        requestData
+      );
+      console.log("등록 성공:", response.data);
+    } catch (error) {
+      console.error("등록 실패:", error);
+    }
   };
 
   return (
@@ -57,9 +88,10 @@ const RequestRegistPage = () => {
               onChange={(e) => setCleaningType(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
             >
-              <option value="일반 청소">일반 청소</option>
-              <option value="특수 청소">특수 청소</option>
-              <option value="방역 청소">방역 청소</option>
+              <option value="OFFICE_CLEANING">사무실 청소</option>
+              <option value="HOME_CLEANING">가정 청소</option>
+              <option value="MOVE_CLEANING">이사 청소</option>
+              <option value="WINDOW_CLEANING">창문 청소</option>
             </select>
           </div>
 
@@ -95,6 +127,19 @@ const RequestRegistPage = () => {
           ></textarea>
         </div>
 
+        {/* 주소 */}
+        <div>
+          <label className="block text-gray-700">주소</label>
+          <input
+            type="text"
+            value={addressName}
+            onChange={(e) => setAddressName(e.target.value)}
+            placeholder="주소명"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
+
         {/* 이미지 업로드 */}
         <div>
           <label className="block text-gray-700">이미지 첨부 (최대 5개)</label>
@@ -117,7 +162,6 @@ const RequestRegistPage = () => {
           </div>
         </div>
 
-        {/* 등록 버튼 */}
         <div className="flex justify-end">
           <button
             type="submit"
