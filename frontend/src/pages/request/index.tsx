@@ -86,7 +86,7 @@ const RequestListPage = () => {
               맞춤 전문 업체를 찾아보세요!
             </h1>
             <p className="text-lg mb-6">
-              다양한 전문 업체들을 비교하고 쉽게 선택해보세요. <br/>
+              다양한 전문 업체들을 비교하고 쉽게 선택해보세요. <br />
               고객 맞춤형 서비스를 제공하고 있습니다.
             </p>
           </div>
@@ -149,33 +149,33 @@ const RequestListPage = () => {
         {/* 리스트 */}
         <div className="mt-6 space-y-4">
           {filteredRequests.map((request) => (
-            <div
-              key={request.id}
-              className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer"
-            >
-              <span
-                className={`text-sm font-semibold ${
-                  request.status === "모집중" ? "text-blue-500" : "text-red-500"
-                }`}
-              >
-                {request.status}
-              </span>
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold text-gray-800">
-                  {request.title}
+            <Link key={request.id} href={`/request/${request.id}`} passHref>
+              <div className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer">
+                <span
+                  className={`text-sm font-semibold ${
+                    request.status === "모집중"
+                      ? "text-blue-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {request.status}
                 </span>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold text-gray-800">
+                    {request.title}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">
+                    {request.cleaningType}
+                  </span>
+                  <span className="text-sm text-gray-600">|</span>
+                  <span className="text-sm text-gray-600">
+                    {request.createdAt}
+                  </span>
+                </div>
               </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">
-                  {request.cleaningType}
-                </span>
-                <span className="text-sm text-gray-600">|</span>
-                <span className="text-sm text-gray-600">
-                  {request.createdAt}
-                </span>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
 
