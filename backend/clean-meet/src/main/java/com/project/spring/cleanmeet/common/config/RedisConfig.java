@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -16,12 +17,23 @@ public class RedisConfig {
     private String redisHost;
     @Value("${spring.data.redis.port}")
     private int redisPort;
+    @Value("${spring.data.redis.ssl.enabled:false}") // 기본값 false
+    private boolean redisSslEnabled;
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
         //Lettuce 라는 라이브러리를 활용해 Redis 연결을 관리하는 객체를 생성하고
         // Redis 서버에 대한 정보(호스트, 포트)를 설정한다
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisPort));
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
+
+        // LettuceClientConfiguration을 사용해 SSL 적용
+        LettuceClientConfiguration.LettuceClientConfigurationBuilder clientConfig
+                = LettuceClientConfiguration.builder();
+        if (redisSslEnabled) {
+            clientConfig.useSsl();
+        }
+
+        return new LettuceConnectionFactory(redisConfig, clientConfig.build());
     }
 
 
