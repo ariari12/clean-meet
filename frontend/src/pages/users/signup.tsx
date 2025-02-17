@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import GeneralSignup from "../../component/GeneralSignup";
 import CompanySignup from "../../component/CompanySignup";
+import { useRouter } from "next/navigation";
 
 const SignupPage: React.FC = () => {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState<"general" | "company">("general");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -40,8 +44,9 @@ const SignupPage: React.FC = () => {
     };
 
     try {
-      await axios.post("/api/users", submitData);
+      await axios.post(`${API_BASE_URL}/api/users`, submitData);
       alert("회원가입 성공");
+      router.push("/users/login");
     } catch (error) {
       alert("회원가입 실패: " + error);
     }

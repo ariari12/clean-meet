@@ -1,78 +1,72 @@
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 
-const RequestListPage = () => {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [cleaningType, setCleaningType] = useState("전체");
+interface ServiceCategoryResponseDto {
+  name: string;
+}
 
-  // 확인용 더미
-  const requests = [
-    {
-      id: 1,
-      title: "원룸 청소 구합니다",
-      status: "모집중",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 2,
-      title: "사무실 청소 구해요",
-      status: "완료",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 3,
-      title: "건물 외관 관리 및 청소",
-      status: "모집중",
-      cleaningType: "특수 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 4,
-      title: "병원 방역 의뢰",
-      status: "모집중",
-      cleaningType: "방역 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 5,
-      title: "사무실 청소",
-      status: "완료",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 6,
-      title: "사무실 청소",
-      status: "완료",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 7,
-      title: "사무실 청소",
-      status: "모집중",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-    {
-      id: 8,
-      title: "사무실 청소",
-      status: "모집중",
-      cleaningType: "일반 청소",
-      createdAt: "2025-02-10",
-    },
-  ];
+interface Request {
+  id: number;
+  title: string;
+  serviceStatus: "PENDING" | "COMPLETED"; // 서비스 상태
+  serviceCategoryResponseDto: ServiceCategoryResponseDto; // 청소 종류
+  createdAt: string; // 생성일
+}
+
+const RequestListPage: React.FC = () => {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const [search, setSearch] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [cleaningType, setCleaningType] = useState<string>("전체");
+  const [requests, setRequests] = useState<Request[]>([]);
+
+  useEffect(() => {
+    const getRequestsList = async () => {
+      try {
+        const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
+
+        const response = await axios.get(
+          // "http://localhost:8080/api/service/page?page=1&size=10&sort=createdAt,DESC",
+          // `${API_BASE_URL}/api/commission/page?sort=createdAt,desc`,
+          // `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt,DESC`,
+          `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "", // 토큰이 존재하면 헤더에 추가
+            },
+          }
+        );
+
+        const data = response.data;
+        console.log("data 확인:", data);
+
+        const mappedRequests = data.content.map((item: Request) => ({
+          id: item.id,
+          title: item.title,
+          status: item.serviceStatus === "PENDING" ? "모집중" : "완료",
+          cleaningType: item.serviceCategoryResponseDto.name,
+          createdAt: new Date(item.createdAt).toLocaleDateString(),
+        }));
+
+        setRequests(mappedRequests);
+      } catch (error) {
+        console.error("요청중 에러가 발생했습니다. :", error);
+      }
+    };
+
+    getRequestsList();
+  }, []);
 
   // 리스트 필터
   const filteredRequests = requests.filter((request) => {
     const matchesSearch = request.title.includes(search);
-    const matchesStatus = status === "전체" || request.status === status;
+    const matchesStatus = status === "전체" || request.serviceStatus === status;
     const matchesCleaningType =
-      cleaningType === "전체" || request.cleaningType === cleaningType;
+      cleaningType === "전체" ||
+      request.serviceCategoryResponseDto.name === cleaningType;
 
     return matchesSearch && matchesStatus && matchesCleaningType;
   });
@@ -148,37 +142,41 @@ const RequestListPage = () => {
 
         {/* 리스트 */}
         <div className="mt-6 space-y-4">
-          {filteredRequests.map((request) => (
-            <Link key={request.id} href={`/request/${request.id}`} passHref>
-              <div className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer">
-                <span
-                  className={`text-sm font-semibold ${
-                    request.status === "모집중"
-                      ? "text-blue-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {request.status}
-                </span>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-gray-800">
-                    {request.title}
+          {filteredRequests.length > 0 ? (
+            filteredRequests.map((request) => (
+              <Link key={request.id} href={`/request/${request.id}`} passHref>
+                <div className="p-4 bg-gray-50 rounded-lg shadow-md flex flex-col gap-2 border border-gray-200 cursor-pointer">
+                  <span
+                    className={`text-sm font-semibold ${
+                      request.serviceStatus === "PENDING"
+                        ? "text-blue-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {request.serviceStatus}
                   </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">
-                    {request.cleaningType}
-                  </span>
-                  <span className="text-sm text-gray-600">|</span>
-                  <span className="text-sm text-gray-600">
-                    {request.createdAt}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-semibold text-gray-800">
+                      {request.title}
+                    </span>
+                  </div>
 
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">
+                      {request.serviceCategoryResponseDto.name}
+                    </span>
+                    <span className="text-sm text-gray-600">|</span>
+                    <span className="text-sm text-gray-600">
+                      {request.createdAt}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="text-center text-gray-500">목록이 없습니다.</div>
+          )}
+        </div>
         {/* 페이지네이션 */}
         <div className="flex justify-center mt-6 space-x-2">
           <button className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400">
