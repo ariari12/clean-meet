@@ -26,7 +26,8 @@ pipeline {
                 script {
                     echo "🛑 기존 컨테이너 중지 및 제거"
                     sh """
-                        docker-compose -f docker-compose.prod.yml down || true
+                        cd backend/clean-meet
+                        docker-compose -f docker-compose-prod.yml down || true
                         docker system prune -f
                     """
                 }
@@ -38,8 +39,11 @@ pipeline {
                 script {
                     echo "🚀 최신 Docker 이미지 가져오기 & 빌드"
                     try {
-                        sh 'docker-compose -f docker-compose.prod.yml pull || true'
-                        sh 'docker-compose -f docker-compose.prod.yml build'
+                        sh """
+                            cd backend/clean-meet
+                            docker-compose -f docker-compose-prod.yml pull || true
+                            docker-compose -f docker-compose-prod.yml build
+                        """
                     } catch (Exception e) {
                         error "❌ Docker 이미지 빌드 실패: ${e.getMessage()}"
                     }
@@ -52,7 +56,10 @@ pipeline {
                 script {
                     echo "▶️ 애플리케이션 실행"
                     try {
-                        sh 'docker-compose -f docker-compose.prod.yml up -d'
+                        sh """
+                            cd backend/clean-meet
+                            docker-compose -f docker-compose-prod.yml up -d
+                        """
                     } catch (Exception e) {
                         error "❌ 컨테이너 실행 실패: ${e.getMessage()}"
                     }
