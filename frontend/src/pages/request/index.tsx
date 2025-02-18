@@ -17,17 +17,17 @@ interface Request {
 
 const RequestListPage: React.FC = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
-
+  
   const [search, setSearch] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [cleaningType, setCleaningType] = useState<string>("전체");
   const [requests, setRequests] = useState<Request[]>([]);
-
+  
   useEffect(() => {
     const getRequestsList = async () => {
       try {
-
+        const token = localStorage.getItem("token") || "";
+        
         const response = await axios.get(
           // "http://localhost:8080/api/service/page?page=1&size=10&sort=createdAt,DESC",
           // `${API_BASE_URL}/api/commission/page?sort=createdAt,desc`,
