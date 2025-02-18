@@ -14,6 +14,6 @@ public interface UserMapper {
     User toEntity(UserRequestDto userRequestDto);
 
     @Mapping(target = "addressName", source = "address.addressName")
-    UserProfileResponseDto toUserProfile(User user);
+    UserProfileResponseDto toUserProfile(User user, Address address);
 
 }

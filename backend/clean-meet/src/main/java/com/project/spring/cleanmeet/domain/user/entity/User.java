@@ -25,19 +25,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ToString.Exclude
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
-
-
-    public void updateAddress(Address address) {
-        if(address == null) {
-            throw new IllegalArgumentException("Address cannot be null");
-        }
-        this.address = address;
-    }
     public void updateRole(Role role) {
         if(role == null) {
             throw new IllegalArgumentException("Role cannot be null");

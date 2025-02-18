@@ -31,4 +31,10 @@ public class Address {
     @Column(name = "zone_no")
     private String zoneNo;
 
+    @ToString.Exclude
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 }
