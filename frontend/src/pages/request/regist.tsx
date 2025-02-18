@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 const RequestRegistPage = () => {
   const router = useRouter();
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
 
   const [title, setTitle] = useState("");
   const [cleaningType, setCleaningType] = useState("OFFICE_CLEANING");
@@ -55,6 +54,8 @@ const RequestRegistPage = () => {
 
     console.log("데이터 확인:", requestData);
     try {
+      const token = localStorage.getItem("token") || "";
+
       const response = await axios.post(
         `${API_BASE_URL}/api/service/commitsstion`,
         requestData,
