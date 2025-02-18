@@ -32,7 +32,7 @@ public class ServiceCommissionRepositoryImpl implements ServiceCommissionQueryDs
 
         List<ServiceCommission> contents = queryFactory
                 .selectFrom(serviceCommission)
-                .leftJoin(serviceCommission.serviceCategory, serviceCategory).fetchJoin()
+                .leftJoin(serviceCommission.serviceCategory, serviceCategory)
                 .orderBy(orderSpecifier)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
