@@ -2,6 +2,7 @@ package com.project.spring.cleanmeet.domain.servicerequest.controller;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceCommissionService;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,19 @@ import org.springframework.web.bind.annotation.*;
 public class ServiceCommissionApiController {
     private final ServiceCommissionService serviceCommissionService;
     private final ServiceAnswerService serviceAnswerService;
+
+
+
+    @Operation(
+            summary = "서비스 의뢰 상세 조회",
+            description = "의뢰 상세 조회 페이지"
+    )
+    @GetMapping("/request/{id}")
+    public ResponseEntity<ServiceCommissionResponseDto> getServiceCommission(
+            @PathVariable Long id) {
+        ServiceCommissionResponseDto dto = serviceCommissionService.findCommissionDetailById(id);
+        return ResponseEntity.ok(dto);
+    }
 
     @Operation(
             summary = "서비스 요청 목록",

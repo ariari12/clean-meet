@@ -6,6 +6,7 @@ import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategor
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceStatus;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
@@ -53,6 +54,7 @@ public class ServiceCommissionService {
         log.info("서비스 카테고리 조회 성공 serviceCategory : {}",serviceCategory);
 
         ServiceCommission serviceCommission = serviceCommissionMapper.toEntity(serviceCommissionRequestDto, user, savedAddress, serviceCategory);
+        serviceCommission.updateAddress(savedAddress);
         serviceCommission.updateServiceStatus(ServiceStatus.PENDING);
         ServiceCommission savedServiceCommission = serviceCommissionRepository.save(serviceCommission);
         log.info("서비스 요청 저장 성공 serviceCommission : {}", savedServiceCommission);
@@ -63,6 +65,20 @@ public class ServiceCommissionService {
     public Page<CommissionPageResponseDto> findAllPage(Pageable pageable) {
         Page<ServiceCommission> allPage = serviceCommissionRepository.findAllPage(pageable);
         log.info("의뢰 목록들 조회 성공 {}", allPage);
-        return allPage.map(serviceCommissionMapper::toDto);
+        return allPage.map(serviceCommissionMapper::toPageResponseDto);
+    }
+
+    public ServiceCommissionResponseDto findCommissionDetailById(Long commissionId) {
+        log.info("의뢰 상세 조회 시작  commissionId : {}", commissionId);
+        ServiceCommission serviceCommission = serviceCommissionRepository.findById(commissionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재 하지않은 의뢰 ID : " + commissionId));
+
+        log.info("의뢰 조회 완료 serviceCommission getAddress().getRegion3DepthName() : {}", serviceCommission.getAddress().getRegion3DepthName());
+
+
+        ServiceCommissionResponseDto dto = serviceCommissionMapper.toServiceCommissionResponseDto(serviceCommission);
+        log.info("의뢰 상세 조회 종료 dto : {}", dto);
+
+        return dto;
     }
 }

@@ -56,4 +56,10 @@ public class ServiceCommission extends BaseEntity {
         this.serviceStatus = serviceStatus;
     }
 
+    public void updateAddress(Address savedAddress) {
+        if (savedAddress == null) {
+            throw new IllegalArgumentException("주소는 null일 수 없습니다.");
+        }
+        this.address = savedAddress;
+    }
 }
