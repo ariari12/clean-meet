@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const RequestRegistPage = () => {
+  const router = useRouter();
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
 
   const [title, setTitle] = useState("");
   const [cleaningType, setCleaningType] = useState("OFFICE_CLEANING");
@@ -54,9 +57,18 @@ const RequestRegistPage = () => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/api/service/commitsstion`,
-        requestData
+        requestData,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "", 
+          },
+        }
       );
       console.log("등록 성공:", response.data);
+      const requestId = response.data.id; 
+      if (requestId) {
+        router.push(`/request/${requestId}`);
+      }
     } catch (error) {
       console.error("등록 실패:", error);
     }

@@ -17,6 +17,7 @@ interface Request {
 
 const RequestListPage: React.FC = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
 
   const [search, setSearch] = useState<string>("");
   const [status, setStatus] = useState<string>("");
@@ -26,7 +27,6 @@ const RequestListPage: React.FC = () => {
   useEffect(() => {
     const getRequestsList = async () => {
       try {
-        const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
 
         const response = await axios.get(
           // "http://localhost:8080/api/service/page?page=1&size=10&sort=createdAt,DESC",
@@ -35,7 +35,7 @@ const RequestListPage: React.FC = () => {
           `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
           {
             headers: {
-              Authorization: token ? `Bearer ${token}` : "", // 토큰이 존재하면 헤더에 추가
+              Authorization: token ? `Bearer ${token}` : "", 
             },
           }
         );
