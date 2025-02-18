@@ -118,7 +118,9 @@ public class UserService {
     }
 
     public Page<CompanyCardPageResponse> findCompanyAllPage(Pageable pageable) {
+        log.info("회사 카드 페이지 조회 시작 : {}", pageable);
         Page<Company> companyCardPage = companyRepository.findCompanyCardPage(pageable);
+        log.info("회사 카드 페이지 조회 완료  : {}", companyCardPage.getContent());
         return companyCardPage.map(companyMapper::toDto);
     }
 
