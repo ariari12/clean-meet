@@ -62,12 +62,14 @@ public class ServiceCommissionService {
 
     }
 
+    @Transactional(readOnly = true)
     public Page<CommissionPageResponseDto> findAllPage(Pageable pageable) {
         Page<ServiceCommission> allPage = serviceCommissionRepository.findAllPage(pageable);
         log.info("의뢰 목록들 조회 성공 {}", allPage);
         return allPage.map(serviceCommissionMapper::toPageResponseDto);
     }
 
+    @Transactional(readOnly = true)
     public ServiceCommissionResponseDto findCommissionDetailById(Long commissionId) {
         log.info("의뢰 상세 조회 시작  commissionId : {}", commissionId);
         ServiceCommission serviceCommission = serviceCommissionRepository.findById(commissionId)
