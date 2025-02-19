@@ -1,8 +1,6 @@
 package com.project.spring.cleanmeet.domain.servicerequest.controller;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.*;
+import com.project.spring.cleanmeet.domain.servicerequest.service.CommissionCommentService;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceCommissionService;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class ServiceCommissionApiController {
     private final ServiceCommissionService serviceCommissionService;
     private final ServiceAnswerService serviceAnswerService;
-
-
+    private final CommissionCommentService commissionCommentService;
 
     @Operation(
             summary = "서비스 의뢰 상세 조회",
@@ -80,4 +77,18 @@ public class ServiceCommissionApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Operation(
+            summary = "서비스 의뢰 댓글 생성",
+            description = """                    
+                    - parentId null 값인 경우 부모 댓글 생성
+                    - parentId 에 값이 있을 경우 자식 댓글 생성
+                    """
+    )
+    @PostMapping("/comments/{commissionId}")
+    public ResponseEntity<String> commissionComment(
+            @PathVariable Long commissionId, Authentication auth,
+            @RequestBody CommissionCommentRequestDto dto) {
+        commissionCommentService.save(commissionId, auth, dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
