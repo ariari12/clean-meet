@@ -57,20 +57,30 @@ const CompanyDetailPage = () => {
         </div>
       </div>
 
-      <p className="mt-4 py-10 text-gray-700">{company.description}</p>
       <div className="space-y-2 border-t pt-4">
         <p>
-          <strong>제공 서비스:</strong> {company.services.join(", ")}
+          <div className="flex flex-wrap gap-2 mt-2">
+            {company.services.map((service, index) => (
+              <span
+                key={index}
+                className="bg-blue-200 py-1 px-3 rounded-md text-sm"
+              >
+                {service}
+              </span>
+            ))}
+          </div>
         </p>
         <p>
           <strong>연락처:</strong> {company.contact}
         </p>
         <p>
-          <strong>주소:</strong> {company.address}
+          <strong>이메일:</strong> test@test.com
         </p>
         <p>
-          <strong>평점:</strong> ⭐ {company.rating} / 5
+          <strong>주소:</strong> {company.address}
         </p>
+
+        <p className="mt-4 py-10 text-gray-700">{company.description}</p>
       </div>
 
       {/* 탭 영역 */}
@@ -125,8 +135,12 @@ const CompanyDetailPage = () => {
         {/* 리뷰 탭 */}
         {activeTab === "review" && (
           <div>
+ 
+            <p className="my-5">
+              <strong>평점:</strong> ⭐ {company.rating} / 5
+            </p>
             <h4 className="mt-4 text-lg font-semibold">
-              리뷰 {reviews.length}
+              리뷰: {reviews.length}
             </h4>
             <div className="space-y-4">
               {reviews.map((review, index) => (
