@@ -1,187 +1,218 @@
 import Footer from "@/component/Footer";
+import ComReviewSection from "@/component/main/ComReviewSection";
+import RequestListSection from "@/component/main/RequestListSection";
+import Sample1Section from "@/component/main/Sample1Section";
+import TopSection from "@/component/main/TopSection";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 export default function Home() {
+  useEffect(() => {}, []);
+
   return (
     <div className="flex flex-col items-center">
       {/* 플랫폼 짧은 슬로건 & 메인 이미지 영역*/}
-      <section className="pt-[72px] relative w-full h-[700px] flex flex-col justify-center items-center text-center bg-gray-900 text-white">
-        <Image
-          src="/clean-bg-01.jpg"
-          alt="깨끗한 집 사진"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-60"
-        />
-        <div className="relative z-10">
-          <h1 className="text-5xl font-bold drop-shadow-lg">
-            &quot;깨끗한 공간, 새로운 시작&quot;
-          </h1>
-          <p className="text-xl mt-4 opacity-90">
-            청소는 이제 전문가에게 맡기세요.
-          </p>
-        </div>
-      </section>
+      <TopSection />
 
       {/* 청소하기 어려운 사례 예시 영역 */}
-      <section className="w-full bg-gray-100 flex justify-center py-32">
-        <div className="min-w-5xl h-full bg-gray-100  text-center space-y-8 px-96">
-          <h2 className="text-3xl font-semibold">
-            전문가의 도움이 필요한 혼자 청소하기 힘든 순간들
-          </h2>
+      <Sample1Section />
 
-          <div className="grid grid-cols-4 gap-6 w-full">
-            <div className="flex flex-col w-full h-full bg-slate-50 p-6 rounded-lg shadow ">
-              <Image
-                src={"/clean-main4.jpg"}
-                alt={""}
-                width={150}
-                height={150}
-                className="object-cover w-full h-full rounded-t-xl"
-              />
-              <h3 className="mt-3 text-xl font-medium">일반 이사 청소</h3>
-              <p className="text-gray-600 mt-2">
-                이사 후 남겨진 먼지와 얼룩, 직접 하기에는 너무 벅찹니다.
-              </p>
-            </div>
-
-            <div className="flex flex-col w-full bg-slate-50  p-6 rounded-lg shadow h-full">
-              <Image
-                src={"/clean-main2.jpg"}
-                alt={""}
-                width={150}
-                height={150}
-                className="object-cover w-full h-full rounded-t-xl"
-              />
-              <h3 className="mt-3 text-xl font-medium">사무실 청소</h3>
-              <p className="text-gray-600 mt-2">
-                이사 후 남겨진 먼지와 얼룩, 직접 하기에는 너무 벅찹니다.
-              </p>
-            </div>
-
-            <div className="flex flex-col w-full bg-slate-50  p-6 rounded-lg shadow h-full">
-              <Image
-                src={"/clean-main3.jpg"}
-                alt={""}
-                width={150}
-                height={150}
-                className="object-cover w-full h-full rounded-t-xl"
-              />
-              <h3 className="mt-3 text-xl font-medium">병원 방역 및 청소</h3>
-              <p className="text-gray-600 mt-2">
-                이사 후 남겨진 먼지와 얼룩, 직접 하기에는 너무 벅찹니다.
-              </p>
-            </div>
-
-            <div className="flex flex-col w-full bg-slate-50 p-6 rounded-lg shadow h-full">
-              <Image
-                src={"/clean-main1.png"}
-                alt={""}
-                width={150}
-                height={150}
-                className="object-cover w-full h-full rounded-t-xl"
-              />
-              <h3 className="mt-3 text-xl font-medium">방치된 집 특수 청소</h3>
-              <p className="text-gray-600 mt-2">
-                이사 후 남겨진 먼지와 얼룩, 직접 하기에는 너무 벅찹니다.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <Link href="/request/regist" passHref>
-              <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
-                의뢰 등록하러 가기
-              </span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 일반 가정청 소, 특수 청소, 방역 같은 플랫폼 제공 서비스 소개 영역*/}
-      {/* <section className="max-w-5xl text-center space-y-8 py-16"> */}
+      {/* 회사 소개 및 리뷰 영역*/}
+      {/* <ComReviewSection /> */}
       <section className="w-full text-center space-y-8 px-20 py-32 bg-fixed bg-cover bg-center relative">
         <h2 className="text-3xl font-semibold">
           다양한 업체를 신중히 선택할 수 있어요
         </h2>
-        {/* <div className="grid grid-cols-3 gap-6"> */}
-        <div className="bg-zinc-100 max-w-6xl mx-auto">
-          <div className="relative flex justify-between gap-7 px-32 bg-orange-50 h-[680px] min-h-[420px] p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="w-[70%] max-w-[580px] max-h-[580px] h-[80%]">
+
+        <div className="bg-zinc-100 max-w-6xl mx-auto space-y-16 text-left">
+          {/* 첫 번째 업체 소개 */}
+          <div className="relative flex gap-10 bg-orange-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+            <div className="w-2/3">
               <Image
-                src={"/company-bg-01.jpeg"}
-                alt={""}
+                src="/company-bg-01.jpeg"
+                alt="청소마스터"
                 width={150}
                 height={150}
-                className="object-cover w-full h-full rounded-t-xl"
+                className="object-cover w-full h-full rounded-xl"
               />
             </div>
-            <div className="z-10 absolute bottom-[-28px] right-[120px] bg-zinc-50 w-full max-w-[450px] min-h-[350px] shadow-xl">
-              <h3 className="pt-10 text-xl font-bold">청소마스터</h3>
-              <p className="text-gray-600 mt-2">주소: 경기도 성남시</p>
-              <p className="text-gray-600 mt-2">
+            <div className="w-1/3 text-left space-y-4">
+              <h3 className="text-xl font-bold">청소마스터</h3>
+              <p className="text-gray-600">주소: 경기도 성남시</p>
+              <p className="text-gray-600">
                 집안 구석구석 깨끗하게 청소해 드립니다.
               </p>
-              <div className="mt-10">
-                <p className="text-gray-600 mt-2">김**</p>
-                <p className="text-gray-600 mt-2">
-                  직원분들이 친절하고 청소 후 완전 깨끗해졌어요
-                </p>
+            </div>
+
+            {/* 첫 번째 회원 리뷰 */}
+            <div className="absolute bottom-40 right-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <FaStar key={index} className="text-yellow-400 text-xl" />
+                  ))}
+                </div>
+                <span className="ml-2 text-gray-600">5.0</span>
               </div>
+              <p className="text-gray-600">이**</p>
+              <p className="text-gray-600 mt-2 line-clamp-3 overflow-hidden text-ellipsis">
+                이번에 처음으로 청소 서비스를 이용해 봤는데, 기대 이상으로
+                만족했습니다. 집안 전체를 청소해 주셨는데, 특히 주방과 화장실
+                청소가 대단히 꼼꼼했습니다. 기름때가 많아 고민이었는데, 새집처럼
+                반짝반짝해졌어요. 침대 밑이나 가구 뒤쪽 같은 평소에 잘 닿지 않는
+                곳까지 신경 써 주셔서 너무 감사했습니다. 청소가 끝난 후에는 집안
+                공기가 달라졌다고 느낄 정도로 상쾌하고 쾌적했습니다. 친절한
+                서비스에 감동받았고, 다음에 또 이용하고 싶습니다!
+              </p>
+            </div>
+
+            <div className="absolute bottom-[-40px] right-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <FaStar key={index} className="text-yellow-400 text-xl" />
+                  ))}
+                </div>
+                <span className="ml-2 text-gray-600">5.0</span>
+              </div>
+              <p className="text-gray-600">김**</p>
+              <p className="text-gray-600 mt-2 line-clamp-3 overflow-hidden text-ellipsis">
+                청소 서비스를 신청했는데 처음부터 끝까지 정말 만족스러웠습니다.
+                예약 과정도 매우 간편했고, 청소 당일에는 직원분들이 정시에
+                도착해 주셔서 좋았습니다. 청소 전에 집 상태를 꼼꼼히 체크하시고,
+                어디를 중점적으로 청소해야 할지 설명해 주셔서 신뢰가 갔어요.
+                청소가 끝난 후에는 집안 구석구석 먼지 하나 없이 반짝반짝
+                깨끗해졌고, 특히 창틀과 욕실 청소가 완벽했습니다. 청소 중간중간
+                진행 상황도 친절히 알려주시고, 끝난 후에는 청소 결과에 대해 함께
+                확인해 주셔서 더욱 안심이 되었습니다. 앞으로도 자주 이용할
+                계획입니다!
+              </p>
             </div>
           </div>
 
-          <div className="relative flex justify-end gap-7 mt-16 px-32 bg-orange-50 h-[680px] min-h-[420px] p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="w-[70%] max-w-[580px] max-h-[580px] h-[80%]">
-              <Image
-                src={"/company-bg-02.webp"}
-                alt={""}
-                width={150}
-                height={150}
-                className="object-cover w-full h-full rounded-t-xl"
-              />
-            </div>
-            <div className="z-10 absolute bottom-[-28px] left-[120px] bg-zinc-50 w-full max-w-[450px] min-h-[350px] shadow-xl">
-              <h3 className="pt-10 text-xl font-bold">청소나라</h3>
-              <p className="text-gray-600 mt-2">주소: 경기도 성남시</p>
-              <p className="text-gray-600 mt-2">
+          {/* 두 번째 업체 소개 */}
+          <div className="relative flex gap-10 bg-orange-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+            <div className="w-1/3 text-left space-y-4">
+              <h3 className="text-xl font-bold">청소나라</h3>
+              <p className="text-gray-600">주소: 경기도 성남시</p>
+              <p className="text-gray-600">
                 집안 구석구석 깨끗하게 청소해 드립니다.
               </p>
-              <div className="mt-10">
-                <p className="text-gray-600 mt-2">김**</p>
-                <p className="text-gray-600 mt-2">
-                  직원분들이 친절하고 청소 후 완전 깨끗해졌어요
-                </p>
+            </div>
+            <div className="w-2/3">
+              <Image
+                src="/company-bg-02.webp"
+                alt="청소나라"
+                width={150}
+                height={150}
+                className="object-cover w-full h-full rounded-xl"
+              />
+            </div>
+
+            {/* 두 번째 회원 리뷰 */}
+            <div className="absolute bottom-32 left-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <FaStar key={index} className="text-yellow-400 text-xl" />
+                  ))}
+                </div>
+                <span className="ml-2 text-gray-600">5.0</span>
               </div>
+              <p className="text-gray-600">정**</p>
+              <p className="text-gray-600 mt-2 line-clamp-2 overflow-hidden text-ellipsis">
+                너무너무 깨끗해졌어요 ~ 다음에 또 이용할게요 !
+              </p>
+            </div>
+
+            <div className="absolute bottom-[-50px] left-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                {[...Array(4)].map((_, index) => (
+                  <FaStar key={index} className="text-yellow-400 text-xl" />
+                ))}
+                {[...Array(1)].map((_, index) => (
+                  <FaRegStar key={index} className="text-yellow-400 text-xl" />
+                ))}
+                <span className="ml-2 text-gray-600">4.0</span>
+              </div>
+              <p className="text-gray-600">이**</p>
+              <p className="text-gray-600 mt-2 line-clamp-2 overflow-hidden text-ellipsis">
+                서비스가 전반적으로 만족스러웠습니다. 청소가 매우 꼼꼼하게
+                이루어졌고, 직원분들도 친절하셨습니다. 특히 거실 바닥과 주방이
+                새집처럼 반짝거려서 기분이 너무 좋았습니다. 청소 중간중간 진행
+                상황을 공유해 주셔서 안심할 수 있었고, 끝난 후에는 집안 곳곳을
+                함께 확인해 주셔서 더욱 믿음이 갔습니다. 다음에도 반드시 이용할
+                계획입니다!
+              </p>
             </div>
           </div>
 
-          <div className="relative flex justify-between gap-7 mt-16 px-32 bg-orange-50 h-[680px] min-h-[420px] p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="w-[70%] max-w-[580px] max-h-[580px] h-[80%]">
+          {/* 세 번째 업체 소개 */}
+          <div className="relative flex gap-10 bg-orange-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+            <div className="w-2/3">
               <Image
-                src={"/company-bg-03.jpg"}
-                alt={""}
+                src="/company-bg-03.jpg"
+                alt="청소왕"
                 width={150}
                 height={150}
-                className="object-cover w-full h-full rounded-t-xl"
+                className="object-cover w-full h-full rounded-xl"
               />
             </div>
-            <div className="z-10 absolute bottom-[-28px] right-[120px] bg-zinc-50 w-full max-w-[450px] min-h-[350px] shadow-xl">
-              <h3 className="pt-10 text-xl font-bold">청소왕</h3>
-              <p className="text-gray-600 mt-2">주소: 경기도 성남시</p>
-              <p className="text-gray-600 mt-2">
+            <div className="w-1/3 text-left space-y-4">
+              <h3 className="text-xl font-bold">청소왕</h3>
+              <p className="text-gray-600">주소: 경기도 성남시</p>
+              <p className="text-gray-600">
                 집안 구석구석 깨끗하게 청소해 드립니다.
               </p>
-              <div className="mt-10">
-                <p className="text-gray-600 mt-2">김**</p>
-                <p className="text-gray-600 mt-2">
-                  직원분들이 친절하고 청소 후 완전 깨끗해졌어요
-                </p>
+            </div>
+
+            {/* 세 번째 회원 리뷰 */}
+            <div className="absolute bottom-36 right-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                {[...Array(5)].map((_, index) => (
+                  <FaStar key={index} className="text-yellow-400 text-xl" />
+                ))}
+                <span className="ml-2 text-gray-600">5.0</span>
               </div>
+              <p className="text-gray-600">최**</p>
+              <p className="text-gray-600 mt-2 line-clamp-3 overflow-hidden text-ellipsis">
+                정말 만족스러운 경험이었습니다! 청소 전후의 차이를 확연히 느낄
+                수 있었습니다. 특히 주방과 창문 틀까지 손이 닿지 않았던 곳까지
+                청소가 완벽하게 되어서 감동했습니다. 청소 후 집 안이 새 것처럼
+                깔끔해졌고, 서비스 또한 매우 친절하고 전문적이어서 재이용하고
+                싶습니다.
+              </p>
+            </div>
+
+            <div className="absolute bottom-[-60px] right-[60px] max-w-[450px] bg-zinc-50 p-6 rounded-lg shadow-xl">
+              <div className="flex items-center mb-2">
+                <div className="flex items-center">
+                  {[...Array(4)].map((_, index) => (
+                    <FaStar key={index} className="text-yellow-400 text-xl" />
+                  ))}
+                  {[...Array(1)].map((_, index) => (
+                    <FaRegStar
+                      key={index}
+                      className="text-yellow-400 text-xl"
+                    />
+                  ))}
+                </div>
+                <span className="ml-2 text-gray-600">4.0</span>
+              </div>
+              <p className="text-gray-600">박**</p>
+              <p className="text-gray-600 mt-2 line-clamp-3 overflow-hidden text-ellipsis">
+                매우 만족스러운 청소 서비스였습니다. 직원분들이 정확한 시간에
+                도착하여 청소를 시작했으며, 각 공간마다 꼼꼼하게 작업을
+                해주셨습니다. 특히 주방과 욕실이 깔끔하게 청소되어 너무
+                기뻤습니다. 전반적으로 정돈된 느낌을 받아서 집안 분위기가 확
+                달라졌습니다. 다음에도 재이용할 의향이 있습니다.
+              </p>
             </div>
           </div>
         </div>
+
         <div className="flex justify-center pt-20">
           <Link href="/company" passHref>
             <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
@@ -191,122 +222,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 일반 가정청소, 특수 청소, 방역 같은 플랫폼 제공 서비스 소개 영역*/}
-      <section
-        className="text-center space-y-8 w-full"
-        style={{
-          backgroundImage: "url('/clean-bg-03.jpg')",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          backgroundBlendMode: "darken",
-        }}
-      >
-        <div className="px-32 pt-32 pb-16">
-          <h2 className="text-3xl font-semibold mb-20 text-stone-100">
-            전문업체의 도움이 필요한 고객들의 의뢰 목록이에요
-          </h2>
-          <div className="grid grid-cols-4 gap-6">
-            <div className="min-h-[300px] bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-              <h3 className="text-xl font-medium">1</h3>
-              <p className="text-gray-600 mt-2">
-                집안 구석구석 깨끗하게 청소해 드립니다.
-              </p>
-            </div>
-            <div className="min-h-[300px] bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-              <h3 className="text-xl font-medium">2</h3>
-              <p className="text-gray-600 mt-2">
-                새집 입주 전 완벽한 청소 서비스 제공!
-              </p>
-            </div>
-            <div className="min-h-[300px] bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-              <h3 className="text-xl font-medium">3</h3>
-              <p className="text-gray-600 mt-2">
-                사무실, 매장 등을 위한 전문적인 청소 서비스
-              </p>
-            </div>
-            <div className="min-h-[300px] bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-              <h3 className="text-xl font-medium">3</h3>
-              <p className="text-gray-600 mt-2">
-                사무실, 매장 등을 위한 전문적인 청소 서비스
-              </p>
-            </div>
-          </div>
-          <div className="flex justify-center mt-20">
-            <Link href="/request" passHref>
-              <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
-                의뢰 목록 확인하러 가기
-              </span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* 등록된 협력 업체 소개 영역*/}
-      <section className="w-full bg-zinc-100 py-32">
-        <div className="max-w-6xl mx-auto text-center space-y-8">
-          <h2 className="text-3xl font-semibold">등록 업체</h2>
-          <p>수많은 업체들이 현재 Clean Meet과 함께하고 있습니다</p>
-
-          {/* 슬라이드 영역 */}
-          <div className="relative w-full overflow-hidden">
-            <div className="flex gap-6 animate-slide-motion whitespace-nowrap">
-              {/* 임시로 확인 더미 넣었음 */}
-              {[...Array(2)].map((_, index) => (
-                <div key={index} className="flex gap-6">
-                  {[
-                    { src: "/company-bg-01.jpeg", name: "청소마스터" },
-                    { src: "/company-bg-02.webp", name: "깔끔이 서비스" },
-                    { src: "/company-bg-03.jpg", name: "프리미엄 클리닝" },
-                    { src: "/company-bg-04.avif", name: "스마트 클린" },
-                    { src: "/company-bg-05.jpg", name: "한방 청소" },
-                  ].map((company, index) => (
-                    <div key={index} className="w-[280px] flex-shrink-0">
-                      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                        <div className="w-full h-[180px]">
-                          <Image
-                            src={company.src}
-                            alt={company.name}
-                            width={280}
-                            height={180}
-                            className="object-cover w-full h-full rounded-t-xl"
-                          />
-                        </div>
-                        <div className="p-3">
-                          <p className="text-gray-800 text-lg font-semibold">
-                            {company.name}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <Link href="/users/signup" passHref>
-              <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
-                협력업체 등록하러 가기
-              </span>
-            </Link>
-          </div>
-        </div>
-
-        {/* 커스텀 애니메이션 스타일 */}
-        <style jsx>{`
-          @keyframes slideMotion {
-            from {
-              transform: translateX(0);
-            }
-            to {
-              transform: translateX(-100%);
-            }
-          }
-          .animate-slide-motion {
-            animation: slideMotion 10s linear infinite;
-          }
-        `}</style>
-      </section>
+      <RequestListSection />
 
       <Footer />
     </div>
