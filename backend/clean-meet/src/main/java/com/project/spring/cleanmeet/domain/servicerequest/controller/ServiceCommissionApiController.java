@@ -28,7 +28,7 @@ public class ServiceCommissionApiController {
 
     @Operation(
             summary = "서비스 의뢰 상세 조회",
-            description = "의뢰 상세 조회 페이지"
+            description = "의뢰 상세 조회 페이지 그리고 댓글 조회 가능"
     )
     @GetMapping("/request/{id}")
     public ResponseEntity<ServiceCommissionResponseDto> getServiceCommission(
@@ -44,8 +44,7 @@ public class ServiceCommissionApiController {
                 - `sort` 파라미터는 원하는 정렬 방향을 포함해야 합니다.
                 - 기본값이 설정되어 있어 생략해도 상관없습니다.
                 - 예시: `/api/commission/page?sort=createdAt,desc`
-                """,
-            security = @SecurityRequirement(name = "bearerAuth")
+                """
     )
     @GetMapping("/page")
     public ResponseEntity<Page<CommissionPageResponseDto>> commissionAll(
@@ -91,4 +90,5 @@ public class ServiceCommissionApiController {
         commissionCommentService.save(commissionId, auth, dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
 }

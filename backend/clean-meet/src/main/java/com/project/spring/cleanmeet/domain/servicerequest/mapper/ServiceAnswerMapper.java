@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.user.mapper;
+package com.project.spring.cleanmeet.domain.servicerequest.mapper;
 
 
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;

@@ -7,7 +7,7 @@ import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommissi
 import com.project.spring.cleanmeet.domain.servicerequest.repository.CommissionCommentRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.user.entity.User;
-import com.project.spring.cleanmeet.domain.user.mapper.CommissionCommentMapper;
+import com.project.spring.cleanmeet.domain.servicerequest.mapper.CommissionCommentMapper;
 import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
