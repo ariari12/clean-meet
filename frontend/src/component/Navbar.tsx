@@ -45,7 +45,8 @@ const Navbar = () => {
                 로그아웃
               </button>
               <Link
-                href="/users/profile/personalProfile"
+                // href="/users/profile/personalProfile"
+                href="/users/profile"
                 className="navbar__list--item"
               >
                 프로필
@@ -53,6 +54,13 @@ const Navbar = () => {
             </div>
           ) : (
             <div>
+              {/* <Link
+                // href="/users/profile/personalProfile"
+                href="/users/profile"
+                className="navbar__list--item"
+              >
+                프로필
+              </Link> */}
               <Link href="/users/login" className="navbar__list--item">
                 로그인
               </Link>
