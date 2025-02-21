@@ -56,7 +56,6 @@ const CompanyProfilePage = () => {
       {/* 프로필 정보 */}
       {/* <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md"> */}
       <div className="w-full p-6 bg-gray-50 rounded-lg shadow-md flex items-center gap-6">
-        {/* 프로필 상세 정보 */}
         <div className="flex-1">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-gray-700">기본 프로필</h3>
@@ -80,8 +79,7 @@ const CompanyProfilePage = () => {
 
           <div className="flex justify-between items-center gap-16">
             {/* 프로필 이미지 자리 */}
-            <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-              {/* 실제 이미지가 있을 경우 src를 적용 */}
+            {/* <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
               <Image
                 // src={profile.imageUrl || "/default-profile.png"}
                 src={""}
@@ -91,6 +89,11 @@ const CompanyProfilePage = () => {
                 height={96}
                 className="w-full h-full rounded-full object-cover"
               />
+            </div> */}
+            <div className="w-[150px] h-[150px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+              <div className="w-full h-full bg-gray-300 animate-pulse flex items-center justify-center">
+                <span className="text-gray-500">No Image</span>
+              </div>
             </div>
             {isEditingProfile ? (
               <div className="space-y-2 w-2/3">
