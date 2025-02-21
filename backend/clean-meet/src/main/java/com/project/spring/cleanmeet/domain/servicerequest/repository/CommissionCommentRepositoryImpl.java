@@ -26,7 +26,8 @@ public class CommissionCommentRepositoryImpl implements CommissionCommentQueryDs
                 .where(
                         commissionComment.serviceCommission.eq(serviceCommission)
                                 .and(commissionComment.parentComment.isNull())
-                ).fetch();
+                )
+                .orderBy(commissionComment.id.desc()).fetch();
 
         return parentComments;
     }

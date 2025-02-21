@@ -39,6 +39,7 @@ public class CommissionComment extends BaseEntity {
 
     // 여러 개의 대댓글을 가질 수 있음
     @ToString.Exclude
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "parentComment")
     private List<CommissionComment> childComments = new ArrayList<>();
 }
