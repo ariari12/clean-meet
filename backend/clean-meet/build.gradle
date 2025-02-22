@@ -33,6 +33,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-s3
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.3.0'
+
+
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
