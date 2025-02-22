@@ -3,6 +3,8 @@ package com.project.spring.cleanmeet.domain.user.service;
 import com.project.spring.cleanmeet.common.exception.DuplicateEmailException;
 import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
+import com.project.spring.cleanmeet.common.util.S3Component;
+import com.project.spring.cleanmeet.domain.image.Category;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCompanyCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
@@ -41,6 +43,7 @@ public class UserService {
     private final CompanyMapper companyMapper;
 
     private final PasswordEncoder passwordEncoder;
+    private final S3Component s3Component;
 
     public void personalSave(UserRequestDto userRequestDto) {
         log.info("개인 회원가입 시작: userRequestDto={}", userRequestDto);
@@ -140,4 +143,15 @@ public class UserService {
         log.info("유저 프로필 조회 완료 UserProfileResponseDto : {}", userProfileResponseDto);
         return userProfileResponseDto;
     }
+
+
+    public String createPreSigned(String fileName, Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("프로필 preSignedUrl 생성 시작");
+        String preSignedUrl = s3Component.createPreSignedUrl(Category.PROFILE.getValue(), fileName, customUser.getId());
+        log.info("프로필 preSignedUrl 생성 완료 preSignedUrl={}", preSignedUrl);
+
+        return preSignedUrl;
+    }
+
 }

@@ -23,8 +23,7 @@ public class S3Component {
     private final S3Presigner s3Presigner;
     private final S3Client s3Client;
 
-    String createPreSignedUrl(String path, String fileName, Authentication auth) {
-        String userId = ((CustomUser) auth.getPrincipal()).getId();
+    public String createPreSignedUrl(String path, String fileName, String userId) {
         String uniqueFileName = fileName + "-" + userId;
         String uniquePath = path + File.pathSeparator + uniqueFileName;
 

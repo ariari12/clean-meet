@@ -47,6 +47,12 @@ public class UserApiController {
         return ResponseEntity.ok(dto);
     }
 
+    @PostMapping("/profile/presigned-url")
+    public ResponseEntity<String> createPreSigned(@RequestParam String fileName,Authentication auth) {
+        String preSignedUrl = userService.createPreSigned(fileName, auth);
+        return ResponseEntity.status(HttpStatus.CREATED).body(preSignedUrl);
+    }
+
     @Operation(
             summary = "기업 회원가입",
             description = "새로운 기업 사용자를 등록합니다. " +
