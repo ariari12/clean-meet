@@ -1,7 +1,6 @@
 package com.project.spring.cleanmeet.domain.servicerequest.controller;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.*;
+import com.project.spring.cleanmeet.domain.servicerequest.service.CommissionCommentService;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceCommissionService;
 import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +24,18 @@ import org.springframework.web.bind.annotation.*;
 public class ServiceCommissionApiController {
     private final ServiceCommissionService serviceCommissionService;
     private final ServiceAnswerService serviceAnswerService;
+    private final CommissionCommentService commissionCommentService;
+
+    @Operation(
+            summary = "서비스 의뢰 상세 조회",
+            description = "의뢰 상세 조회 페이지 그리고 댓글 조회 가능"
+    )
+    @GetMapping("/request/{id}")
+    public ResponseEntity<ServiceCommissionResponseDto> getServiceCommission(
+            @PathVariable Long id) {
+        ServiceCommissionResponseDto dto = serviceCommissionService.findCommissionDetailById(id);
+        return ResponseEntity.ok(dto);
+    }
 
     @Operation(
             summary = "서비스 요청 목록",
@@ -33,8 +44,7 @@ public class ServiceCommissionApiController {
                 - `sort` 파라미터는 원하는 정렬 방향을 포함해야 합니다.
                 - 기본값이 설정되어 있어 생략해도 상관없습니다.
                 - 예시: `/api/commission/page?sort=createdAt,desc`
-                """,
-            security = @SecurityRequirement(name = "bearerAuth")
+                """
     )
     @GetMapping("/page")
     public ResponseEntity<Page<CommissionPageResponseDto>> commissionAll(
@@ -63,6 +73,21 @@ public class ServiceCommissionApiController {
     @PostMapping("/answer")
     public ResponseEntity<String> response(@RequestBody ServiceAnswerRequestDto serviceAnswerRequestDto) {
         serviceAnswerService.save(serviceAnswerRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(
+            summary = "서비스 의뢰 댓글 생성",
+            description = """                    
+                    - parentId null 값인 경우 부모 댓글 생성
+                    - parentId 에 값이 있을 경우 자식 댓글 생성
+                    """
+    )
+    @PostMapping("/comments/{commissionId}")
+    public ResponseEntity<String> commissionComment(
+            @PathVariable Long commissionId, Authentication auth,
+            @RequestBody CommissionCommentRequestDto dto) {
+        commissionCommentService.save(commissionId, auth, dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

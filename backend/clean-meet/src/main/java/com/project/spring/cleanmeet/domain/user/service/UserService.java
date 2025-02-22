@@ -43,23 +43,23 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void personalSave(UserRequestDto userRequestDto) {
-        log.info("개인 회원가입 시작: email={}", userRequestDto.getEmail());
+        log.info("개인 회원가입 시작: userRequestDto={}", userRequestDto);
 
         //중복 회원가입 방지
         isEmailExists(userRequestDto.getEmail());
 
-        // 주소 저장
-        Address address = addressMapper.toEntity(userRequestDto.getAddressRequestDto());
-        Address savedAddress = addressRepository.save(address);
-        log.info("주소 저장 완료 : {}", savedAddress);
-
         //유저 저장
         User user = userMapper.toEntity(userRequestDto);
         user.updateRole(Role.ROLE_PERSONAL);
-        user.updateAddress(savedAddress);
         // 패스워드 검증 및 해싱
         user.encodePassword(passwordEncoder, userRequestDto.getPassword());
         User savedUser = userRepository.save(user);
+
+        // 주소 저장
+        Address address = addressMapper.toEntity(userRequestDto.getAddressRequestDto(),user);
+        Address savedAddress = addressRepository.save(address);
+        log.info("주소 저장 완료 : {}", savedAddress);
+
         log.info("회원 가입 성공: email={}", savedUser.getEmail());
 
     }
@@ -73,19 +73,18 @@ public class UserService {
         //중복 회원가입 방지
         isEmailExists(userRequestDto.getEmail());
 
-        // 주소 저장
-        Address address = addressMapper.toEntity(addressRequestDto);
-        Address savedAddress = addressRepository.save(address);
-        log.info("회사 주소 저장 완료 : {}", savedAddress);
-
         //유저 저장
         User user = userMapper.toEntity(userRequestDto);
         user.updateRole(Role.ROLE_COMPANY);
-        user.updateAddress(savedAddress);
         // 패스워드 검증 및 해싱
         user.encodePassword(passwordEncoder, userRequestDto.getPassword());
         User savedUser = userRepository.save(user);
         log.info("회사 유저정보 저장 완료 : {}", savedUser);
+
+        // 주소 저장
+        Address address = addressMapper.toEntity(addressRequestDto,savedUser);
+        Address savedAddress = addressRepository.save(address);
+        log.info("회사 주소 저장 완료 : {}", savedAddress);
 
         // 회사 저장
         Company company = companyMapper.toEntity(companyRequestDto, user);
@@ -118,7 +117,9 @@ public class UserService {
     }
 
     public Page<CompanyCardPageResponse> findCompanyAllPage(Pageable pageable) {
+        log.info("회사 카드 페이지 조회 시작 : {}", pageable);
         Page<Company> companyCardPage = companyRepository.findCompanyCardPage(pageable);
+        log.info("회사 카드 페이지 조회 완료  : {}", companyCardPage.getContent());
         return companyCardPage.map(companyMapper::toDto);
     }
 
@@ -126,9 +127,16 @@ public class UserService {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
         log.info("유저 프로필 조회 시작 customUser={}", customUser);
         Long userId = Long.parseLong(customUser.getId());
+
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다."));
-        UserProfileResponseDto userProfileResponseDto = userMapper.toUserProfile(user);
+                () -> new UserNotFoundException("존재하지 않는 유저 id 입니다. userId=" + userId));
+        log.info("유저 조회 완료 user={}", user);
+
+        Address address = addressRepository.findByUser(user)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저 입니다. user=" + user));
+        log.info("주소 조회 완료 address = {}", address);
+
+        UserProfileResponseDto userProfileResponseDto = userMapper.toUserProfile(user, address);
         log.info("유저 프로필 조회 완료 UserProfileResponseDto : {}", userProfileResponseDto);
         return userProfileResponseDto;
     }

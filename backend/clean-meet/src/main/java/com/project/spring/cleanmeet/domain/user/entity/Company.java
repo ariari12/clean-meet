@@ -20,7 +20,8 @@ public class Company extends BaseEntity {
     private String companyName;
     @Column(name = "service_area")
     private String serviceArea;
-
+    @Column(nullable = false,name = "is_public")
+    private boolean isPublic;
     //회사소개 문구
     @Column(name = "company_introduction")
     private String companyIntroduction;

@@ -16,11 +16,11 @@ public class Address {
     private Long id;
     @Column(name = "address_name")
     private String addressName;
-    @Column(name = "region_1depth_name")
+    @Column(name = "region1_depth_name")
     private String region1DepthName;
-    @Column(name = "region_2depth_name")
+    @Column(name = "region2_depth_name")
     private String region2DepthName;
-    @Column(name = "region_3depth_name")
+    @Column(name = "region3_depth_name")
     private String region3DepthName;
     @Column(name = "road_name")
     private String roadName;
@@ -30,5 +30,11 @@ public class Address {
     private String subBuildingNo;
     @Column(name = "zone_no")
     private String zoneNo;
+
+    @ToString.Exclude
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }

@@ -2,38 +2,19 @@ services:
   spring-app-server:
     build: .
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_DEV}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_PROD}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME_PROD}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD_PROD}
       JWT_SECRET: ${JWT_SECRET}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      SWAGGER_ENABLED: false
+      REDIS_ENABLED: true
     #        SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
     #        SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY}
     #        SPRING_CLOUD_AWS_REGION_STATIC: ${SPRING_CLOUD_AWS_REGION_STATIC}
     #        SPRING_CLOUD_AWS_S3_BUCKET: ${SPRING_CLOUD_AWS_S3_BUCKET}
-    depends_on:
-      database-mysql:
-        condition: service_healthy
-
-  database-mysql:
-    image: mysql:8.1
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "3307:3306"  # 로컬 3307 -> 컨테이너 3306
-
-  redis:
-    image: redis:7.4
-    ports:
-      - "6380:6379"
-    command: [ "redis-server", "--appendonly", "yes" ]  # 데이터 영구 저장 설정
 
   nginx-proxy:
     build: ./nginx

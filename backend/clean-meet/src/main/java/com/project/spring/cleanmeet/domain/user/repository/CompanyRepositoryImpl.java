@@ -19,11 +19,13 @@ public class CompanyRepositoryImpl implements CompanyQueryDsl {
     public Page<Company> findCompanyCardPage(Pageable pageable) {
         List<Company> content = queryFactory
                 .selectFrom(company)
+                .where(company.isPublic.eq(true))
                 .fetch();
 
         Long total = queryFactory
                 .select(company.count())
                 .from(company)
+                .where(company.isPublic.eq(true))
                 .fetchOne();
         return PageableExecutionUtils.getPage(content, pageable, () -> total);
     }

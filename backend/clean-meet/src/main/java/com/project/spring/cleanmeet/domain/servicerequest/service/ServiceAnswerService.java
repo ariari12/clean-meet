@@ -7,7 +7,7 @@ import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceStatus;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceAnswerRepository;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
-import com.project.spring.cleanmeet.domain.user.mapper.ServiceAnswerMapper;
+import com.project.spring.cleanmeet.domain.servicerequest.mapper.ServiceAnswerMapper;
 import com.project.spring.cleanmeet.domain.user.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ public class ServiceAnswerService {
     private final ServiceCommissionRepository serviceCommissionRepository;
     private final CompanyRepository companyRepository;
     private final ServiceAnswerMapper serviceAnswerMapper;
+
     public void save(ServiceAnswerRequestDto serviceAnswerRequestDto) {
         log.info("서비스 응답 저장 시작 serviceResponseDto : {}", serviceAnswerRequestDto);
         Long serviceRequestId = serviceAnswerRequestDto.getServiceRequestId();
