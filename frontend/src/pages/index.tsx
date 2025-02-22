@@ -1,5 +1,5 @@
 import Footer from "@/component/Footer";
-import ComReviewSection from "@/component/main/ComReviewSection";
+// import ComReviewSection from "@/component/main/ComReviewSection";
 import RequestListSection from "@/component/main/RequestListSection";
 import Sample1Section from "@/component/main/Sample1Section";
 import TopSection from "@/component/main/TopSection";

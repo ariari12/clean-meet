@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.user.mapper;
+package com.project.spring.cleanmeet.domain.servicerequest.mapper;
 
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
@@ -10,7 +10,6 @@ import com.project.spring.cleanmeet.domain.user.entity.User;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = false))
 public interface ServiceCommissionMapper {

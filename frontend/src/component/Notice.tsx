@@ -51,7 +51,7 @@ const Notice = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentNotices = notices.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="mt-6">

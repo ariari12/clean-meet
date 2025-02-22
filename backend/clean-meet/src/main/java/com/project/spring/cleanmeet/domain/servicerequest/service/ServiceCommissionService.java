@@ -4,17 +4,19 @@ import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionPageResponseDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceCommissionResponseDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.*;
+import com.project.spring.cleanmeet.domain.servicerequest.entity.CommissionComment;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceStatus;
+import com.project.spring.cleanmeet.domain.servicerequest.mapper.CommissionCommentConverter;
+import com.project.spring.cleanmeet.domain.servicerequest.mapper.CommissionCommentMapper;
+import com.project.spring.cleanmeet.domain.servicerequest.repository.CommissionCommentRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.Address;
 import com.project.spring.cleanmeet.domain.user.entity.User;
 import com.project.spring.cleanmeet.domain.user.mapper.AddressMapper;
-import com.project.spring.cleanmeet.domain.user.mapper.ServiceCommissionMapper;
+import com.project.spring.cleanmeet.domain.servicerequest.mapper.ServiceCommissionMapper;
 import com.project.spring.cleanmeet.domain.user.repository.AddressRepository;
 import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @Transactional
@@ -34,8 +38,10 @@ public class ServiceCommissionService {
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final CommissionCommentRepository commissionCommentRepository;
     private final AddressMapper addressMapper;
     private final ServiceCommissionMapper serviceCommissionMapper;
+    private final CommissionCommentConverter commissionCommentConverter;
 
     public void save(ServiceCommissionRequestDto serviceCommissionRequestDto, Authentication authentication) {
         log.info("서비스 요창 저장 시작 serviceCommissionDto : {}", serviceCommissionRequestDto);
@@ -75,10 +81,17 @@ public class ServiceCommissionService {
         ServiceCommission serviceCommission = serviceCommissionRepository.findById(commissionId)
                 .orElseThrow(() -> new IllegalArgumentException("존재 하지않은 의뢰 ID : " + commissionId));
 
-        log.info("의뢰 조회 완료 serviceCommission getAddress().getRegion3DepthName() : {}", serviceCommission.getAddress().getRegion3DepthName());
+        log.info("의뢰 조회 완료  : {}", serviceCommission);
 
+        List<CommissionComment> parentComment = commissionCommentRepository.findComment(serviceCommission);
+        log.info("의뢰 부모 댓글 조회 완료 parentComment : {}", parentComment);
+        List<ParentCommentResponseDto> comments = parentComment.stream()
+                .map(commissionCommentConverter::commentResponseDto)
+                .toList();
+        log.info("의뢰 모든 댓글 조회 완료 comments : {}", comments);
 
         ServiceCommissionResponseDto dto = serviceCommissionMapper.toServiceCommissionResponseDto(serviceCommission);
+        dto.setComments(comments);
         log.info("의뢰 상세 조회 종료 dto : {}", dto);
 
         return dto;

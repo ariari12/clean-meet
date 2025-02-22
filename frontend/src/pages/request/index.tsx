@@ -58,6 +58,7 @@ const RequestListPage: React.FC = () => {
     };
 
     getRequestsList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 리스트 필터
