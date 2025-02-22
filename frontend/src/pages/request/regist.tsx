@@ -165,6 +165,7 @@ const RequestRegistPage = () => {
           />
           <div className="mt-2 flex flex-wrap gap-2">
             {images.map((img, index) => (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={index}
                 src={URL.createObjectURL(img)}

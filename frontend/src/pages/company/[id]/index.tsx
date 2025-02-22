@@ -15,6 +15,12 @@ const companies = [
   },
 ];
 
+interface Review {
+  author: string;
+  text: string;
+  rating: number;
+};
+
 const CompanyDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -24,7 +30,7 @@ const CompanyDetailPage = () => {
   const [inquiryContent, setInquiryContent] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   const company = companies.find((comp) => comp.id === Number(id));
 
