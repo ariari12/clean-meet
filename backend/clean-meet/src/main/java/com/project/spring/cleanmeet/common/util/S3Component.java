@@ -1,11 +1,10 @@
 package com.project.spring.cleanmeet.common.util;
 
-import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
+import com.project.spring.cleanmeet.common.model.PreSignedResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -14,6 +13,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 import java.io.File;
 import java.time.Duration;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class S3Component {
@@ -23,9 +23,10 @@ public class S3Component {
     private final S3Presigner s3Presigner;
     private final S3Client s3Client;
 
-    public String createPreSignedUrl(String path, String fileName, String userId) {
-        String uniqueFileName = fileName + "-" + userId;
-        String uniquePath = path + File.pathSeparator + uniqueFileName;
+    public PreSignedResponseDto createPreSignedUrl(String path, String fileName, String userId) {
+        log.info("preSignedUrl 생성 시작 path={}, fileName={}, userId={}", path, fileName, userId);
+        String uniqueFileName = fileName + "/" + userId;
+        String uniquePath = path + "/" + uniqueFileName;
 
         var putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
@@ -36,7 +37,11 @@ public class S3Component {
                 .putObjectRequest(putObjectRequest)
                 .build();
         String preSignedUrl = s3Presigner.presignPutObject(preSignRequest).url().toString();
-        return preSignedUrl;
+
+        return PreSignedResponseDto.builder()
+                .preSignedUrl(preSignedUrl)
+                .s3Key(uniquePath)
+                .build();
     }
 
 }

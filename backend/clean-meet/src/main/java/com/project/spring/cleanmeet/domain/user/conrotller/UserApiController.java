@@ -1,8 +1,5 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
-import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
-import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.*;
 import com.project.spring.cleanmeet.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,16 +38,23 @@ public class UserApiController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileResponseDto> getUserProfile(Authentication auth) {
+    public ResponseEntity<?> getUserProfile(Authentication auth) {
         UserProfileResponseDto dto = userService.findUserProfile(auth);
 
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/profile/presigned-url")
-    public ResponseEntity<String> createPreSigned(@RequestParam String fileName,Authentication auth) {
-        String preSignedUrl = userService.createPreSigned(fileName, auth);
-        return ResponseEntity.status(HttpStatus.CREATED).body(preSignedUrl);
+
+    @Operation(
+            summary = "프로필 업데이트",
+            description = "클라이언트가 이미지를 S3에 저장하고 s3Key를 DB에 저장하는 요청",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody UserProfileRequestDto userProfileRequestDto,
+                                                Authentication auth) {
+        userService.updateProfile(userProfileRequestDto, auth);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(

@@ -1,6 +1,7 @@
 package com.project.spring.cleanmeet.domain.user.entity;
 
 
+import com.project.spring.cleanmeet.domain.user.dto.AddressRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,38 @@ public class Address {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static Address of(User user) {
+        return Address.builder().user(user).build();
+    }
+
+    public void updateAddress(AddressRequestDto dto) {
+
+        if (dto.getAddressName() != null && !dto.getAddressName().equals(this.addressName)) {
+            this.addressName = dto.getAddressName();
+        }
+        if (dto.getRegion1DepthName() != null && !dto.getRegion1DepthName().equals(this.region1DepthName)) {
+            this.region1DepthName = dto.getRegion1DepthName();
+        }
+        if (dto.getRegion2DepthName() != null && !dto.getRegion2DepthName().equals(this.region2DepthName)) {
+            this.region2DepthName = dto.getRegion2DepthName();
+        }
+        if (dto.getRegion3DepthName() != null && !dto.getRegion3DepthName().equals(this.region3DepthName)) {
+            this.region3DepthName = dto.getRegion3DepthName();
+        }
+        if (dto.getRoadName() != null && !dto.getRoadName().equals(this.roadName)) {
+            this.roadName = dto.getRoadName();
+        }
+        if (dto.getMainBuildingNo() != null && !dto.getMainBuildingNo().equals(this.mainBuildingNo)) {
+            this.mainBuildingNo = dto.getMainBuildingNo();
+        }
+        if (dto.getSubBuildingNo() != null && !dto.getSubBuildingNo().equals(this.subBuildingNo)) {
+            this.subBuildingNo = dto.getSubBuildingNo();
+        }
+        if (dto.getZoneNo() != null && !dto.getZoneNo().equals(this.zoneNo)) {
+            this.zoneNo = dto.getZoneNo();
+        }
+    }
 
 
 }

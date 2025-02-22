@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.domain.image;
+package com.project.spring.cleanmeet.domain.image.entity;
 import lombok.Getter;
 
 

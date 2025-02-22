@@ -3,8 +3,8 @@ package com.project.spring.cleanmeet.domain.user.service;
 import com.project.spring.cleanmeet.common.exception.DuplicateEmailException;
 import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
-import com.project.spring.cleanmeet.common.util.S3Component;
-import com.project.spring.cleanmeet.domain.image.Category;
+import com.project.spring.cleanmeet.domain.image.entity.Image;
+import com.project.spring.cleanmeet.domain.image.repository.ImageRepository;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.entity.ServiceCompanyCategory;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
@@ -36,6 +36,7 @@ public class UserService {
     private final CompanyRepository companyRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final ServiceCompanyCategoryRepository serviceCompanyCategoryRepository;
+    private final ImageRepository imageRepository;
 
     private final ServiceCompanyCategoryMapper serviceCompanyCategoryMapper;
     private final UserMapper userMapper;
@@ -43,7 +44,7 @@ public class UserService {
     private final CompanyMapper companyMapper;
 
     private final PasswordEncoder passwordEncoder;
-    private final S3Component s3Component;
+
 
     public void personalSave(UserRequestDto userRequestDto) {
         log.info("개인 회원가입 시작: userRequestDto={}", userRequestDto);
@@ -144,14 +145,49 @@ public class UserService {
         return userProfileResponseDto;
     }
 
-
-    public String createPreSigned(String fileName, Authentication auth) {
+    public void updateProfile(UserProfileRequestDto dto , Authentication auth) {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
-        log.info("프로필 preSignedUrl 생성 시작");
-        String preSignedUrl = s3Component.createPreSignedUrl(Category.PROFILE.getValue(), fileName, customUser.getId());
-        log.info("프로필 preSignedUrl 생성 완료 preSignedUrl={}", preSignedUrl);
+        log.info("유저 프로필 업데이트 시작 dto : {}", dto);
+        User user = userRepository.findById(Long.valueOf(customUser.getId()))
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 userId=" + customUser.getId()));
+        log.info("유저 조회 성공 user={}", user);
 
-        return preSignedUrl;
+        user.updateProfile(dto.getName(), dto.getContact());
+        log.info("유저 정보 수정 완료 updatedUser={}", user);
+
+        if(dto.getAddressRequestDto() != null) {
+            AddressRequestDto addrDto = dto.getAddressRequestDto();
+            addressRepository.findByUser(user)
+                    .ifPresentOrElse(
+                            address -> {
+                                address.updateAddress(addrDto);
+                                log.info("주소 정보 수정 완료 ");
+                            },
+                            () -> {
+                                Address newAddress = Address.of(user);
+                                newAddress.updateAddress(addrDto);
+                                Address savedAddress = addressRepository.save(newAddress);
+                                log.info("주소 정보 저장 완료 address = {}", savedAddress);
+                            }
+                    );
+        }
+
+        if(dto.getS3Key() != null) {
+            imageRepository.findByUser(user)
+                    .ifPresentOrElse(
+                            img -> {
+                                Image updateImage = img.updateS3Key(dto.getS3Key());
+                                log.info("이미지 url 수정 완료  image={}", updateImage);
+                            }, // 기존 이미지 업데이트
+                            () -> {
+                                Image newImage = Image.of(dto.getS3Key(), user, null);
+                                Image savedImage = imageRepository.save(newImage);// 새로운 이미지 저장
+                                log.info("이미지 url 저장 완료   image={}", savedImage);
+                            }
+                    );
+
+        }
+        log.info("프로필 업데이트 완료");
     }
 
 }
