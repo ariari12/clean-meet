@@ -166,21 +166,19 @@ public class UserService {
             log.info("주소 정보 수정 완료 ");
         }
 
-        if(dto.getS3Key() != null) {
-            imageRepository.findByUser(user)
-                    .ifPresentOrElse(
-                            img -> {
-                                Image updateImage = img.updateS3Key(dto.getS3Key());
-                                log.info("이미지 url 수정 완료  image={}", updateImage);
-                            }, // 기존 이미지 업데이트
-                            () -> {
-                                Image newImage = Image.of(dto.getS3Key(), user, null);
-                                Image savedImage = imageRepository.save(newImage);// 새로운 이미지 저장
-                                log.info("이미지 url 저장 완료   image={}", savedImage);
-                            }
-                    );
 
-        }
+        imageRepository.findByUser(user)
+                .ifPresentOrElse(
+                        img -> {
+                            Image updateImage = img.updateS3Key(dto.getS3Key());
+                            log.info("이미지 url 수정 완료  image={}", updateImage);
+                        }, // 기존 이미지 업데이트
+                        () -> {
+                            Image newImage = Image.of(dto.getS3Key(), user, null);
+                            Image savedImage = imageRepository.save(newImage);// 새로운 이미지 저장
+                            log.info("이미지 url 저장 완료   image={}", savedImage);
+                        }
+                );
         log.info("프로필 업데이트 완료");
     }
 

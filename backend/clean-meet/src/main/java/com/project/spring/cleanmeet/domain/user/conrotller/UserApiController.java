@@ -52,7 +52,9 @@ public class UserApiController {
 
     @Operation(
             summary = "프로필 업데이트",
-            description = "클라이언트가 이미지를 S3에 저장하고 s3Key를 DB에 저장하는 요청",
+            description = """
+                    - 이미지를 저장할 경우 preSignedUrl API를 통해 S3Key를 받아와야함
+                    """,
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @PutMapping("/profile")
