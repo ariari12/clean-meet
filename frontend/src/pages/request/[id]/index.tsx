@@ -1,49 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-// 리스트 상세 더미 데이터
-const requests = [
-  {
-    id: 1,
-    title: "원룸 청소 구합니다",
-    status: "모집중",
-    cleaningType: "일반 청소",
-    createdAt: "2025-02-10",
-    description:
-      "원룸 청소를 맡기고 싶습니다. 신속하고 깔끔하게 해주실 분 찾습니다",
-  },
-];
-
+// 상세 페이지 컴포넌트
 const RequestDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  // 댓글 더미 데이터
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      author: "테스터",
-      date: "2025-02-10",
-      text: "관심 있습니다 연락 주세요.",
-    },
-    {
-      id: 2,
-      author: "김김김",
-      date: "2025-02-11",
-      text: "안녕하세요, 자세한 조건이 궁금합니다!",
-    },
-  ]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [request, setRequest] = useState<any>(null); // 요청 데이터 상태
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [comments, setComments] = useState<any[]>([]); // 댓글 데이터 상태
+  const [newComment, setNewComment] = useState(""); // 새 댓글 내용 상태
+  const [inquiryTitle, setInquiryTitle] = useState(""); // 문의 제목 상태
+  const [inquiryContent, setInquiryContent] = useState(""); // 문의 내용 상태
+  const [activeTab, setActiveTab] = useState("comment"); // 탭 상태
 
-  const [newComment, setNewComment] = useState("");
-  const [inquiryTitle, setInquiryTitle] = useState("");
-  const [inquiryContent, setInquiryContent] = useState("");
-  const [activeTab, setActiveTab] = useState("comment");
+  useEffect(() => {
+    // id가 없으면 API 호출을 하지 않음
+    if (!id) return;
 
-  const request = requests.find((req) => req.id === Number(id));
+    const fetchRequestDetail = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${API_BASE_URL}/api/service/request/${id}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+        const data = response.data;
+        console.log("데이터 확인", data);
 
-  if (!request) {
-    return <div>해당 의뢰를 찾을 수 없습니다.</div>;
-  }
+        setRequest(data);
+      } catch (error) {
+        console.error("상세 페이지 로드 오류:", error);
+      }
+    };
+
+    fetchRequestDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // 댓글 작성 핸들러
   const handleAddComment = () => {
@@ -73,20 +73,27 @@ const RequestDetailPage = () => {
     setInquiryContent("");
   };
 
+  if (!request) {
+    return <div>해당 의뢰를 찾을 수 없습니다.</div>;
+  }
+
   return (
     <div className="my-[120px] max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <p className="py-2 text-blue-500">{request.status}</p>
+      <p className="py-2 text-blue-500">{request.serviceStatus}</p>
       <h1 className="text-2xl font-bold mb-4">{request.title}</h1>
 
       <div className="mt-6 space-y-2 border-b-[1px] py-5 px-2">
         <p>
-          <strong>청소 유형:</strong> {request.cleaningType}
+          <strong>청소 유형:</strong> {request.serviceCategory.name}
         </p>
         <p>
-          <strong>주소:</strong> 경기도 성남시
+          {/* 주소는 API에 맞게 수정해야함 */}
+          <strong>주소:</strong> {request.address}{" "}
         </p>
         <p>
-          <strong>마감일:</strong> {request.createdAt}
+          <strong>마감일:</strong>{" "}
+          {new Date(request.startDate).toLocaleDateString()} ~
+          {new Date(request.endDate).toLocaleDateString()}
         </p>
       </div>
 

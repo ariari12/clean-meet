@@ -1,9 +1,14 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
+interface Authority {
+  authority: string;
+}
+
 interface User {
   email: string;
   name: string;
-  authorities: string;
+  accessToken: string; 
+  authorities: Authority[]; 
 }
 
 interface UserContextType {

@@ -17,25 +17,25 @@ interface Request {
 
 const RequestListPage: React.FC = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  
+
   const [search, setSearch] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("전체");
   const [cleaningType, setCleaningType] = useState<string>("전체");
   const [requests, setRequests] = useState<Request[]>([]);
-  
+
   useEffect(() => {
     const getRequestsList = async () => {
       try {
         const token = localStorage.getItem("token") || "";
-        
+
         const response = await axios.get(
           // "http://localhost:8080/api/service/page?page=1&size=10&sort=createdAt,DESC",
           // `${API_BASE_URL}/api/commission/page?sort=createdAt,desc`,
-          // `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt,DESC`,
-          `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
+          // `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
+          `${API_BASE_URL}/api/service/page?page=0&size=10&sort=createdAt%2CDESC`,
           {
             headers: {
-              Authorization: token ? `Bearer ${token}` : "", 
+              Authorization: token ? `Bearer ${token}` : "",
             },
           }
         );
@@ -46,8 +46,10 @@ const RequestListPage: React.FC = () => {
         const mappedRequests = data.content.map((item: Request) => ({
           id: item.id,
           title: item.title,
-          status: item.serviceStatus === "PENDING" ? "모집중" : "완료",
-          cleaningType: item.serviceCategoryResponseDto.name,
+          serviceStatus: item.serviceStatus,
+          serviceCategoryResponseDto: {
+            name: item.serviceCategoryResponseDto.name,
+          },
           createdAt: new Date(item.createdAt).toLocaleDateString(),
         }));
 
@@ -58,8 +60,8 @@ const RequestListPage: React.FC = () => {
     };
 
     getRequestsList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   // 리스트 필터
   const filteredRequests = requests.filter((request) => {
@@ -131,9 +133,9 @@ const RequestListPage: React.FC = () => {
                 type="checkbox"
                 className="opacity-0 w-0 h-0 peer"
                 onChange={() =>
-                  setStatus(status === "모집중" ? "전체" : "모집중")
+                  setStatus(status === "PENDING" ? "전체" : "PENDING")
                 }
-                checked={status === "모집중"}
+                checked={status === "PENDING"}
               />
               <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full border-1 border-gray-400 peer-checked:bg-cyan-700 peer-checked:border-transparent transition-all duration-300 ease-in-out"></span>
               <span className="absolute left-1 top-1 block w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-8 transition-all duration-300 ease-in-out"></span>
