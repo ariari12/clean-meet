@@ -137,10 +137,13 @@ public class UserService {
         log.info("유저 조회 완료 user={}", user);
 
         Address address = addressRepository.findByUser(user)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저 입니다. user=" + user));
+                .orElseThrow(() -> new IllegalArgumentException("유저의 주소가 없습니다. user=" + user));
         log.info("주소 조회 완료 address = {}", address);
 
-        UserProfileResponseDto userProfileResponseDto = userMapper.toUserProfile(user, address);
+        Image image = imageRepository.findByUser(user).orElse(null);
+        log.info("유저 프로필 사진 조회 완료  image = {}", image);
+
+        UserProfileResponseDto userProfileResponseDto = userMapper.toUserProfile(user, address, image);
         log.info("유저 프로필 조회 완료 UserProfileResponseDto : {}", userProfileResponseDto);
         return userProfileResponseDto;
     }
@@ -157,19 +160,10 @@ public class UserService {
 
         if(dto.getAddressRequestDto() != null) {
             AddressRequestDto addrDto = dto.getAddressRequestDto();
-            addressRepository.findByUser(user)
-                    .ifPresentOrElse(
-                            address -> {
-                                address.updateAddress(addrDto);
-                                log.info("주소 정보 수정 완료 ");
-                            },
-                            () -> {
-                                Address newAddress = Address.of(user);
-                                newAddress.updateAddress(addrDto);
-                                Address savedAddress = addressRepository.save(newAddress);
-                                log.info("주소 정보 저장 완료 address = {}", savedAddress);
-                            }
-                    );
+            Address address = addressRepository.findByUser(user)
+                    .orElseThrow(() -> new IllegalArgumentException("유저의 주소가 없습니다. user=" + user));
+            address.updateAddress(addrDto);
+            log.info("주소 정보 수정 완료 ");
         }
 
         if(dto.getS3Key() != null) {

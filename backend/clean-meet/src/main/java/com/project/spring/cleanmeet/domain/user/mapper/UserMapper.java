@@ -1,5 +1,6 @@
 package com.project.spring.cleanmeet.domain.user.mapper;
 
+import com.project.spring.cleanmeet.domain.image.entity.Image;
 import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.Address;
@@ -14,6 +15,7 @@ public interface UserMapper {
     User toEntity(UserRequestDto userRequestDto);
 
     @Mapping(target = "addressName", source = "address.addressName")
-    UserProfileResponseDto toUserProfile(User user, Address address);
+    @Mapping(target = "s3Key", source = "image.s3Key")
+    UserProfileResponseDto toUserProfile(User user, Address address, Image image);
 
 }

@@ -34,7 +34,12 @@ public class UserApiController {
 
     @Operation(
             summary = "프로필 정보 조회",
-            description = "로그인 된 유저 프로필 조회",
+            description = """
+                    - 로그인 된 유저 프로필 조회
+                    - S3 이미지 조회요청은 아래 URL로
+                    - 도커 컴포즈 환경 `http://localhost/images/{S3_KEY}`
+                    - 로컬 환경 `https://cleanmeetbucket.s3.ap-northeast-2.amazonaws.com/{S3_KEY}`
+                    """,
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @GetMapping("/profile")

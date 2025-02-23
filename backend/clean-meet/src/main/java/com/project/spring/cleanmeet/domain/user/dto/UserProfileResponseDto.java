@@ -15,4 +15,5 @@ public class UserProfileResponseDto {
     private String contact;
     private Role role;
     private String addressName;
+    private String s3Key;
 }
