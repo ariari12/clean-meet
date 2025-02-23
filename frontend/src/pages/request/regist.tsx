@@ -57,7 +57,7 @@ const RequestRegistPage = () => {
       const token = localStorage.getItem("token") || "";
 
       const response = await axios.post(
-        `${API_BASE_URL}/api/service/commitsstion`,
+        `${API_BASE_URL}/api/service/commission`,
         requestData,
         {
           headers: {
