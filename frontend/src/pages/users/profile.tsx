@@ -1,5 +1,5 @@
 import React from "react";
-// import PersonalProfilePage from "./profile/personalProfile";
+import PersonalProfilePage from "./profile/personalProfile";
 import CompanyProfilePage from "./profile/companyProfile";
 import { useUser } from "@/context/UserContext";
 
@@ -10,12 +10,13 @@ const ProfilePage = () => {
   return (
     <div>
       {/* 서버 붙을 때까지 잠시 임시 */}
-      {/* {user && user.롤 === "개인" ? (
+
+      {user &&
+      user.authorities.some((auth) => auth.authority === "ROLE_PERSONAL") ? (
         <PersonalProfilePage />
       ) : (
         <CompanyProfilePage />
-      )} */}
-      <CompanyProfilePage />
+      )}
     </div>
   );
 };
