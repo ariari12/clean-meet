@@ -3,14 +3,14 @@ package com.project.spring.cleanmeet.common.security.jwt.redis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Service
+@Repository
 @RequiredArgsConstructor
-public class RedisRefreshTokenService {
+public class RedisRefreshTokenRepository {
     private final StringRedisTemplate stringRedisTemplate;
 
     public void saveRefreshToken(String userId, String refreshToken, long ttlInSeconds) {
