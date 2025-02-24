@@ -5,7 +5,7 @@ import com.project.spring.cleanmeet.common.security.jwt.JwtUtil;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginRequestDto;
 import com.project.spring.cleanmeet.common.security.jwt.dto.UserLoginResponseDto;
-import com.project.spring.cleanmeet.common.security.jwt.redis.RedisRefreshTokenService;
+import com.project.spring.cleanmeet.common.security.jwt.repository.RedisRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final RedisRefreshTokenService redisRefreshTokenService;
+    private final RedisRefreshTokenRepository redisRefreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtUtil jwtUtil;
 
@@ -45,7 +45,7 @@ public class AuthService {
 
         String newRefreshToken = jwtUtil.createRefreshToken(customUser);
         // 4. Refresh Token DB 저장 or 캐싱 (Rotation을 위해서 '현재 유효한 토큰 목록'을 관리)
-        redisRefreshTokenService.saveRefreshToken(customUser.getId().toString(),newRefreshToken,TOKEN_TTL);
+        redisRefreshTokenRepository.saveRefreshToken(customUser.getId().toString(),newRefreshToken,TOKEN_TTL);
         log.info("새로운 리프레시 토큰 생성 : {}", newRefreshToken);
 
         createCookie(response, "REFRESH_TOKEN",newRefreshToken,TOKEN_TTL);
@@ -63,7 +63,7 @@ public class AuthService {
         Claims claims = jwtUtil.extractToken(refreshToken);
         String userId = claims.get("id", String.class);
         // 레디스 검증
-        String savedRefreshToken = redisRefreshTokenService.getRefreshToken(userId);
+        String savedRefreshToken = redisRefreshTokenRepository.getRefreshToken(userId);
         if( savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)) {
             throw new InvalidTokenException("Refresh token 만료 또는 유효하지 않습니다.");
         }
@@ -96,15 +96,14 @@ public class AuthService {
     }
 
     private void updateRefreshTokenRedis(String userId, String newRefreshToken, int ttl) {
-        redisRefreshTokenService.removeRefreshToken(userId);
-        redisRefreshTokenService.saveRefreshToken(userId, newRefreshToken,ttl);
+        redisRefreshTokenRepository.removeRefreshToken(userId);
+        redisRefreshTokenRepository.saveRefreshToken(userId, newRefreshToken,ttl);
     }
 
     private void createCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        //cookie.setSecure(true);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }

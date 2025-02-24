@@ -1,4 +1,4 @@
-package com.project.spring.cleanmeet.common.security.jwt.redis;
+package com.project.spring.cleanmeet.common.security.jwt.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
