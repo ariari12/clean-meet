@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { FaRegStar, FaStar } from "react-icons/fa";
 
@@ -50,7 +51,7 @@ const ComReviewSection = () => {
         }
       });
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -281,6 +282,13 @@ const ComReviewSection = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center pt-20">
+        <Link href="/company" passHref>
+          <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
+            전문업체 확인하기
+          </span>
+        </Link>
       </div>
     </section>
   );

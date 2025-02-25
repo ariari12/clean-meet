@@ -76,20 +76,20 @@ const RequestListPage: React.FC = () => {
 
   return (
     <div>
-      <div className="pt-[120px] bg-teal-500 text-white">
+      <div className="pt-[120px] bg-gradient-to-r from-sky-600 to-sky-400 text-white">
         <div className="max-w-7xl mx-auto py-10 px-6 flex justify-between items-center">
           <div className="flex-1">
             <h1 className="text-3xl font-semibold mb-4">
-              맞춤 전문 업체를 찾아보세요!
+              청소 의뢰를 등록하고 전문가의 견적을 받아보세요!
             </h1>
             <p className="text-lg mb-6">
-              다양한 전문 업체들을 비교하고 쉽게 선택해보세요. <br />
-              고객 맞춤형 서비스를 제공하고 있습니다.
+              간편하게 청소 의뢰를 등록하고, <br />
+              다양한 전문가들의 맞춤 견적을 받아보세요.
             </p>
           </div>
-          <Link href="/company" passHref>
+          <Link href="/request/regist" passHref>
             <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 transition cursor-pointer">
-              전문업체 확인하기
+              의뢰 등록하기
             </span>
           </Link>
         </div>
