@@ -47,11 +47,19 @@ const CompanyListPage = () => {
 
   return (
     <div>
-      <div className="pt-[120px] bg-blue-500 text-white">
+      <div className="pt-[120px] bg-gradient-to-r from-blue-600 to-blue-400 text-white">
         <div className="max-w-7xl mx-auto py-10 px-6 flex justify-between items-center">
-          <h1 className="text-3xl font-semibold mb-4">
-            직접 의뢰를 등록하고 다양한 전문 업체들의 견적을 받아보세요!
-          </h1>
+          <div className="flex-1">
+            <h1 className="text-3xl font-semibold mb-4">
+              직접 의뢰를 등록하고 다양한 전문 업체들의 견적을 받아보세요!
+            </h1>
+            <p className="text-lg mb-6">
+              다양한 청소 서비스를 제공하는 업체들이 직접 경쟁하여 최고의 가격을
+              제시합니다. <br />
+              빠르고 쉽게 여러 견적을 비교하고 선택할 수 있습니다.
+            </p>
+          </div>
+
           <Link href="/request/regist" passHref>
             <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 transition cursor-pointer">
               의뢰 등록하기

@@ -46,7 +46,7 @@ const RequestListSection = () => {
           </div>
         </div>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center pt-12">
           <Link href="/users/signup" passHref>
             <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 hover:border-[1px] hover:border-zinc-950 transition cursor-pointer">
               협력업체 등록하러 가기
