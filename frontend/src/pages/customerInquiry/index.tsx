@@ -1,6 +1,6 @@
-import Notice from "@/component/Notice";
-import Faq from "@/component/Faq";
-import Qna from "@/component/Qna";
+import Notice from "@/components/Notice";
+import Faq from "@/components/Faq";
+import Qna from "@/components/Qna";
 import React, { useState } from "react";
 
 const CustomerInquiryPage = () => {
@@ -19,10 +19,12 @@ const CustomerInquiryPage = () => {
         <div className="max-w-7xl mx-auto py-10 px-6 flex justify-between items-center">
           <div className="flex-1">
             <h1 className="text-3xl font-semibold mb-4">
-              직접 의뢰를 등록하고 다양한 전문 업체들의 견적을 받아보세요!
+              고객님의 소중한 의견을 기다립니다.
             </h1>
             <p className="text-lg mb-6">
-              요구에 맞는 최적의 서비스를 선택할 수 있습니다.
+              저희는 고객님의 편의를 위해 다양한 지원 서비스를 제공합니다.{" "}
+              <br />
+              궁금한 점은 고객센터를 통해 빠르고 친절하게 해결해 드립니다.
             </p>
           </div>
         </div>
@@ -99,7 +101,7 @@ const CustomerInquiryPage = () => {
                   : "text-gray-600"
               }`}
             >
-              QnA
+              1:1 문의
             </span>
             {activeTab === "qna" && (
               <span className="absolute bottom-0 left-0 w-full h-[3px] bg-orange-500 rounded-t-[2px]" />
