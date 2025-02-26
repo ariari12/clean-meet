@@ -1,7 +1,9 @@
 package com.project.spring.cleanmeet.domain.user.mapper;
 
 import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
+import com.project.spring.cleanmeet.domain.user.dto.CompanyProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
 import com.project.spring.cleanmeet.domain.user.entity.User;
 import org.mapstruct.Builder;
@@ -15,4 +17,7 @@ public interface CompanyMapper {
     Company toEntity(CompanyRequestDto companyRequestDto, User user);
 
     CompanyCardPageResponse toDto(Company company);
+
+    @Mapping(target = "userProfile.contact", source = "company.companyContact")
+    CompanyProfileResponseDto CompanyProfileDto(Company company, UserProfileResponseDto userProfile);
 }
