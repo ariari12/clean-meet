@@ -19,9 +19,17 @@ public class RedisCompanyRepository {
             stringRedisTemplate.opsForSet().add("tag:"+tag, String.valueOf(companyId));
         }
     }
-    public void deleteCompanyTag(Long companyId, String tag) {
-        stringRedisTemplate.opsForSet().remove("company:"+companyId+":tags", tag);
-        stringRedisTemplate.opsForSet().remove("tag:"+tag, String.valueOf(companyId));
+    public void deleteCompanyTag(Long companyId, List<String> tags) {
+        for(String tag : tags){
+            stringRedisTemplate.opsForSet().remove("company:"+companyId+":tags", tag);
+            stringRedisTemplate.opsForSet().remove("tag:"+tag, String.valueOf(companyId));
+        }
+
+        // 회사 태그에 값이 없다면 태그 자체를 삭제
+        Long size = stringRedisTemplate.opsForSet().size("company:" + companyId + "tags");
+        if(size == null || size == 0){
+            stringRedisTemplate.delete("company:"+companyId+"tags:");
+        }
     }
 
 }
