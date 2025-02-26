@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import GeneralSignup from "../../component/GeneralSignup";
-import CompanySignup from "../../component/CompanySignup";
+import GeneralSignup from "../../components/GeneralSignup";
+import CompanySignup from "../../components/CompanySignup";
 import { useRouter } from "next/navigation";
 
 const SignupPage: React.FC = () => {
