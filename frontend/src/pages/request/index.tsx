@@ -17,25 +17,25 @@ interface Request {
 
 const RequestListPage: React.FC = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  
+
   const [search, setSearch] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("전체");
   const [cleaningType, setCleaningType] = useState<string>("전체");
   const [requests, setRequests] = useState<Request[]>([]);
-  
+
   useEffect(() => {
     const getRequestsList = async () => {
       try {
         const token = localStorage.getItem("token") || "";
-        
+
         const response = await axios.get(
           // "http://localhost:8080/api/service/page?page=1&size=10&sort=createdAt,DESC",
           // `${API_BASE_URL}/api/commission/page?sort=createdAt,desc`,
-          // `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt,DESC`,
-          `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
+          // `${API_BASE_URL}/api/service/page?page=1&size=10&sort=createdAt%2CDESC`,
+          `${API_BASE_URL}/api/service/page?page=0&size=10&sort=createdAt%2CDESC`,
           {
             headers: {
-              Authorization: token ? `Bearer ${token}` : "", 
+              Authorization: token ? `Bearer ${token}` : "",
             },
           }
         );
@@ -46,8 +46,10 @@ const RequestListPage: React.FC = () => {
         const mappedRequests = data.content.map((item: Request) => ({
           id: item.id,
           title: item.title,
-          status: item.serviceStatus === "PENDING" ? "모집중" : "완료",
-          cleaningType: item.serviceCategoryResponseDto.name,
+          serviceStatus: item.serviceStatus,
+          serviceCategoryResponseDto: {
+            name: item.serviceCategoryResponseDto.name,
+          },
           createdAt: new Date(item.createdAt).toLocaleDateString(),
         }));
 
@@ -58,8 +60,8 @@ const RequestListPage: React.FC = () => {
     };
 
     getRequestsList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   // 리스트 필터
   const filteredRequests = requests.filter((request) => {
@@ -74,20 +76,20 @@ const RequestListPage: React.FC = () => {
 
   return (
     <div>
-      <div className="pt-[120px] bg-teal-500 text-white">
+      <div className="pt-[120px] bg-gradient-to-r from-sky-600 to-sky-400 text-white">
         <div className="max-w-7xl mx-auto py-10 px-6 flex justify-between items-center">
           <div className="flex-1">
             <h1 className="text-3xl font-semibold mb-4">
-              맞춤 전문 업체를 찾아보세요!
+              청소 의뢰를 등록하고 전문가의 견적을 받아보세요!
             </h1>
             <p className="text-lg mb-6">
-              다양한 전문 업체들을 비교하고 쉽게 선택해보세요. <br />
-              고객 맞춤형 서비스를 제공하고 있습니다.
+              간편하게 청소 의뢰를 등록하고, <br />
+              다양한 전문가들의 맞춤 견적을 받아보세요.
             </p>
           </div>
-          <Link href="/company" passHref>
+          <Link href="/request/regist" passHref>
             <span className="max-w-[320px] block px-6 py-3 bg-zinc-950 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-white hover:text-zinc-950 transition cursor-pointer">
-              전문업체 확인하기
+              의뢰 등록하기
             </span>
           </Link>
         </div>
@@ -131,9 +133,9 @@ const RequestListPage: React.FC = () => {
                 type="checkbox"
                 className="opacity-0 w-0 h-0 peer"
                 onChange={() =>
-                  setStatus(status === "모집중" ? "전체" : "모집중")
+                  setStatus(status === "PENDING" ? "전체" : "PENDING")
                 }
-                checked={status === "모집중"}
+                checked={status === "PENDING"}
               />
               <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full border-1 border-gray-400 peer-checked:bg-cyan-700 peer-checked:border-transparent transition-all duration-300 ease-in-out"></span>
               <span className="absolute left-1 top-1 block w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-8 transition-all duration-300 ease-in-out"></span>

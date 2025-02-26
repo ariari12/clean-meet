@@ -14,8 +14,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log("로그인:", 1);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -33,7 +31,6 @@ const LoginPage = () => {
     // }
 
     try {
-      console.log("로그인:", 2);
       const response = await axios.post(
         `${API_BASE_URL}/api/auth/login`,
         { email, password },
@@ -48,14 +45,15 @@ const LoginPage = () => {
       // JWT 토큰 저장
       const token = response.data.accessToken;
       localStorage.setItem("token", token);
-      
+
       // 사용자 정보 저장
-      const user = {
+      const userData = {
         email: response.data.email,
         name: response.data.name,
-        authorities: response.data.authority,
+        accessToken: response.data.accessToken,
+        authorities: response.data.authorities,
       };
-      setUser(user);
+      setUser(userData);
 
       router.push("/");
 

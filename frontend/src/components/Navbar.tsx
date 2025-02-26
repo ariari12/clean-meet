@@ -38,7 +38,7 @@ const Navbar = () => {
                 안녕하세요
               </p> */}
               <p className="text-lg">
-                <span className="font-bold italic">{user.name}</span>님
+                <span className="font-bold italic text-white">{user.name}</span>님
                 안녕하세요!
               </p>
               <button onClick={handleLogout} className="navbar__list--item">
