@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -45,5 +46,16 @@ public class LoginApiController {
         String accessToken = authService.tokenRotation(refreshToken, authorizationHeader, response);
 
         return ResponseEntity.status(HttpStatus.OK).body(accessToken);
+    }
+
+    @Operation(
+            summary = "로그아웃",
+            description = "로그아웃 요청을 통해 redis 에 저장된 리프레시토큰 삭제",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logoutJwt(Authentication auth) {
+        authService.logout(auth);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -117,4 +117,11 @@ public class AuthService {
         }
         throw new IllegalArgumentException("Authorization 헤더가 유효하지 않습니다.");
     }
+
+    public void logout(Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("로그아웃 시작 :  {}", customUser);
+        redisRefreshTokenRepository.removeRefreshToken(customUser.getId());
+        log.info("로그아웃 성공");
+    }
 }
