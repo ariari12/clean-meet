@@ -1,6 +1,6 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
 
-import com.project.spring.cleanmeet.domain.user.dto.*;
+import com.project.spring.cleanmeet.domain.user.dto.company.*;
 import com.project.spring.cleanmeet.domain.user.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -71,12 +71,12 @@ public class CompanyApiController {
     )
     @PreAuthorize("hasAuthority('ROLE_COMPANY')")
     @PutMapping("/profile/description")
-    public ResponseEntity<String> companyDescriptionUpdate(
+    public ResponseEntity<CompanyDescriptionResponseDto> companyDescriptionUpdate(
             @RequestBody CompanyDescriptionRequestDto companyDescriptionRequestDto,
             Authentication auth) {
-//        companyService.updateDescription(companyDescriptionRequestDto, auth);
+        CompanyDescriptionResponseDto dto = companyService.updateDescription(companyDescriptionRequestDto, auth);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @Operation(
@@ -84,10 +84,11 @@ public class CompanyApiController {
     )
     @PreAuthorize("hasAuthority('ROLE_COMPANY')")
     @PutMapping("/profile/tags")
-    public ResponseEntity<String> companyAddTags(Authentication auth, CompanyTagsRequestDto companyTagsRequestDto) {
+    public ResponseEntity<CompanyTagsResponseDto> companyAddTags(@RequestBody CompanyTagsRequestDto companyTagsRequestDto,
+                                                 Authentication auth) {
 
-//        companyService.updateTags(companyTagsRequestDto, auth);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        CompanyTagsResponseDto companyTagsResponseDto = companyService.updateTags(companyTagsRequestDto, auth);
+        return ResponseEntity.status(HttpStatus.OK).body(companyTagsResponseDto);
     }
 
     @Operation(
@@ -95,10 +96,10 @@ public class CompanyApiController {
     )
     @PreAuthorize("hasAuthority('ROLE_COMPANY')")
     @PutMapping("/profile/visibility")
-    public ResponseEntity<String> updateVisibility(
+    public ResponseEntity<CompanyVisibilityResponseDto> updateVisibility(
             @RequestBody CompanyVisibilityRequestDto companyVisibilityRequestDto,
             Authentication auth) {
-//        companyService.updateVisibility(companyVisibilityRequestDto, auth);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        CompanyVisibilityResponseDto dto = companyService.updateVisibility(companyVisibilityRequestDto, auth);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 }

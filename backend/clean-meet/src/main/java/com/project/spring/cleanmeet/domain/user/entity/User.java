@@ -1,7 +1,6 @@
 package com.project.spring.cleanmeet.domain.user.entity;
 import com.project.spring.cleanmeet.common.entity.BaseEntity;
 
-import com.project.spring.cleanmeet.domain.user.dto.UserProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;

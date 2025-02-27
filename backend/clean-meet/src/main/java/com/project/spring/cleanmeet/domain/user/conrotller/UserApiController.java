@@ -1,5 +1,7 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
-import com.project.spring.cleanmeet.domain.user.dto.*;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

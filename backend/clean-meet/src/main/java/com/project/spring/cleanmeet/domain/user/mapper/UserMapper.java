@@ -1,8 +1,8 @@
 package com.project.spring.cleanmeet.domain.user.mapper;
 
 import com.project.spring.cleanmeet.domain.image.entity.Image;
-import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
-import com.project.spring.cleanmeet.domain.user.dto.UserRequestDto;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.Address;
 import com.project.spring.cleanmeet.domain.user.entity.User;
 

@@ -1,14 +1,14 @@
 package com.project.spring.cleanmeet.domain.user.mapper;
 
-import com.project.spring.cleanmeet.domain.user.dto.CompanyCardPageResponse;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyProfileResponseDto;
-import com.project.spring.cleanmeet.domain.user.dto.CompanyRequestDto;
-import com.project.spring.cleanmeet.domain.user.dto.UserProfileResponseDto;
+import com.project.spring.cleanmeet.domain.user.dto.company.*;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
 import com.project.spring.cleanmeet.domain.user.entity.User;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = false))
@@ -18,6 +18,9 @@ public interface CompanyMapper {
 
     CompanyCardPageResponse toDto(Company company);
 
-    @Mapping(target = "userProfile.contact", source = "company.companyContact")
-    CompanyProfileResponseDto CompanyProfileDto(Company company, UserProfileResponseDto userProfile);
+    CompanyProfileResponseDto companyProfileDto(
+            Company company, List<String> tags, UserProfileResponseDto userProfile
+    );
+
+    CompanyDescriptionResponseDto companyDescriptionDto(String description);
 }

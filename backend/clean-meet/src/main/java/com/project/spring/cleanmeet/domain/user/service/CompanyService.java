@@ -8,6 +8,9 @@ import com.project.spring.cleanmeet.domain.servicecategory.mapper.ServiceCompany
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCategoryRepository;
 import com.project.spring.cleanmeet.domain.servicecategory.repository.ServiceCompanyCategoryRepository;
 import com.project.spring.cleanmeet.domain.user.dto.*;
+import com.project.spring.cleanmeet.domain.user.dto.company.*;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
+import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.Address;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
 import com.project.spring.cleanmeet.domain.user.entity.Role;
@@ -17,6 +20,7 @@ import com.project.spring.cleanmeet.domain.user.mapper.CompanyMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
 import com.project.spring.cleanmeet.domain.user.repository.AddressRepository;
 import com.project.spring.cleanmeet.domain.user.repository.CompanyRepository;
+import com.project.spring.cleanmeet.domain.user.repository.RedisCompanyRepository;
 import com.project.spring.cleanmeet.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
 import java.util.List;
 
 @Slf4j
@@ -38,6 +45,7 @@ public class CompanyService {
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final ServiceCompanyCategoryRepository serviceCompanyCategoryRepository;
     private final AddressRepository addressRepository;
+    private final RedisCompanyRepository redisCompanyRepository;
 
     private final UserService userService;
 
@@ -89,6 +97,7 @@ public class CompanyService {
 
         List<ServiceCompanyCategory> savedServiceCompanyCategory =
                 serviceCompanyCategoryRepository.saveAll(serviceCompanyCategoryList);
+
         log.info("회사 서비스카테고리 저장 완료: {}", savedServiceCompanyCategory);
     }
 
@@ -103,36 +112,80 @@ public class CompanyService {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
         log.info("회사 프로필 조회 시작 userId : {}", customUser.getId());
 
-
         // 유저 조회 로직
         UserProfileResponseDto userProfile = userService.findUserProfile(auth);
+
         Company company = companyRepository.findByUserId(Long.valueOf(customUser.getId()))
                 .orElseThrow(() -> new IllegalArgumentException("회사를 찾을 수 없습니다. userId: " + customUser.getId()));
+        log.info("회사 조회 완료 company : {}", company);
 
+        List<String> companyTags = redisCompanyRepository.findCompanyTags(company.getId());
+        log.info("태그 조회 완료 companyTags : {}", companyTags);
 
-
-
-
-        return null;
+        CompanyProfileResponseDto companyProfileResponseDto = companyMapper.companyProfileDto(company, companyTags, userProfile);
+        log.info("회사 프로필 조회 완료  companyProfileResponseDto : {}", companyProfileResponseDto);
+        return companyProfileResponseDto;
     }
 
-//    public void updateTags(CompanyTagsRequestDto companyTagsRequestDto, Authentication auth) {
-//        if(dto.getTags() != null) {
-//            //회사 태그 조회
-//            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-//                @Override
-//                public void afterCommit() {
-//                    redisCompanyRepository.deleteCompanyTag(company.getId(), dto.getTags());
-//                    redisCompanyRepository.saveCompanyTag(company.getId(), dto.getTags());
-//                }
-//            });
-//        }
-//    }
+    public CompanyTagsResponseDto updateTags(CompanyTagsRequestDto dto, Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("태그 업데이트 시작 dto : {}", dto);
+        Company company = companyRepository.findByUserId(Long.valueOf(customUser.getId()))
+                .orElseThrow(
+                        () -> new IllegalArgumentException("회사 정보를 찾을 수 없습니다.  userId: " + customUser.getId())
+                );
+
+        if(dto.getTags() != null) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    redisCompanyRepository.deleteCompanyTag(company.getId(), dto.getTags());
+                    redisCompanyRepository.saveCompanyTag(company.getId(), dto.getTags());
+                }
+            });
+        }
+        List<String> companyTags = redisCompanyRepository.findCompanyTags(company.getId());
+        CompanyTagsResponseDto companyTagsResponseDto = new CompanyTagsResponseDto(companyTags);
+        log.info("태그 업데이트 종료");
+        return companyTagsResponseDto;
+    }
 
     private void isEmailExists(String email) {
         Boolean isExist = userRepository.existsByEmail(email);
         if (isExist) {
             throw new DuplicateEmailException("이미 등록된 이메일입니다 " + email);
         }
+    }
+
+    public CompanyDescriptionResponseDto updateDescription(CompanyDescriptionRequestDto companyDescriptionRequestDto, Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("회사 상세정보 업데이트 시작 description : {}", companyDescriptionRequestDto);
+        Company company = companyRepository.findByUserId(Long.valueOf(customUser.getId()))
+                .orElseThrow(
+                        () -> new IllegalArgumentException("회사 정보를 찾을 수 없습니다.  userId: " + customUser.getId())
+                );
+        log.info("회사 조회 완료 company : {}", company);
+
+        Company updateDescription = company.updateDescription(companyDescriptionRequestDto.getDescription());
+        CompanyDescriptionResponseDto dto = companyMapper.companyDescriptionDto(updateDescription.getDescription());
+        log.info("회사 업데이트 완료 companyDescriptionDto : {}", dto);
+        return dto;
+    }
+
+    public CompanyVisibilityResponseDto updateVisibility(CompanyVisibilityRequestDto companyVisibilityRequestDto,
+                                                         Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("회사 열람 업데이트 시작  dto : {}", companyVisibilityRequestDto);
+        Company company = companyRepository.findByUserId(Long.valueOf(customUser.getId()))
+                .orElseThrow(
+                        () -> new IllegalArgumentException("회사 정보를 찾을 수 없습니다.  userId: " + customUser.getId())
+                );
+        log.info("회사 조회 완료 company : {}", company);
+
+        Company updateCompany = company.updateIsPublic(companyVisibilityRequestDto.isPublic());
+        CompanyVisibilityResponseDto dto = new CompanyVisibilityResponseDto(updateCompany.isPublic());
+        log.info("회사 공개 여부 업데이트 완료 CompanyVisibilityResponseDto : {}", dto);
+        return dto;
+
     }
 }

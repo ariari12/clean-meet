@@ -31,12 +31,23 @@ public class Company extends BaseEntity {
     @Lob // Text 자료형으로 매핑
     @Column(columnDefinition = "TEXT")
     private String description;
-    @Column(name = "logo_url")
-    private String logoUrl;
 
     @OneToOne
     @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Company updateDescription(String description) {
+        if (this.description == null) {
+            throw new IllegalArgumentException("상세내용이 null 값 입니다. description: " + description);
+        }
+        this.description = description;
+        return this;
+    }
+
+    public Company updateIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+        return this;
+    }
 
 }

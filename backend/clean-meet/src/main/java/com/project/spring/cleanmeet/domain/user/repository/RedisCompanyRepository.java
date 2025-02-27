@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,6 +30,14 @@ public class RedisCompanyRepository {
         if(size == null || size == 0){
             stringRedisTemplate.delete("company:"+companyId+"tags:");
         }
+    }
+
+    public List<String> findCompanyTags(Long companyId) {
+        return Optional.ofNullable(stringRedisTemplate.opsForSet()
+                .members("company:" + companyId + ":tags"))
+                .orElse(Collections.emptySet())
+                .stream()
+                .toList();
     }
 
 }
