@@ -1,8 +1,8 @@
 // import Image from "next/image";
-import CompanyInfo from "@/components/profile/companyInfo";
+import CompanyInfo from "@/components/profile/CompanyInfo";
 import MyWriting from "@/components/profile/MyWriting";
 import ReceiveMsg from "@/components/profile/ReceiveMsg";
-import SideMenu from "@/components/profile/sideMenu";
+import SideMenu from "@/components/profile/SideMenu";
 import React, { useState } from "react";
 // import { LuPencil } from "react-icons/lu";
 
