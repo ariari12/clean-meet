@@ -8,7 +8,7 @@ const SignupPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>("general");
 
   return (
-    <div className="relative w-full h-[100vh] flex flex-col justify-center items-center text-center">
+    <div className="relative w-full my-[120px] min-h-[80vh] flex flex-col justify-center items-center text-center">
       <div className="text-center font-black text-[30px] text-[#1089d3]">
         회원가입
       </div>

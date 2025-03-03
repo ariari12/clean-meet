@@ -120,7 +120,7 @@ const PersonalProfilePage = () => {
 
       {/* 설정 */}
       <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg shadow-sm">
-        <h3 className="text-lg font-semibold mb-3 text-zinc-900">설정</h3>
+        <h3 className="text-lg font-semibold mb-3 text-zinc-900">회원탈퇴</h3>
         <div className="flex justify-between items-center space-x-4">
           <p className="text-sm text-red-600 mb-0">
             탈퇴 시 계정 정보가 삭제되며 복구할 수 없습니다. 신중히 결정해
