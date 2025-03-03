@@ -7,13 +7,31 @@ import { RiFileList3Fill } from "react-icons/ri";
 import { PiBuildingsFill } from "react-icons/pi";
 import { RiQuestionnaireFill } from "react-icons/ri";
 import { FaUserGear } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+// import axios from "axios";
 
 const Navbar = () => {
+  // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const { user, setUser } = useUser(); // 사용자 정보
 
-  const handleLogout = () => {
-    setUser(null); // 로그아웃 시 사용자 정보 초기화
-    localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 삭제
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      // 백쪽에 로그아웃 요청 api 추가되면 작업 예정
+      // await axios.post(`${API_BASE_URL}/api/users/logout`, {
+      // });
+
+      // 상태 초기화 및 로컬 스토리지에서 사용자 정보 및 토큰 삭제
+      setUser(null); // 로그인 상태 초기화
+      localStorage.removeItem("user"); // 사용자 정보 삭제
+      localStorage.removeItem("token"); // 토큰 삭제
+
+      // 로그아웃 후 메인으로
+      router.push("/");
+    } catch (error) {
+      console.error("로그아웃 중 오류가 발생했습니다.", error);
+    }
   };
 
   return (
