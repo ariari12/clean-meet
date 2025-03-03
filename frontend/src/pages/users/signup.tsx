@@ -1,56 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import GeneralSignup from "../../components/GeneralSignup";
 import CompanySignup from "../../components/CompanySignup";
-import { useRouter } from "next/navigation";
+
+type ActiveTab = "general" | "company";
 
 const SignupPage: React.FC = () => {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const router = useRouter();
-
-  const [activeTab, setActiveTab] = useState<"general" | "company">("general");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [contact, setContact] = useState<string>("");
-  const [addressName, setAddressName] = useState<string>("");
-  const [companyName, setCompanyName] = useState<string>("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (password !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    const submitData = {
-      email,
-      password,
-      name,
-      contact,
-      addressRequestDto: {
-        addressName,
-        region1DepthName: "",
-        region2DepthName: "",
-        region3DepthName: "",
-        roadName: "",
-        mainBuildingNo: "",
-        subBuildingNo: "",
-        zoneNo: "",
-      },
-      ...(activeTab === "company" && { companyName }),
-    };
-
-    try {
-      await axios.post(`${API_BASE_URL}/api/users`, submitData);
-      alert("회원가입 성공");
-      router.push("/users/login");
-    } catch (error) {
-      alert("회원가입 실패: " + error);
-    }
-  };
+  const [activeTab, setActiveTab] = useState<ActiveTab>("general");
 
   return (
     <div className="relative w-full h-[100vh] flex flex-col justify-center items-center text-center">
@@ -77,28 +32,9 @@ const SignupPage: React.FC = () => {
           </button>
         </div>
 
-        <form className="mt-[20px]" onSubmit={handleSubmit}>
-          {activeTab === "general" ? (
-            <GeneralSignup
-              setName={setName}
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setConfirmPassword={setConfirmPassword}
-              setContact={setContact}
-              setAddressName={setAddressName}
-            />
-          ) : (
-            <CompanySignup
-              setName={setName}
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setConfirmPassword={setConfirmPassword}
-              setContact={setContact}
-              setCompanyName={setCompanyName}
-              setAddressName={setAddressName}
-            />
-          )}
-        </form>
+        {/* <form className="mt-[20px]" onSubmit={handleSubmit}> */}
+        {activeTab === "general" ? <GeneralSignup /> : <CompanySignup />}
+        {/* </form> */}
       </div>
     </div>
   );
