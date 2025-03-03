@@ -8,10 +8,10 @@ import { PiBuildingsFill } from "react-icons/pi";
 import { RiQuestionnaireFill } from "react-icons/ri";
 import { FaUserGear } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-// import axios from "axios";
+import axios from "axios";
 
 const Navbar = () => {
-  // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const { user, setUser } = useUser(); // 사용자 정보
 
   const router = useRouter();
@@ -19,8 +19,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       // 백쪽에 로그아웃 요청 api 추가되면 작업 예정
-      // await axios.post(`${API_BASE_URL}/api/users/logout`, {
-      // });
+      await axios.delete(`${API_BASE_URL}/api/auth/logout`);
+      console.log("로그아웃!")
 
       // 상태 초기화 및 로컬 스토리지에서 사용자 정보 및 토큰 삭제
       setUser(null); // 로그인 상태 초기화
