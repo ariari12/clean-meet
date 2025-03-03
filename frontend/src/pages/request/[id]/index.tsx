@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useUser } from "@/context/UserContext";
 
-// 상세 페이지 컴포넌트
 const RequestDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [request, setRequest] = useState<any>(null); // 요청 데이터 상태
+  const [request, setRequest] = useState<any>(null); // 요청 데이터 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [comments, setComments] = useState<any[]>([]); // 댓글 데이터 상태
-  const [newComment, setNewComment] = useState(""); // 새 댓글 내용 상태
-  const [inquiryTitle, setInquiryTitle] = useState(""); // 문의 제목 상태
-  const [inquiryContent, setInquiryContent] = useState(""); // 문의 내용 상태
+  const [comments, setComments] = useState<any[]>([]); // 댓글 데이터
+  const [newComment, setNewComment] = useState(""); // 새 댓글 내용
+  const [inquiryTitle, setInquiryTitle] = useState(""); // 문의 제목
+  const [inquiryContent, setInquiryContent] = useState(""); // 문의 내용
   const [activeTab, setActiveTab] = useState("comment"); // 탭 상태
+
+  const { user } = useUser();
 
   useEffect(() => {
     // id가 없으면 API 호출을 하지 않음
@@ -101,101 +103,103 @@ const RequestDetailPage = () => {
         {request.description}
       </div>
 
-      {/* 탭 영역 */}
-      <div className="mt-8">
-        <div className="flex border-b">
-          <button
-            className={`py-2 px-4 font-semibold ${
-              activeTab === "inquiry" ? "border-b-2 border-blue-500" : ""
-            }`}
-            onClick={() => setActiveTab("inquiry")}
-          >
-            문의하기
-          </button>
-          <button
-            className={`py-2 px-4 font-semibold ${
-              activeTab === "comment" ? "border-b-2 border-blue-500" : ""
-            }`}
-            onClick={() => setActiveTab("comment")}
-          >
-            댓글
-          </button>
-        </div>
-
-        {/* 문의하기 탭 */}
-        {activeTab === "inquiry" && (
-          <div className="mt-5">
-            <input
-              type="text"
-              placeholder="문의 제목"
-              value={inquiryTitle}
-              onChange={(e) => setInquiryTitle(e.target.value)}
-              className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <textarea
-              placeholder="문의 내용"
-              value={inquiryContent}
-              rows={5}
-              onChange={(e) => setInquiryContent(e.target.value)}
-              className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={handleSubmitInquiry}
-                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-              >
-                등록
-              </button>
-            </div>
+      {/* 탭 영역, 기업 회원에게 노출 */}
+      {user && user.authorities[0].authority !== "ROLE_PERSONAL" && (
+        <div className="mt-8">
+          <div className="flex border-b">
+            <button
+              className={`py-2 px-4 font-semibold ${
+                activeTab === "inquiry" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => setActiveTab("inquiry")}
+            >
+              문의하기
+            </button>
+            <button
+              className={`py-2 px-4 font-semibold ${
+                activeTab === "comment" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => setActiveTab("comment")}
+            >
+              댓글
+            </button>
           </div>
-        )}
 
-        {/* 댓글 탭 */}
-        {activeTab === "comment" && (
-          <div className="mt-5">
-            <h2 className="text-xl font-semibold mb-4">
-              댓글 ({comments.length})
-            </h2>
-            <div className="space-y-3">
-              {comments.map((comment) => (
-                <div key={comment.id} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="flex justify-between">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-md">{comment.author}</p>
-                      <p className="text-sm text-gray-600">{comment.date}</p>
-                    </div>
-                    <button
-                      onClick={() => handleDeleteComment(comment.id)}
-                      className="px-2 py-2 text-gray-500 text-sm cursor-pointer"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                  <p>{comment.text}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* 댓글 입력 */}
-            <div className="mt-4">
+          {/* 문의하기 탭 */}
+          {activeTab === "inquiry" && (
+            <div className="mt-5">
+              <input
+                type="text"
+                placeholder="문의 제목"
+                value={inquiryTitle}
+                onChange={(e) => setInquiryTitle(e.target.value)}
+                className="w-full p-2 mb-4 border border-gray-300 rounded"
+              />
               <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="댓글을 입력하세요."
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              ></textarea>
+                placeholder="문의 내용"
+                value={inquiryContent}
+                rows={5}
+                onChange={(e) => setInquiryContent(e.target.value)}
+                className="w-full p-2 mb-4 border border-gray-300 rounded"
+              />
               <div className="flex justify-end">
                 <button
-                  onClick={handleAddComment}
-                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  onClick={handleSubmitInquiry}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
-                  댓글 작성
+                  등록
                 </button>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* 댓글 탭 */}
+          {activeTab === "comment" && (
+            <div className="mt-5">
+              <h2 className="text-xl font-semibold mb-4">
+                댓글 ({comments.length})
+              </h2>
+              <div className="space-y-3">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="p-3 bg-gray-50 rounded-lg">
+                    <div className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-md">{comment.author}</p>
+                        <p className="text-sm text-gray-600">{comment.date}</p>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="px-2 py-2 text-gray-500 text-sm cursor-pointer"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                    <p>{comment.text}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* 댓글 입력 */}
+              <div className="mt-4">
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="댓글을 입력하세요."
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                ></textarea>
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleAddComment}
+                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  >
+                    댓글 작성
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
