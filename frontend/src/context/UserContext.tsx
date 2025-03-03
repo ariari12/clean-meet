@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface Authority {
   authority: string;
@@ -7,8 +13,8 @@ interface Authority {
 interface User {
   email: string;
   name: string;
-  accessToken: string; 
-  authorities: Authority[]; 
+  accessToken: string;
+  authorities: Authority[];
 }
 
 interface UserContextType {
@@ -20,6 +26,21 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  // 페이지 새로고침 후 로컬 스토리지에서 유저 정보 로드
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // 유저 정보 로컬 스토리지에 저장
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user)); 
+    }
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
