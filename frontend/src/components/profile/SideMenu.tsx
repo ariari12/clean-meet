@@ -14,10 +14,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeTab, setActiveTab }) => {
         <li>
           <button
             onClick={() => setActiveTab("basic")}
-            className={`w-full p-2 text-left font-semibold rounded-lg ${
+            className={`w-full p-2 text-center font-semibold rounded-lg transition duration-300 ${
               activeTab === "basic"
-                ? "bg-blue-500 text-white"
-                : "bg-white text-gray-700"
+                ? "bg-teal-500 text-white"
+                : "bg-emerald-700 bg-opacity-40 text-white"
             }`}
           >
             기본정보
@@ -26,10 +26,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeTab, setActiveTab }) => {
         <li>
           <button
             onClick={() => setActiveTab("messages")}
-            className={`w-full p-2 text-left font-semibold rounded-lg ${
+            className={`w-full p-2 text-center font-semibold rounded-lg transition duration-300 ${
               activeTab === "messages"
-                ? "bg-blue-500 text-white"
-                : "bg-white text-gray-700"
+                ? "bg-teal-500 text-white"
+                : "bg-emerald-700 bg-opacity-40 text-white"
             }`}
           >
             받은 메시지
@@ -38,10 +38,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeTab, setActiveTab }) => {
         <li>
           <button
             onClick={() => setActiveTab("posts")}
-            className={`w-full p-2 text-left font-semibold rounded-lg ${
+            className={`w-full p-2 text-center font-semibold rounded-lg transition duration-300 ${
               activeTab === "posts"
-                ? "bg-blue-500 text-white"
-                : "bg-white text-gray-700"
+                ? "bg-teal-500 text-white"
+                : "bg-emerald-700 bg-opacity-40 text-white"
             }`}
           >
             내가 쓴 글

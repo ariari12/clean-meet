@@ -61,7 +61,11 @@ const CompanyInfo = ({
   };
 
   return (
-    <>
+    <div className="p-4">
+      <h2 className="mb-4 border-b border-solid border-gray-200 pb-4 w-full text-2xl font-bold ">
+        프로필 정보
+      </h2>
+
       {/* 프로필 정보 */}
       {/* <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md"> */}
       <div className="w-full p-6 bg-gray-50 rounded-lg shadow-md flex items-center gap-6">
@@ -74,7 +78,7 @@ const CompanyInfo = ({
                   ? handleProfileSaveClick
                   : handleProfileEditClick
               }
-              className="text-blue-500 hover:text-gray-700"
+              className="text-teal-700 hover:text-gray-700"
             >
               {isEditingProfile ? (
                 "저장"
@@ -173,7 +177,7 @@ const CompanyInfo = ({
 
           <button
             onClick={isEditing ? handleSaveClick : handleEditClick}
-            className="text-blue-500 hover:text-gray-700"
+            className="text-teal-700 hover:text-gray-700"
           >
             {isEditing ? (
               "저장"
@@ -207,7 +211,7 @@ const CompanyInfo = ({
           {tags.map((tag, index) => (
             <div
               key={index}
-              className="flex items-center bg-blue-200 text-blue-700 text-sm px-3 py-1 rounded-md"
+              className="flex items-center bg-teal-50 border border-solid border-teal-500 text-teal-700 text-sm px-3 py-1 rounded-md"
             >
               <span>{tag}</span>
               <button
@@ -229,7 +233,7 @@ const CompanyInfo = ({
           />
           <button
             type="submit"
-            className="min-w-[50px] text-sm bg-blue-500 p-2 text-white rounded-lg"
+            className="min-w-[50px] text-sm bg-teal-500 p-2 text-white rounded-lg"
           >
             추가
           </button>
@@ -238,6 +242,13 @@ const CompanyInfo = ({
 
       {/* 회사 목록에 노출 체크박스 */}
       <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-3 text-zinc-900">
+          회사 목록 노출
+        </h3>
+        <p className="m-2 text-gray-400 text-sm">
+          플랫폼에 귀사의 회사가 노출될 수 있도록 합니다. <br />
+          체크 해제 시 회사 목록에서 제외됩니다.
+        </p>
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -250,12 +261,22 @@ const CompanyInfo = ({
             회사 목록에 노출
           </label>
         </div>
-        <p className="m-2 text-gray-400 text-sm">
-          플랫폼에 귀사의 회사가 노출될 수 있도록 합니다. <br />
-          체크 해제 시 회사 목록에서 제외됩니다.
-        </p>
       </div>
-    </>
+
+      {/* 회원 탈퇴 */}
+      <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg shadow-sm">
+        <h3 className="text-lg font-semibold mb-3 text-zinc-900">회원탈퇴</h3>
+        <div className="flex justify-between items-center space-x-4">
+          <p className="text-sm text-red-600 mb-0">
+            탈퇴 시 계정 정보가 삭제되며 복구할 수 없습니다. 신중히 결정해
+            주세요.
+          </p>
+          <button className="max-w-[92px] w-full py-2 bg-white text-sm border-[1px] border-red-600 text-red-500 font-semibold rounded-lg shadow-md transition-all duration-300 hover:bg-red-600 hover:text-white">
+            회원탈퇴
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

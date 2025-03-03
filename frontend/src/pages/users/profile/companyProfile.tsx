@@ -9,7 +9,6 @@ import React, { useState } from "react";
 type TabType = "basic" | "messages" | "posts";
 
 const CompanyProfilePage = () => {
-
   const [companyDetails, setCompanyDetails] =
     useState(`저희 청소 전문 업체는 서울, 경기, 인천 지역에서 다년간 운영되어 온 신뢰할 수 있는 기업입니다.
     고객 만족을 최우선으로 하며, 상업 및 주거 공간의 청소를 전문적으로 제공합니다.
@@ -20,7 +19,7 @@ const CompanyProfilePage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("basic");
 
   return (
-    <div className="flex my-[100px] max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="flex my-[100px] min-h-[70vh] max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       {/* 사이드 메뉴 */}
       <SideMenu activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -34,7 +33,6 @@ const CompanyProfilePage = () => {
         )}
         {activeTab === "messages" && <ReceiveMsg />}
         {activeTab === "posts" && <MyWriting />}
-
       </div>
     </div>
   );
