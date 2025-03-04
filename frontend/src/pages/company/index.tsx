@@ -23,7 +23,7 @@ const CompanyListPage = () => {
         const token = localStorage.getItem("token") || "";
 
         const response = await axios.get(
-          `${API_BASE_URL}/api/users/company/page?page=${page}&size=20`,
+          `${API_BASE_URL}/api/users/companies/list?page=${page}&size=20`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
