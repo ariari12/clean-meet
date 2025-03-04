@@ -17,6 +17,7 @@ public class ServiceAnswer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -26,6 +27,9 @@ public class ServiceAnswer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "service_status")
     private ServiceStatus serviceStatus;
+
+    @Column(name = "is_read")
+    private boolean isRead;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

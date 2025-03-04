@@ -4,6 +4,7 @@ import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerReque
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceAnswer;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceStatus;
+import com.project.spring.cleanmeet.domain.servicerequest.repository.RedisAnswerRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceAnswerRepository;
 import com.project.spring.cleanmeet.domain.user.entity.Company;
@@ -22,6 +23,7 @@ public class ServiceAnswerService {
     private final ServiceAnswerRepository serviceAnswerRepository;
     private final ServiceCommissionRepository serviceCommissionRepository;
     private final CompanyRepository companyRepository;
+    private final RedisAnswerRepository redisAnswerRepository;
     private final ServiceAnswerMapper serviceAnswerMapper;
 
     public void save(ServiceAnswerRequestDto serviceAnswerRequestDto) {
@@ -41,8 +43,17 @@ public class ServiceAnswerService {
         ServiceAnswer serviceAnswer = serviceAnswerMapper.toEntity(serviceAnswerRequestDto, company, serviceCommission);
         serviceAnswer.updateStatus(ServiceStatus.PENDING);
         ServiceAnswer savedServiceAnswer = serviceAnswerRepository.save(serviceAnswer);
+        // 레디스 저장
+        redisAnswerRepository.save(serviceAnswerRequestDto,serviceCommission.getUser().getId());
         log.info("서비스 응답 저장 성공 : {}", savedServiceAnswer);
 
 
     }
+
+//    public List<?> findAllAnswers(Authentication auth) {
+//        serviceAnswerRepository
+//
+//    }
+
+
 }
