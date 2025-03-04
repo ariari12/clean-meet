@@ -76,6 +76,16 @@ public class ServiceCommissionApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+//    @Operation(summary = "프로필 받은 메시지 목록",
+//            description = "의뢰 응답을 레디스에서 가져옵니다.",
+//            security = @SecurityRequirement(name = "bearerAuth"))
+//    @PostMapping("/answer")
+//    public ResponseEntity<String> responseRedisList() {
+//        serviceAnswerService
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
+
+
     @Operation(
             summary = "서비스 의뢰 댓글 생성",
             description = """                    
