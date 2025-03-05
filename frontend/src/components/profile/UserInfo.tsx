@@ -1,15 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const UserInfo = () => {
-  const [phone, setPhone] = useState("010-1234-5678");
-  // const [email, setEmail] = useState("test@test.com");
-  const [address, setAddress] = useState("경기도 성남시 xx구 xx동");
-  const [password, setPassword] = useState("");
-  const [isEdit, setisEdit] = useState(false);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  // 프로필 정보 state
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [isEdit, setisEdit] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const toggleEdit = () => {
     setisEdit(!isEdit);
   };
+
+  // 프로필 정보 가져오기
+  const fetchProfileData = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+        },
+      });
+      const profileRes = response.data;
+      console.log("profileRes", profileRes)
+      setEmail(profileRes.email);
+      setName(profileRes.name);
+      setContact(profileRes.contact);
+      setAddress(profileRes.addressName);
+
+      setLoading(false); // 데이터 로딩 완료
+    } catch (error) {
+      console.error("프로필 정보를 가져오는데 실패했습니다.", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) {
+    return <div>로딩 </div>;
+  }
 
   return (
     <div className="p-4 bg-white">
@@ -20,11 +58,10 @@ const UserInfo = () => {
       <div className="flex items-center w-full p-6 bg-gray-100 rounded-lg shadow-md">
         <div className="w-32 h-32 bg-gray-300 rounded-full shadow-inner"></div>
         <div className="px-10">
-          <h2 className="text-2xl font-bold text-gray-800 mt-4">테스트 유저</h2>
-          {/* <p className="text-md text-gray-500">{email}</p> */}
-          <p className="text-md text-gray-500">test@test.com</p>
-          <p className="text-md text-gray-500">일반 사용자</p>
-          <p className="mt-3 text-sm text-gray-600">가입일: 2025-02-11</p>
+          <h2 className="text-2xl font-bold text-gray-800 mt-4">{name}</h2>
+          <p className="text-md text-gray-500">{email}</p>
+          {/* <p className="text-md text-gray-500">일반 사용자</p> */}
+          <p className="mt-3 text-sm text-gray-600">가입일: 2025-03-05</p>
         </div>
       </div>
 
@@ -49,16 +86,16 @@ const UserInfo = () => {
         <div className="space-y-3">
           <div>
             <label
-              htmlFor="phone"
+              htmlFor="contact"
               className="block text-sm font-medium text-gray-700"
             >
               전화번호
             </label>
             <input
-              id="phone"
+              id="contact"
               type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-lg"
             />
           </div>

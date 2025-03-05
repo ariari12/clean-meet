@@ -18,21 +18,21 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-
       // 백쪽 토큰 제거 api 호출
       const token = localStorage.getItem("token") || "";
       await axios.delete(`${API_BASE_URL}/api/auth/logout`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },
+        withCredentials: true, // 쿠키 포함 요청
       });
-
-      console.log("로그아웃!");
 
       // 상태 초기화 및 로컬 스토리지에서 사용자 정보 및 토큰 삭제
       setUser(null); // 로그인 상태 초기화
       localStorage.removeItem("user"); // 사용자 정보 삭제
       localStorage.removeItem("token"); // 토큰 삭제
+
+      console.log("로그아웃!");
 
       // 로그아웃 후 메인으로
       router.push("/");
