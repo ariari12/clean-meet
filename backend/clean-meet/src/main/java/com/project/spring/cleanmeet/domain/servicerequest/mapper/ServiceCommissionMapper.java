@@ -15,6 +15,7 @@ import org.mapstruct.Mapping;
 public interface ServiceCommissionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "serviceCategory", source = "serviceCategory")
+    @Mapping(target = "user", source = "user")
     ServiceCommission toEntity(ServiceCommissionRequestDto serviceCommissionRequestDto,
                                User user, Address address, ServiceCategory serviceCategory);
 
