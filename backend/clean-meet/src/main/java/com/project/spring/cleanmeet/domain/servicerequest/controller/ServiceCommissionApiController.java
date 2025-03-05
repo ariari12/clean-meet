@@ -78,14 +78,6 @@ public class ServiceCommissionApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Operation(summary = "프로필 받은 메시지 목록",
-            description = "의뢰 응답을 레디스에서 가져옵니다.",
-            security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping("/answer")
-    public ResponseEntity<List<ServiceAnswerRequestDto>> responseRedisList(Authentication auth) {
-        List<ServiceAnswerRequestDto> allAnswers = serviceAnswerService.findAllAnswers(auth);
-        return ResponseEntity.status(HttpStatus.OK).body(allAnswers);
-    }
 
 
     @Operation(
