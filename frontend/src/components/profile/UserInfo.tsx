@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "../Loader";
 
 const UserInfo = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -9,7 +10,6 @@ const UserInfo = () => {
   const [email, setEmail] = useState<string>("");
   const [contact, setContact] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
 
   const [isEdit, setisEdit] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,8 +45,8 @@ const UserInfo = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
-    return <div>로딩 </div>;
+  if (!loading) {
+    return <Loader />;
   }
 
   return (
@@ -117,46 +117,6 @@ const UserInfo = () => {
         </div>
       </div>
 
-      {/* 비밀번호 변경 필드 */}
-      <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg shadow-sm">
-        <div className="flex justify-between items-center my-2">
-          <h3 className="text-lg font-semibold text-zinc-900">비밀번호</h3>
-          <button
-            onClick={toggleEdit}
-            className={`text-sm px-3 py-2 rounded-lg shadow-md transition-all duration-300 ${
-              isEdit
-                ? "bg-white text-red-600 border-[1px] border-red-600"
-                : "bg-blue-600 text-white"
-            }`}
-            style={{
-              backgroundColor: isEdit ? "#ffffff" : "#3B82F6",
-            }}
-          >
-            {isEdit ? "저장" : "수정"}
-          </button>
-        </div>
-        <input
-          type="password"
-          placeholder="기존 비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
-        />
-        <input
-          type="password"
-          placeholder="새 비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-        />
-        <input
-          type="password"
-          placeholder="새 비밀번호 확인"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mt-2 p-2 border border-gray-300 rounded-lg"
-        />
-      </div>
 
       {/* 설정 */}
       <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg shadow-sm">

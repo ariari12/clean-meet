@@ -53,7 +53,7 @@ const ReceiveMsg: React.FC = () => {
   return (
     <div className="p-4">
       <h2 className="mb-4 border-b border-solid border-gray-200 pb-4 w-full text-2xl font-bold ">
-        받은 메지시 함
+        받은 문의
       </h2>
       <div className="flex justify-end items-center space-x-2 mb-4">
         <span className="text-sm text-gray-700">안 본 것만 보기</span>

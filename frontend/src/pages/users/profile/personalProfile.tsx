@@ -2,9 +2,10 @@ import MyWriting from "@/components/profile/MyWriting";
 import ReceiveMsg from "@/components/profile/ReceiveMsg";
 import SideMenu from "@/components/profile/SideMenu";
 import UserInfo from "@/components/profile/UserInfo";
+import PasswordChange from "@/components/PasswordChange";
 import React, { useState } from "react";
 
-type TabType = "basic" | "messages" | "posts";
+type TabType = "basic" | "password" | "messages" | "posts";
 
 const PersonalProfilePage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("basic");
@@ -17,6 +18,7 @@ const PersonalProfilePage = () => {
       <div className="flex-1 p-4">
         {/* 기업 정보 */}
         {activeTab === "basic" && <UserInfo />}
+        {activeTab === "password" && <PasswordChange />}
         {activeTab === "messages" && <ReceiveMsg />}
         {activeTab === "posts" && <MyWriting />}
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-type TabType = "basic" | "messages" | "posts";
+type TabType = "basic" | "password" | "messages" | "posts";
 
 interface SideMenuProps {
   activeTab: TabType;
@@ -25,6 +25,18 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeTab, setActiveTab }) => {
         </li>
         <li>
           <button
+            onClick={() => setActiveTab("password")}
+            className={`w-full p-2 text-center font-semibold rounded-lg transition duration-300 ${
+              activeTab === "password"
+                ? "bg-teal-500 text-white"
+                : "bg-emerald-700 bg-opacity-40 text-white"
+            }`}
+          >
+            비빌번호 변경
+          </button>
+        </li>
+        <li>
+          <button
             onClick={() => setActiveTab("messages")}
             className={`w-full p-2 text-center font-semibold rounded-lg transition duration-300 ${
               activeTab === "messages"
@@ -32,7 +44,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ activeTab, setActiveTab }) => {
                 : "bg-emerald-700 bg-opacity-40 text-white"
             }`}
           >
-            받은 메시지
+            받은 문의
           </button>
         </li>
         <li>
