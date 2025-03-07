@@ -100,11 +100,27 @@ public class AuthService {
         redisRefreshTokenRepository.saveRefreshToken(userId, newRefreshToken,ttl);
     }
 
+    public void logout(Authentication auth, HttpServletResponse response) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("로그아웃 시작 :  {}", customUser);
+        deleteCookie(response, "REFRESH_TOKEN");
+        redisRefreshTokenRepository.removeRefreshToken(customUser.getId());
+        log.info("로그아웃 성공");
+    }
+
     private void createCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
+    }
+
+    private void deleteCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie(name, "");
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 
@@ -116,12 +132,5 @@ public class AuthService {
             return extractToken;
         }
         throw new IllegalArgumentException("Authorization 헤더가 유효하지 않습니다.");
-    }
-
-    public void logout(Authentication auth) {
-        CustomUser customUser = (CustomUser) auth.getPrincipal();
-        log.info("로그아웃 시작 :  {}", customUser);
-        redisRefreshTokenRepository.removeRefreshToken(customUser.getId());
-        log.info("로그아웃 성공");
     }
 }

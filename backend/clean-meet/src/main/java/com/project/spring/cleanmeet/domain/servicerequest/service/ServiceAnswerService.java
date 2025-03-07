@@ -1,5 +1,6 @@
 package com.project.spring.cleanmeet.domain.servicerequest.service;
 
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceAnswer;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
@@ -53,10 +54,14 @@ public class ServiceAnswerService {
 
     }
 
-//    public List<?> findAllAnswers(Authentication auth) {
-//        serviceAnswerRepository
-//
-//    }
+    public List<ServiceAnswerRequestDto> findAllAnswers(Authentication auth) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+        log.info("유저 모든 응답 조회 시작");
+        List<ServiceAnswerRequestDto> serviceAnswerList = redisAnswerRepository.getServiceAnswerList(Long.valueOf(customUser.getId()));
+        log.info("유저 모든 응답 조회 완료  : {}", serviceAnswerList);
+        return serviceAnswerList;
+
+    }
 
 
 }

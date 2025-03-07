@@ -54,8 +54,8 @@ public class LoginApiController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @DeleteMapping("/logout")
-    public ResponseEntity<String> logoutJwt(Authentication auth) {
-        authService.logout(auth);
+    public ResponseEntity<String> logoutJwt(Authentication auth, HttpServletResponse response) {
+        authService.logout(auth, response);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
