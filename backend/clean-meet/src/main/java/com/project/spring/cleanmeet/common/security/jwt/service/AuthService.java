@@ -102,7 +102,7 @@ public class AuthService {
 
     public void logout(Authentication auth, HttpServletResponse response) {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
-        log.info("로그아웃 시작 :  {}", customUser);
+        log.info("로그아웃 시작 : CustomUser {}, Response {}", customUser, response);
         deleteCookie(response, "REFRESH_TOKEN");
         redisRefreshTokenRepository.removeRefreshToken(customUser.getId());
         log.info("로그아웃 성공");

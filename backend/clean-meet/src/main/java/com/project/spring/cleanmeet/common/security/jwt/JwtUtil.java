@@ -60,17 +60,13 @@ public class JwtUtil {
     // JWT 까주는 함수
     public Claims extractToken(String token) {
         Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .verifyWith(secretKey).build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        }catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("토큰이 만료되었습니다.");
-        }catch (Exception e) {
-            log.error("Failed to parse token: {}",e.getMessage());
-            throw new InvalidTokenException("잘못된 토큰입니다.");
-        }
+        log.info("토큰 추출 시작 : {}", token);
+
+        claims = Jwts.parser()
+                .verifyWith(secretKey).build()
+                .parseSignedClaims(token)
+                .getPayload();
+
         log.info("토큰 추출 완료 : {}", claims);
         return claims;
     }

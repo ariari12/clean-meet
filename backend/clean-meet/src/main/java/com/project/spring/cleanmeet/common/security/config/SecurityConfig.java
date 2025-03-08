@@ -1,6 +1,7 @@
 package com.project.spring.cleanmeet.common.security.config;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +50,16 @@ public class SecurityConfig {
 //                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
+                    .exceptionHandling(exception -> exception
+                            .authenticationEntryPoint(
+                                    (request, response, authException) ->{
+                                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증이 필요합니다.");
+                                    })
+                            .accessDeniedHandler(
+                                    (request, response, accessDeniedException) ->{
+                                        response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한이 부족합니다.");
+                                    })
+                    )
         ;
         return http.build();
     }
