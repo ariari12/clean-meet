@@ -46,7 +46,7 @@ public class SecurityConfig {
                                         "/api/companies/list","/api/auth/refreshToken","/swagger-ui/**",
                                         "/v3/api-docs/**", "/api/service/request/**","/api/service/page")
                                 .permitAll()
-                                .requestMatchers("/api/service/answer/**").hasRole("COMPANY")
+                                .requestMatchers("/api/service/answer/**","/api/companies/profile/**").hasRole("COMPANY")
 //                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )

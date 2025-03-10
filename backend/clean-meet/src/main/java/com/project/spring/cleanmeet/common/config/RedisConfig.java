@@ -1,5 +1,7 @@
 package com.project.spring.cleanmeet.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +40,7 @@ public class RedisConfig {
 
 
     @Bean
-    public RedisTemplate<String, Object> objectRedisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate<String, Object> objectRedisTemplate(RedisConnectionFactory factory, ObjectMapper objectMapper) {
         //Redis에 데이터를 입출력하기 위한 스프링 제공 템플릿
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // Redis와 연결하기 위해 필요한 팩토리(RedisConnectionFactory)를 등록합니다
@@ -47,7 +49,7 @@ public class RedisConfig {
         // 문자열 이외의 방식으로 직렬화하면, Redis CLI(커맨드라인)에서 키를 확인하기가 어려워지고, 관리하기도 복잡해집니다.
         template.setKeySerializer(new StringRedisSerializer());
         // Redis의 Value를 GenericJackson2JsonRedisSerializer는 Jackson 라이브러리를 활용하여 객체를 JSON 형태로 직렬화/역직렬화합니다.
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
 
         return template;
     }

@@ -1,6 +1,4 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
-import com.project.spring.cleanmeet.domain.servicerequest.service.ServiceAnswerService;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
@@ -20,7 +18,6 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
-    private final ServiceAnswerService serviceAnswerService;
 
 
     @Operation(
@@ -50,14 +47,15 @@ public class UserApiController {
         return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "프로필 받은 메시지 목록",
-            description = "의뢰 응답을 레디스에서 가져옵니다.",
-            security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping("/profile/messages")
-    public ResponseEntity<List<ServiceAnswerRequestDto>> responseRedisList(Authentication auth) {
-        List<ServiceAnswerRequestDto> allAnswers = serviceAnswerService.findAllAnswers(auth);
-        return ResponseEntity.status(HttpStatus.OK).body(allAnswers);
-    }
+
+//    @Operation(summary = "내가 쓴 글 목록",
+//            description = "의뢰 목록",
+//            security = @SecurityRequirement(name = "bearerAuth"))
+//    @PostMapping("/profile/messages")
+//    public ResponseEntity<?> getProfileBoardList(Authentication auth) {
+//        List<ServiceAnswerRequestDto> allAnswers = serviceAnswerService.findAllAnswers(auth);
+//        return ResponseEntity.status(HttpStatus.OK).body(allAnswers);
+//    }
 
 
     @Operation(

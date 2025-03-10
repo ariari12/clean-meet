@@ -18,15 +18,17 @@ public class ServiceAnswer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "scheduled_date_time")
     private LocalDateTime scheduledDateTime;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "service_status")
-    private ServiceStatus serviceStatus;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "service_status")
+//    private ServiceStatus serviceStatus;
 
     @Column(name = "is_read")
     private boolean isRead;
@@ -39,10 +41,10 @@ public class ServiceAnswer extends BaseEntity {
     @JoinColumn(name = "service_commission")
     private ServiceCommission serviceCommission;
 
-    public void updateStatus(ServiceStatus serviceStatus) {
-        if(serviceStatus == null){
-            throw new IllegalArgumentException("ServiceStatus can not be null");
-        }
-        this.serviceStatus = serviceStatus;
-    }
+//    public void updateStatus(ServiceStatus serviceStatus) {
+//        if(serviceStatus == null){
+//            throw new IllegalArgumentException("ServiceStatus can not be null");
+//        }
+//        this.serviceStatus = serviceStatus;
+//    }
 }
