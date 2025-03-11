@@ -47,4 +47,25 @@ public class ServiceCommissionRepositoryImpl implements ServiceCommissionQueryDs
 
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
+
+    @Override
+    public Page<ServiceCommission> findUserBoardsPage(Pageable pageable, Long userId) {
+        List<ServiceCommission> contents = queryFactory
+                .selectFrom(serviceCommission)
+                .where(serviceCommission.user.id.eq(userId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        Long total = queryFactory
+                .select(serviceCommission.count())
+                .from(serviceCommission)
+                .fetchOne();
+
+
+        return PageableExecutionUtils.getPage(contents, pageable, () -> total);
+    }
+
+
 }

@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface ServiceCommissionQueryDsl{
     Page<ServiceCommission> findAllPage(Pageable pageable);
+
+    Page<ServiceCommission> findUserBoardsPage(Pageable pageable, Long userId);
 }

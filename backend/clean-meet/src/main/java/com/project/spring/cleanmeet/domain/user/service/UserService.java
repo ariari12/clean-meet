@@ -5,6 +5,9 @@ import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.image.entity.Image;
 import com.project.spring.cleanmeet.domain.image.repository.ImageRepository;
+import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
+import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
+import com.project.spring.cleanmeet.domain.user.dto.user.ProfileBoardsDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
@@ -13,6 +16,8 @@ import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
 import com.project.spring.cleanmeet.domain.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final ServiceCommissionRepository serviceCommissionRepository;
 
     private final AddressService addressService;
     private final UserMapper userMapper;
@@ -115,4 +121,17 @@ public class UserService {
         log.info("프로필 업데이트 완료");
     }
 
+    public Page<ProfileBoardsDto> getMyBoards(Authentication auth, Pageable pageable) {
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
+
+        boolean isCompany = customUser.getAuthorities().stream()
+                .anyMatch(user-> user.getAuthority().equals("ROLE_COMPANY"));
+        if (isCompany) {
+            // ROLE_COMPANY인 경우 처리
+        }
+        Page<ServiceCommission> userBoardsPage = serviceCommissionRepository.findUserBoardsPage(pageable, Long.valueOf(customUser.getId()));
+
+
+        return null;
+    }
 }

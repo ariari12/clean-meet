@@ -1,4 +1,5 @@
 package com.project.spring.cleanmeet.domain.user.conrotller;
+import com.project.spring.cleanmeet.domain.user.dto.user.ProfileBoardsDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
@@ -6,6 +7,10 @@ import com.project.spring.cleanmeet.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,7 +23,6 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
-
 
     @Operation(
             summary = "회원가입",
@@ -48,14 +52,17 @@ public class UserApiController {
     }
 
 
-//    @Operation(summary = "내가 쓴 글 목록",
-//            description = "의뢰 목록",
-//            security = @SecurityRequirement(name = "bearerAuth"))
-//    @PostMapping("/profile/messages")
-//    public ResponseEntity<?> getProfileBoardList(Authentication auth) {
-//        List<ServiceAnswerRequestDto> allAnswers = serviceAnswerService.findAllAnswers(auth);
-//        return ResponseEntity.status(HttpStatus.OK).body(allAnswers);
-//    }
+    @Operation(summary = "내가 쓴 글 목록",
+            description = "의뢰 목록",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/profile/boards")
+    public ResponseEntity<?> getProfileBoardList(
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable, Authentication auth) {
+        Page<ProfileBoardsDto> dto = userService.getMyBoards(auth, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
 
 
     @Operation(
