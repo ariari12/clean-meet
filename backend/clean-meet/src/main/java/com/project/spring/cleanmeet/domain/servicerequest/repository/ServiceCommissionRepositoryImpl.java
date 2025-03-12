@@ -49,12 +49,13 @@ public class ServiceCommissionRepositoryImpl implements ServiceCommissionQueryDs
     }
 
     @Override
-    public Page<ServiceCommission> findUserBoardsPage(Pageable pageable, Long userId) {
+    public Page<ServiceCommission> findMyBoards(Pageable pageable, Long userId) {
         List<ServiceCommission> contents = queryFactory
                 .selectFrom(serviceCommission)
                 .where(serviceCommission.user.id.eq(userId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(serviceCommission.id.desc())
                 .fetch();
 
 

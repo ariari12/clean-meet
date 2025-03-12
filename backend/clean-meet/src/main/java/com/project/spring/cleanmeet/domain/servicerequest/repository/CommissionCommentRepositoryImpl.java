@@ -5,6 +5,10 @@ import com.project.spring.cleanmeet.domain.servicerequest.entity.QCommissionComm
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+
 import java.util.List;
 
 
@@ -30,5 +34,22 @@ public class CommissionCommentRepositoryImpl implements CommissionCommentQueryDs
                 .orderBy(commissionComment.id.desc()).fetch();
 
         return parentComments;
+    }
+
+    @Override
+    public Page<CommissionComment> findMyBoards(Pageable pageable, Long userId) {
+        List<CommissionComment> contents = queryFactory.selectFrom(commissionComment)
+                .where(commissionComment.user.id.eq(userId))
+                .orderBy(commissionComment.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory.select(commissionComment.count())
+                .from(commissionComment)
+                .where(commissionComment.user.id.eq(userId))
+                .fetchOne();
+
+        return PageableExecutionUtils.getPage(contents, pageable, () -> count);
     }
 }

@@ -5,7 +5,9 @@ import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.image.entity.Image;
 import com.project.spring.cleanmeet.domain.image.repository.ImageRepository;
+import com.project.spring.cleanmeet.domain.servicerequest.entity.CommissionComment;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
+import com.project.spring.cleanmeet.domain.servicerequest.repository.CommissionCommentRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.user.dto.user.ProfileBoardsDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
@@ -28,9 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
+    private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final ServiceCommissionRepository serviceCommissionRepository;
+    private final CommissionCommentRepository commissionCommentRepository;
 
     private final AddressService addressService;
     private final UserMapper userMapper;
@@ -123,13 +127,19 @@ public class UserService {
 
     public Page<ProfileBoardsDto> getMyBoards(Authentication auth, Pageable pageable) {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
+        Long userId = Long.valueOf(customUser.getId());
+        Company company;
 
         boolean isCompany = customUser.getAuthorities().stream()
                 .anyMatch(user-> user.getAuthority().equals("ROLE_COMPANY"));
         if (isCompany) {
             // ROLE_COMPANY인 경우 처리
+            company = companyRepository
+                    .findByUserId(userId)
+                    .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다. userId=" + userId));
         }
-        Page<ServiceCommission> userBoardsPage = serviceCommissionRepository.findUserBoardsPage(pageable, Long.valueOf(customUser.getId()));
+        Page<ServiceCommission> commissions = serviceCommissionRepository.findMyBoards(pageable, userId);
+        Page<CommissionComment> comments = commissionCommentRepository.findMyBoards(pageable, userId);
 
 
         return null;
