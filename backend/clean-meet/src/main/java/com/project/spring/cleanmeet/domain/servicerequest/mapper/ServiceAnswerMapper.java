@@ -2,7 +2,6 @@ package com.project.spring.cleanmeet.domain.servicerequest.mapper;
 
 
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerListResponseDto;
-import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRedisDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ServiceAnswerRequestDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceAnswer;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
@@ -29,4 +28,6 @@ public interface ServiceAnswerMapper {
     @Mapping(target = "companyId", source = "serviceAnswer.company.id")
     @Mapping(target = "serviceCommissionId", source = "serviceAnswer.serviceCommission.id")
     ServiceAnswerRequestDto toRequestDto(ServiceAnswer serviceAnswer);
+
+
 }

@@ -5,15 +5,21 @@ import com.project.spring.cleanmeet.common.exception.UserNotFoundException;
 import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import com.project.spring.cleanmeet.domain.image.entity.Image;
 import com.project.spring.cleanmeet.domain.image.repository.ImageRepository;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.AnswerProfileDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.CommentProfileDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.CommissionProfileDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.CommissionComment;
+import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceAnswer;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.CommissionCommentRepository;
+import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceAnswerRepository;
 import com.project.spring.cleanmeet.domain.servicerequest.repository.ServiceCommissionRepository;
 import com.project.spring.cleanmeet.domain.user.dto.user.ProfileBoardsDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileRequestDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserProfileResponseDto;
 import com.project.spring.cleanmeet.domain.user.dto.user.UserRequestDto;
 import com.project.spring.cleanmeet.domain.user.entity.*;
+import com.project.spring.cleanmeet.domain.user.mapper.ProfileBoardsMapper;
 import com.project.spring.cleanmeet.domain.user.mapper.UserMapper;
 import com.project.spring.cleanmeet.domain.user.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +41,9 @@ public class UserService {
     private final ImageRepository imageRepository;
     private final ServiceCommissionRepository serviceCommissionRepository;
     private final CommissionCommentRepository commissionCommentRepository;
+    private final ServiceAnswerRepository serviceAnswerRepository;
+
+    private final ProfileBoardsMapper profileBoardsMapper;
 
     private final AddressService addressService;
     private final UserMapper userMapper;
@@ -125,23 +134,32 @@ public class UserService {
         log.info("프로필 업데이트 완료");
     }
 
-    public Page<ProfileBoardsDto> getMyBoards(Authentication auth, Pageable pageable) {
+    public ProfileBoardsDto getMyBoards(Authentication auth, Pageable pageable) {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
         Long userId = Long.valueOf(customUser.getId());
         Company company;
 
-        boolean isCompany = customUser.getAuthorities().stream()
-                .anyMatch(user-> user.getAuthority().equals("ROLE_COMPANY"));
+        boolean isCompany = Company.isCompany(customUser);
+        Page<ServiceCommission> commissions = serviceCommissionRepository.findMyBoards(pageable, userId);
+        Page<CommissionComment> comments = commissionCommentRepository.findMyBoards(pageable, userId);
+
+        Page<CommissionProfileDto> commissionProfileDtos = profileBoardsMapper.toCommission(commissions);
+        Page<CommentProfileDto> commentProfileDtos = profileBoardsMapper.toComments(comments);
+
+        ProfileBoardsDto profileBoardsDtos;
         if (isCompany) {
             // ROLE_COMPANY인 경우 처리
             company = companyRepository
                     .findByUserId(userId)
                     .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다. userId=" + userId));
+            Page<ServiceAnswer> answers = serviceAnswerRepository.findByCompanyPage(company, pageable);
+            Page<AnswerProfileDto> answerProfileDtos = profileBoardsMapper.toAnswers(answers);
+            profileBoardsDtos = profileBoardsMapper.toMyBoards(commissionProfileDtos, commentProfileDtos, answerProfileDtos);
+        }else {
+            profileBoardsDtos = profileBoardsMapper.toMyBoards(commissionProfileDtos, commentProfileDtos);
         }
-        Page<ServiceCommission> commissions = serviceCommissionRepository.findMyBoards(pageable, userId);
-        Page<CommissionComment> comments = commissionCommentRepository.findMyBoards(pageable, userId);
 
 
-        return null;
+        return profileBoardsDtos;
     }
 }

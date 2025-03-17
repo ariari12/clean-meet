@@ -59,7 +59,7 @@ public class UserApiController {
     public ResponseEntity<?> getProfileBoardList(
             @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable, Authentication auth) {
-        Page<ProfileBoardsDto> dto = userService.getMyBoards(auth, pageable);
+        ProfileBoardsDto dto = userService.getMyBoards(auth, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }

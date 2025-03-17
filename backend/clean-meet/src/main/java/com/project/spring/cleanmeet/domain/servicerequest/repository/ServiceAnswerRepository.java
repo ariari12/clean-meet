@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 
-public interface ServiceAnswerRepository extends JpaRepository<ServiceAnswer, Long> {
+public interface ServiceAnswerRepository extends JpaRepository<ServiceAnswer, Long>, ServiceAnswerQueryDsl {
 
     List<ServiceAnswer> findByCompany(Company company);
     List<ServiceAnswer> findByCompanyAndIsRead(Company company, boolean isRead);

@@ -1,6 +1,7 @@
 package com.project.spring.cleanmeet.domain.user.entity;
 
 import com.project.spring.cleanmeet.common.entity.BaseEntity;
+import com.project.spring.cleanmeet.common.security.jwt.dto.CustomUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,6 +49,11 @@ public class Company extends BaseEntity {
     public Company updateIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
         return this;
+    }
+
+    public static boolean isCompany(CustomUser  customUser) {
+        return customUser.getAuthorities().stream()
+                .anyMatch(user-> user.getAuthority().equals("ROLE_COMPANY"));
     }
 
 }

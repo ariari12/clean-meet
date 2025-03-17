@@ -1,5 +1,6 @@
 package com.project.spring.cleanmeet.domain.servicerequest.mapper;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ChildCommentResponseDto;
+import com.project.spring.cleanmeet.domain.servicerequest.dto.CommentProfileDto;
 import com.project.spring.cleanmeet.domain.servicerequest.dto.ParentCommentResponseDto;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.CommissionComment;
 import com.project.spring.cleanmeet.domain.servicerequest.entity.ServiceCommission;
@@ -7,6 +8,7 @@ import com.project.spring.cleanmeet.domain.user.entity.User;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = false))
 public interface CommissionCommentMapper {

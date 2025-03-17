@@ -11,5 +11,6 @@ import java.util.List;
 
 public interface CommissionCommentQueryDsl {
     List<CommissionComment> findComment(ServiceCommission serviceCommission);
+
     Page<CommissionComment> findMyBoards(Pageable pageable, Long userId);
 }
