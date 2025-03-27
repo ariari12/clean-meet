@@ -6,7 +6,7 @@ import SideMenu from "@/components/profile/SideMenu";
 import React, { useState } from "react";
 // import { LuPencil } from "react-icons/lu";
 
-type TabType = "basic" | "messages" | "posts";
+type TabType = "basic" | "password" | "messages" | "posts";
 
 const CompanyProfilePage = () => {
   const [companyDetails, setCompanyDetails] =
